@@ -1,6 +1,6 @@
 ---
 title: XSS Web Security
-date: 2018-08-20 16:46:59
+date: 2016-06-26 16:46:59
 tags:
 ---
 
