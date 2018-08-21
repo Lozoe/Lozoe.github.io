@@ -2,6 +2,12 @@
 title: prototype-1
 date: 2016-07-03 17:35:33
 tags:
+  - 原型
+  - JavaScript
+  - 原型链
+  - 构造函数
+  - 实例
+toc: true
 ---
 # 创建对象有几种方法
 1. 第一种方式：字面量

@@ -2,6 +2,12 @@
 title: oop
 date: 2016-06-20 21:32:28
 tags:
+  - 面向对象
+  - JavaScript
+  - 继承
+  - 类
+comment: true
+toc: true
 ---
 
 
