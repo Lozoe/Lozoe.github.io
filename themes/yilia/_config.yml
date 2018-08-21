@@ -7,9 +7,9 @@ menu:
 # SubNav
 subnav:
   github: "https://github.com/Lozoe"
-  weibo: "#"
-  rss: "#"
-  zhihu: "#"
+  weibo: "https://weibo.com/u/2961091143/home?wvr=5"
+  #rss: "#"
+  zhihu: "https://www.zhihu.com/people/liu-zhuo-94-15/activities"
   #qq: "#"
   #weixin: "#"
   #jianshu: "#"
@@ -18,7 +18,7 @@ subnav:
   #bilibili: "#"
   #acfun: "#"
   #mail: "mailto:litten225@qq.com"
-  #facebook: "#"
+  facebook: "https://www.facebook.com/zhuo.liu.me"
   #google: "#"
   #twitter: "#"
   #linkedin: "#"
@@ -108,7 +108,7 @@ style:
 # slider的设置
 slider:
   # 是否默认展开tags板块
-  showTags: false
+  showTags: true
 
 # 智能菜单
 # 如不需要，将该对应项置为false
@@ -121,7 +121,11 @@ smart_menu:
   aboutme: '关于我'
 
 friends:
-  github: https://github.com/Lozoe
+  Github: https://github.com/Lozoe
   CSDN: https://www.cnblogs.com/Iona/
+  Weibo: https://www.weibo.com/u/2961091143/home?wvr=5
 
-aboutme: 很惭愧<br><br>只做了一点微小的工作<br>谢谢大家
+# aboutme: 很惭愧<br><br>只做了一点微小的工作<br>谢谢大家
+aboutme: Lozoe，<br>毕业于皇家民族学院，目前就职于驼厂<br><br>热爱大海与冷笑话，<br/>目前是一枚前端<br/><br/>爱生活，爱健身，爱编码<br>年轻无为，卖马为生。
+
+#https://github.com/litten/BlogBackup/blob/master/themes/yilia/_config.yml
