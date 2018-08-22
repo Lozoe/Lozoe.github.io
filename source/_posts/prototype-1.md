@@ -2,7 +2,6 @@
 title: prototype-1
 date: 2016-07-03 17:35:33
 tags:
-  - 原型
   - JavaScript
   - 原型链
   - 构造函数
