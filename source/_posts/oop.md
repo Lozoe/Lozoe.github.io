@@ -8,6 +8,8 @@ tags:
   - 类
 comment: true
 toc: true
+categories:
+  - 前端
 ---
 
 
@@ -29,6 +31,7 @@ class Animal2 {
     }
 }
 ```
+<!--more-->
 # 2、实例化
 ```
 /**

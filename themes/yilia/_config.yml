@@ -2,8 +2,15 @@
 
 menu:
   主页: /
-  随笔: https://www.cnblogs.com/Iona/
+  #随笔: https://www.cnblogs.com/Iona/
+  #随笔: /tags
+    # - Web安全: /tags/Web安全
+    # - JavaScript: /tags/JavaScript
+    # - JsonP: /tags/JsonP
+    # - 跨域: /tags/跨域
+    # - 原型链: /tags/原型链
   所有文章: /archives
+  分类: /categories
 
 # SubNav
 subnav:
@@ -127,6 +134,6 @@ friends:
   Weibo: https://www.weibo.com/u/2961091143/home?wvr=5
 
 # aboutme: 很惭愧<br><br>只做了一点微小的工作<br>谢谢大家
-aboutme: Lozoe，<br>毕业于皇家民族学院，目前就职于驼厂<br><br>热爱大海与冷笑话，<br/>目前是一枚前端<br/><br/>爱生活，爱健身，爱编码<br>年轻无为，卖马为生。
+aboutme: Lozoe，<br>毕业于大连皇家民族学院，目前就职于驼厂<br><br>热爱大海与冷笑话，<br/>目前是一枚前端<br/><br/>爱生活，爱健身，爱编码<br>年轻无为，卖马为生。
 
 #https://github.com/litten/BlogBackup/blob/master/themes/yilia/_config.yml

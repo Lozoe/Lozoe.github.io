@@ -24,6 +24,7 @@ var o3 = new M('o3');
 var p = {name: 'p'};
 var o4 = Object.create(p);
 ```
+<!--more-->
 ![工作原理](prototype-1/object.png)
 
 
