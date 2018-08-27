@@ -20,7 +20,7 @@ Object.assign(target, ...sources);
 - string或者Symbol类型是可以被直接分配的
 
 拷贝过程中将调用源对象的getter方法，并在target对象上使用setter方法实现目标对象的拷贝。
-
+<!-- more -->
 ## 函数实例
 这里我们通过几个MDN上的例子来介绍一下使用方法：
 
@@ -81,7 +81,7 @@ Object.assign(target, { foo: 2 })
 3. 使用Object在原有的对象基础上返回该对象，并保存为out
 4. 使用for…in循环遍历出所有的可枚举的自有对象。并复制给新的目标对象(hasOwnProperty返回非原型链上的属性)
 源码如下：
-```
+```javascript
 if (typeof Object.assign != "function") {
   (function() {
     Object.assign = function(target) {
