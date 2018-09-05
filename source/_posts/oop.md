@@ -128,9 +128,8 @@ console.log(s5.constructor); // Parent4
 ```
 缺点：
 
-构造函数是一个，无法区分实例是有子类还是父类构造函数生成。
+构造函数是一个，无法区分实例是由子类还是父类构造函数生成。
 
-子类构造函数的prototype直接拿的是父类的实例，他没有自己的constructor,子类构造函数的constructor是从父类实例中继承的，也就是原型链的上一级拿过来的，他拿过的constructor是Parent3的constructor
 ```javascript
 /**
 * 组合继承的优化2
@@ -144,4 +143,13 @@ function Child5 () {
   this.type = 'child5';
 }
 Child5.prototype = Object.create(Parent5.prototype);
+```
+
+ps:
+```js
+Object.create = function (obj) {
+    var F = function () {};
+    F.prototype = obj;
+    return new F();
+};
 ```
