@@ -7,7 +7,7 @@ tags:
 
 ### 分类
 - 标准盒模型（W3C盒模型）content-box   Element width = content
-![IE](box-model/标准.png)
+![标准](box-model/标准.png)
 
 <!-- more -->
 
