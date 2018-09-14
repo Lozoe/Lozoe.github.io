@@ -1,6 +1,7 @@
 ---
 title: gulp插件之gulp-sequence
 date: 2017-08-24 15:06:29
+categories: [JavaScript]
 tags:
   - gulp 
   - gulp-sequence

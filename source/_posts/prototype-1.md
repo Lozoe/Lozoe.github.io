@@ -1,6 +1,7 @@
 ---
 title: 原型链
 date: 2016-07-03 17:35:33
+categories: [JavaScript]
 tags:
   - JavaScript
   - 原型链

@@ -1,6 +1,7 @@
 ---
 title: 函数节流和函数防抖
 date: 2018-07-04 15:33:02
+categories: [JavaScript]
 tags:
   - throttle
   - debounce

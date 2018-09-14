@@ -1,6 +1,7 @@
 ---
 title: HTTP协议
 date: 2018-09-10 15:28:10
+categories: [安全]
 tags:
   - http协议
   - 持久连接

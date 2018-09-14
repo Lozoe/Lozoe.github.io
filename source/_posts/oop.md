@@ -8,8 +8,7 @@ tags:
   - 类
 comment: true
 toc: true
-categories:
-  - 前端
+categories: [JavaScript]
 ---
 
 

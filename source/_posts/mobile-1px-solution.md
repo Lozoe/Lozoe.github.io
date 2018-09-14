@@ -1,6 +1,7 @@
 ---
 title: 移动端1px边框解决方案
 date: 2015-11-10 18:25:26
+categories: [CSS]
 tags:
   - css
 ---
@@ -83,3 +84,5 @@ retina 屏的浏览器可能不认识0.5px的边框，将会把它解释成0px�
 同时通过设置对应viewport的rem基准值，这种方式就可以像以前一样轻松愉快的写1px了。
 这种兼容方案相对比较完美，适合新的项目，老的项目修改成本过大。
 对于这种方案，可以看看[手淘H5的终端适配](https://github.com/amfe/article/issues/17)
+
+[百度](http://caibaojian.com/mobile-responsive-example.html)

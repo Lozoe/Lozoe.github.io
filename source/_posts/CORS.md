@@ -1,6 +1,7 @@
 ---
 title: CORS
 date: 2016-07-28 20:24:51
+categories: [JavaScript]
 tags:
   - CORS
 ---

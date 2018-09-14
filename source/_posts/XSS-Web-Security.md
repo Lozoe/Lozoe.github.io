@@ -1,6 +1,7 @@
 ---
 title: XSS Web Security
 date: 2016-06-26 16:46:59
+categories: [安全]
 tags:
   - Web安全
   - XSS

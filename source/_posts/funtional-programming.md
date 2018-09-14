@@ -1,6 +1,7 @@
 ---
 title: js函数式编程
 date: 2017-08-10 21:51:21
+categories: [JavaScript]
 tags:
   - 编程范式
   - 函数式编程

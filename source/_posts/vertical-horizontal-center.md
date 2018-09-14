@@ -1,6 +1,7 @@
 ---
 title: 水平垂直居中
 date: 2018-09-10 14:50:32
+categories: [CSS]
 tags:
 ---
 

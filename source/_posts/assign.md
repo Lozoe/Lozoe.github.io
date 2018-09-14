@@ -1,6 +1,7 @@
 ---
 title: Object.assign
 date: 2017-08-27 12:01:43
+categories: [JavaScript]
 tags:
   - assign
 ---

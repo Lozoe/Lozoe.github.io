@@ -1,6 +1,7 @@
 ---
 title: js运行机制
 date: 2017-08-22 16:33:10
+categories: [JavaScript]
 tags:
   - js运行机制
   - Event Loop

@@ -1,6 +1,7 @@
 ---
 title: async & defer
 date: 2017-08-30 17:55:17
+categories: [JavaScript]
 tags:
   - async
   - defer
