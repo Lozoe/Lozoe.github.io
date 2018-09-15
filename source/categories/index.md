@@ -5,10 +5,10 @@ type: "tags"
 comments: false
 ---
 
-[前端](http://localhost:4000/categories/front-end/)
-[JavaScript](http://localhost:4000/categories/javascript/)
-[CSS](http://localhost:4000/categories/css/)
-[安全](http://localhost:4000/categories/safe/)
-[数据结构与算法](http://localhost:4000/categories/data-structure/)
+[前端](http://lozoe.github.io/categories/front-end/)
+[JavaScript](http://lozoe.github.io/categories/javascript/)
+[CSS](http://lozoe.github.io/categories/css/)
+[安全](http://lozoe.github.io/categories/safe/)
+[数据结构与算法](http://lozoe.github.io/categories/data-structure/)
 <!-- [生活](http://localhost:4000/categories/life/) -->
 <!-- [其他](http://localhost:4000/categories/other/) -->
