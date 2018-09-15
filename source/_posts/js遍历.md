@@ -171,7 +171,7 @@ var mapResult = arr.map((item, index, array) => item * 2); // 2 4 6 8
 ```
 
 ##### 2、some 方法 (不改变原数组)
-map 方法对数组中每一项运行给定函数，如果该函数对任意一项返回true,则返回true。
+some 方法对数组中每一项运行给定函数，如果该函数对任意一项返回true,则返回true。
  callback 函数只会在有值的索引上被调用；那些从来没被赋过值或者使用 delete 删除的索引则不会被调用。
  
 ```javascript
@@ -180,7 +180,7 @@ var someResult = arr.some((item, index, array) => item > 2); // true
 ```
 
 ##### 3、every 方法 (不改变原数组)
-map 方法对数组中每一项运行给定函数，如果该函数对每一项返回true,则返回true，否则返回false。
+every 方法对数组中每一项运行给定函数，如果该函数对每一项返回true,则返回true，否则返回false。
  callback 函数只会在有值的索引上被调用；那些从来没被赋过值或者使用 delete 删除的索引则不会被调用。
  
 ```javascript

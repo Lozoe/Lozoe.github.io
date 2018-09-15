@@ -17,7 +17,7 @@ tags:
 Boolean Null Undefined Number String Symbol
 - 对象类型
 Object
-
+<!-- more -->
 ## 显式类型转换
 
 1. Number函数
