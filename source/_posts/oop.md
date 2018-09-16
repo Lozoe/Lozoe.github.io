@@ -142,6 +142,7 @@ function Child5 () {
   this.type = 'child5';
 }
 Child5.prototype = Object.create(Parent5.prototype);
+Child5.prototype.constructor = Child5;
 ```
 
 ps:

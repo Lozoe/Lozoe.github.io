@@ -22,6 +22,46 @@ tags:
 3. 内补白 padding
 4. 内容 content
 
+```html
+<div class="container-1"></div>
+<div class="container-2"></div>
+```
+```css
+.container-1 {
+    width: 50px;
+    height: 50px;
+    background: red;
+    box-sizing: content-box; /* border-box */
+    padding: 30px;
+    border: 30px solid green;
+    margin: 30px;
+    font-size: 80px;
+    line-height: 80px;
+}
+.container-2 {
+    width: 50px;
+    height: 50px;
+    background: red;
+    box-sizing: border-box; /* border-box */
+    padding: 30px;
+    border: 30px solid green;
+    margin: 30px;
+    font-size: 80px;
+    line-height: 80px;
+}
+```
+```js
+document.write('container-1-clientHeight ' + document.querySelector('.container-1').clientHeight + ',')
+document.write('container-1-offsetHeight ' + document.querySelector('.container-1').offsetHeight + ',')
+document.write('container-1-height ' + window.getComputedStyle(document.querySelector('.container-1')).getPropertyValue('height'))
+document.write('<br/>')
+document.write('container-2-clientHeight ' + document.querySelector('.container-2').clientHeight + ',')
+document.write('container-2-offsetHeight ' + document.querySelector('.container-2').offsetHeight + ',')
+document.write('container-2-height ' + window.getComputedStyle(document.querySelector('.container-2')).getPropertyValue('height'))
+
+```
+效果： https://codepen.io/lozoe/pen/oPPGBw
+
 避免以下情况的发生：
 
 1. 文件类型描述(Doctype)缺失或不完整时；
