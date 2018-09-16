@@ -74,3 +74,5 @@ tags:
     -webkit-animation: fade-in-out 1s linear infinite;
 }
 ```
+
+效果：https://codepen.io/lozoe/pen/oPPzMx
