@@ -119,6 +119,11 @@ let obj = {
 for(let key of Object.keys(obj)) {
     console.log(key + ': ' + obj[key]);
 } // a: 1 b: 2 c: 3
+
+Object.keys(obj).forEach((key, index) => {
+    console.log(key + ': ' + obj[key])
+})
+
 ```
 解决方案二：
 Generator将对象重新包装

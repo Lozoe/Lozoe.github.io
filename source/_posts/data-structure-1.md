@@ -170,10 +170,10 @@ reduce方法接收一个函数作为参数,这个函数有四个参数:previousV
     console.log(divideBy2(10));//1010
 ````
 
-# 3队列
+# 3 队列
 ---
 
-## 3.1队列的创建
+## 3.1 队列的创建
 队列是遵循FIFO(First In First Out,先进先出,也称为先来先服务)原则的一组有序的项。队列在尾部添加新元素,并从顶部移除元素。最新添加的元素必须排在队列的末尾。队列要实现的操作基本和栈一样，只不过栈是FILO(先进后出)。
 
 ````javascript
@@ -279,14 +279,88 @@ reduce方法接收一个函数作为参数,这个函数有四个参数:previousV
     console.log(pQueue.size()); // 2
 ````
 
-# 3链表
+## 3.3 循环队列
+循环队列是一种线性数据结构，其操作表现基于 FIFO（先进先出）原则并且队尾被连接在队首之后以形成一个循环。它也被称为“环形缓冲器”。
+
+循环队列的一个好处是我们可以利用这个队列之前用过的空间。在一个普通队列里，一旦一个队列满了，我们就不能插入下一个元素，即使在队列前面仍有空间。但是使用循环队列，我们能使用这些空间去存储新的值。
+
+你的实现应该支持如下操作：
+````javascript
+MyCircularQueue(k): 构造器，设置队列长度为 k 。
+Front: 从队首获取元素。如果队列为空，返回 -1 。
+Rear: 获取队尾元素。如果队列为空，返回 -1 。
+enQueue(value): 向循环队列插入一个元素。如果成功插入则返回真。
+deQueue(): 从循环队列中删除一个元素。如果成功删除则返回真。
+isEmpty(): 检查循环队列是否为空。
+isFull(): 检查循环队列是否已满。
+````
+
+### 3.3.1 循环队列的定义
+````javascript
+export default class MyCircularQueue {
+	constructor (k) {
+		// 用来保存数据长度为k的数据结构
+		this.list = Array(k);
+		// 队首指针
+		this.front = 0;
+		// 队尾的指针
+		this.rear = 0;
+		// 队列的长度
+		this.max = k;
+	}
+	enQueue (num) {
+		if (this.isFull()) {
+		    return false;
+		} else {
+		    this.list[this.rear] = num;
+	    	this.rear = (this.rear + 1) % this.max;
+		    return true;
+		}
+	}
+	deQueue () {
+		let v = this.list[this.front];
+		this.list[this.front] = '';
+		this.front = (this.front + 1) % this.max;
+		return v;
+	}
+	isEmpty () {
+		return this.front === this.rear && !this.list[this.front];
+	}
+	isFull () {
+		return this.front === this.rear && !!this.list[this.front];
+	}
+	Front () {
+		return this.list[this.front];
+	}
+	Rear () {
+		let rear = this.rear - 1;
+		return this.list[rear < 0 ? this.max - 1 : rear];
+	}
+}
+````
+### 3.3.1 循环队列的基本使用
+````javascript
+let queue = new MyCircularQueue(4)
+queue.enQueue(1)
+queue.enQueue(2)
+queue.enQueue(3)
+queue.enQueue(4)
+queue.isFull() // true
+queue.enQueue(5) // false
+queue.Front() // 1
+queue.Rear() // 4
+````
+
+
+# 4 链表
 ---
+
 
 数组的大小是固定的,从数组的起点或中间插入 或移除项的成本很高,因为需要移动元素(尽管我们已经学过的JavaScript的Array类方法可以帮 我们做这些事,但背后的情况同样是这样)。链表存储有序的元素集合,但不同于数组,链表中的元素在内存中并不是连续放置的。每个 元素由一个存储元素本身的节点和一个指向下一个元素的引用(也称指针或链接)组成。
 
 相对于传统的数组,链表的一个好处在于,添加或移除元素的时候不需要移动其他元素。然 而,链表需要使用指针,因此实现链表时需要额外注意。数组的另一个细节是可以直接访问任何 位置的任何元素,而要想访问链表中间的一个元素,需要从起点(表头)开始迭代列表直到找到 所需的元素
 
-## 3.1.1链表的创建
+## 4.1 链表的创建
 
 我们使用动态原型模式来创建一个链表。列表最后一个节点的下一个元素始终是null。
 
@@ -400,7 +474,7 @@ reduce方法接收一个函数作为参数,这个函数有四个参数:previousV
     }
 ````
 
-## 3.1.2链表的基本使用
+## 4.2 链表的基本使用
 
 ````javascript
     var linkedList = new LinkedList();
@@ -415,7 +489,7 @@ reduce方法接收一个函数作为参数,这个函数有四个参数:previousV
     console.log(linkedList.toString()); // AB
 ````
 
-## 3.2.1双向链表的创建
+## 4.3 双向链表的创建
 
 链表有多种不同的类型,这一节介绍双向链表。双向链表和普通链表的区别在于,在链表中, 一个节点只有链向下一个节点的链接,而在双向链表中,链接是双向的:一个链向下一个元素, 另一个链向前一个元素。
 
@@ -530,7 +604,7 @@ reduce方法接收一个函数作为参数,这个函数有四个参数:previousV
    inheritPrototype(DoublyLinkedList, LinkedList);
 ````
 
-## 3.2.2双向链表的基本使用
+## 4.4 双向链表的基本使用
 
 ````javascript
     var doublyList = new DoublyLinkedList();
@@ -545,7 +619,7 @@ reduce方法接收一个函数作为参数,这个函数有四个参数:previousV
     console.log(doublyList.toString()); //AB
 ````
 
-### 3.2.3 循环链表
+### 4.5 循环链表
 
 循环链表可以像链表一样只有单向引用,也可以像双向链表一样有双向引用。循环链表和链 表之间唯一的区别在于,最后一个元素指向下一个元素的指针(tail.next)不是引用null, 而是指向第一个元素(head)。双向循环链表有指向head元素的tail.next,和指向tail元素的head.prev。
 
