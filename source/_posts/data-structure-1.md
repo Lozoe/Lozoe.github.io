@@ -298,47 +298,49 @@ isFull(): 检查循环队列是否已满。
 ### 3.3.1 循环队列的定义
 ````javascript
 export default class MyCircularQueue {
-	constructor (k) {
-		// 用来保存数据长度为k的数据结构
-		this.list = Array(k);
-		// 队首指针
-		this.front = 0;
-		// 队尾的指针
-		this.rear = 0;
-		// 队列的长度
-		this.max = k;
-	}
-	enQueue (num) {
-		if (this.isFull()) {
-		    return false;
-		} else {
-		    this.list[this.rear] = num;
-	    	this.rear = (this.rear + 1) % this.max;
-		    return true;
-		}
-	}
-	deQueue () {
-		let v = this.list[this.front];
-		this.list[this.front] = '';
-		this.front = (this.front + 1) % this.max;
-		return v;
-	}
-	isEmpty () {
-		return this.front === this.rear && !this.list[this.front];
-	}
-	isFull () {
-		return this.front === this.rear && !!this.list[this.front];
-	}
-	Front () {
-		return this.list[this.front];
-	}
-	Rear () {
-		let rear = this.rear - 1;
-		return this.list[rear < 0 ? this.max - 1 : rear];
-	}
+  constructor (k) {
+    // 用来保存数据长度为k的数据结构
+    this.list = Array(k);
+    // 队首指针
+    this.front = 0;
+    // 队尾的指针
+    this.rear = 0;
+    // 队列的长度
+    this.max = k;
+  }
+  enQueue (num) {
+    if (this.isFull()) {
+        return false;
+    } else {
+        this.list[this.rear] = num;
+        this.rear = (this.rear + 1) % this.max;
+        return true;
+    }
+  }
+  deQueue () {
+    let v = this.list[this.front];
+    this.list[this.front] = '';
+    this.front = (this.front + 1) % this.max;
+    return v;
+  }
+  isEmpty () {
+    return this.front === this.rear && !this.list[this.front];
+  }
+  isFull () {
+    return this.front === this.rear && !!this.list[this.front];
+  }
+  Front () {
+    return this.list[this.front];
+  }
+  Rear () {
+    let rear = this.rear - 1;
+    return this.list[rear < 0 ? this.max - 1 : rear];
+  }
 }
 ````
+
 ### 3.3.1 循环队列的基本使用
+
 ````javascript
 let queue = new MyCircularQueue(4)
 queue.enQueue(1)
@@ -351,10 +353,8 @@ queue.Front() // 1
 queue.Rear() // 4
 ````
 
-
 # 4 链表
 ---
-
 
 数组的大小是固定的,从数组的起点或中间插入 或移除项的成本很高,因为需要移动元素(尽管我们已经学过的JavaScript的Array类方法可以帮 我们做这些事,但背后的情况同样是这样)。链表存储有序的元素集合,但不同于数组,链表中的元素在内存中并不是连续放置的。每个 元素由一个存储元素本身的节点和一个指向下一个元素的引用(也称指针或链接)组成。
 
