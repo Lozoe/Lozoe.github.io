@@ -12,7 +12,7 @@ Event Loop可以说是js老生常谈的一个话题了。作为一枚前端开�
 浏览器的[Event loop](https://html.spec.whatwg.org/multipage/webappapis.html#event-loops)是在HTML5中定义的规范，而node中则由[libuv](https://html.spec.whatwg.org/multipage/webappapis.html#event-loops)库实现。
 
 以下是参考一系列文章后的总结。
-
+<!-- more -->
 ## 与事件循环相关的概念
 
 说到事件循环，务必要了解清楚一些名词，宏任务，微任务，单线程，同步，异步，都是什么鬼，今天小编就带着大家来聊聊我的认识。

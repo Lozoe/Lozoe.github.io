@@ -17,7 +17,7 @@ tags:
 - promise
 - generator
 - async
-
+<!-- more -->
 #### css
 
 结构：
