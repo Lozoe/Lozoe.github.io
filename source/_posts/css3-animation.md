@@ -3,7 +3,7 @@ title: css3-animation
 date: 2016-08-16 11:08:56
 categories: [CSS]
 tags:
-  - CSS3
+  - css
 ---
 
 和transition相比，animation还可以自定义多个关键帧，浏览器将会负责计算和插入关键帧的虚拟动画帧
