@@ -192,3 +192,62 @@ sign  exponent         fraction
 这个值转化成真值，结果为：0.30000000000000004。那么 0.1 + 0.2 = 0.30000000000000004 的推演到这里就结束了。
 
 现在看JavaScript不能处理小数运算的面纱是不是就揭开了！！！
+
+## 解决方案
+
+首先，理论上用有限的空间来存储无限的小数是不可能保证精确的，但我们可以处理一下得到我们期望的结果。
+
+### 数据展示类
+
+对于运算类操作，如 +-*/，正确的做法是把小数转成整数后再运算。以加法为例：
+
+```js
+/**
+ * 精确加法
+ */
+function add(num1, num2) {
+  const num1Digits = (num1.toString().split('.')[1] || '').length;
+  const num2Digits = (num2.toString().split('.')[1] || '').length;
+  const baseNum = Math.pow(10, Math.max(num1Digits, num2Digits));
+  return (num1 * baseNum + num2 * baseNum) / baseNum;
+}
+```
+
+```js
+//加法
+Number.prototype.add = function (arg) {
+    var r1, r2, m;
+    try { r1 = this.toString().split(".")[1].length } catch (e) { r1 = 0 }
+    try { r2 = arg.toString().split(".")[1].length } catch (e) { r2 = 0 }
+    m = Math.pow(10, Math.max(r1, r2))
+    return (this * m + arg * m) / m
+}
+//减法
+Number.prototype.sub = function (arg) {
+    return this.add(-arg);
+}
+
+//乘法
+Number.prototype.mul = function (arg) {
+    var m = 0, s1 = this.toString(), s2 = arg.toString();
+    try { m += s1.split(".")[1].length } catch (e) { }
+    try { m += s2.split(".")[1].length } catch (e) { }
+    return Number(s1.replace(".", "")) * Number(s2.replace(".", "")) / Math.pow(10, m)
+}
+
+//除法
+Number.prototype.div = function (arg) {
+    var t1 = 0, t2 = 0, r1, r2;
+    try { t1 = this.toString().split(".")[1].length } catch (e) { }
+    try { t2 = arg.toString().split(".")[1].length } catch (e) { }
+    with (Math) {
+        r1 = Number(this.toString().replace(".", ""))
+        r2 = Number(arg.toString().replace(".", ""))
+        return (r1 / r2) * pow(10, t2 - t1);
+    }
+}
+```
+
+参考：
+
+https://github.com/camsong/blog/issues/9
