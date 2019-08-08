@@ -18,10 +18,10 @@ tags:
 ##### 函数式编程：
 是面向数学的抽象，将计算描述为一种表达式求值 是将程序描述为表达式和变换，以数学方程的形式建立模型，并且尽量避免可变的状态，关心数据的映射。haskell、erlang、lisp、javascript
 Imperative programming & Functional programming
-![区别](functional-programming/difference-between-ip-and-fun.png)
+![区别](difference-between-ip-and-fun.png)
 
 OOP programming & Functional programming
-![区别](functional-programming/difference-between-oop-and-fun.png)
+![区别](difference-between-oop-and-fun.png)
 
 
 ### JavaScript函数式编程？
@@ -37,7 +37,7 @@ JavaScript 函数式编程是一个存在了很久的话题，但似乎从 2016 
 
 面向对象对数据进行抽象，将行为以对象方法的方式封装到数据实体内部，从而降低系统的耦合度。而函数式编程，选择对过程进行抽象，将数据以输入输出流的方式封装进过程内部，从而也降低系统的耦合度。两者虽是截然不同，然而在系统设计的目标上可以说是殊途同归的。二者不矛盾。
 庞大的系统，可能既要对数据进行抽象，又要对过程进行抽象，或者一个局部适合进行数据抽象，另一个局部适合进行过程抽象
-![抽象](functional-programming/common-target.png)
+![抽象](common-target.png)
 
 ### JS函数式编程
 1. 一等公民函数
@@ -140,7 +140,7 @@ PI = 'xxx'
 areaOfACircle(3);
 // NaN
 ```
-![纯函数](functional-programming/no-side-effect.png)
+![纯函数](no-side-effect.png)
 特点
 1. 结果只能从参数值来计算
 2. 不能依赖能被外部操作改变的数据
@@ -350,7 +350,7 @@ lastUpperAnother(['jumpkick', 'roundhouse', 'uppercut']); //"UPPERCUT"
 - 增强函数复用性和可维护性
 - 代码实现一目了然，逻辑清晰
 - 数据流从右向左，可读性高于嵌套一堆的函数调用
-![区别](functional-programming/association.png)
+![区别](association.png)
 
 #### 高阶函数
 
@@ -400,7 +400,7 @@ fails.message = 'a failture in life';
 var alwaysFails = checker(fails);
 alwaysFails({}); //["a failture in life"]
 ```
-![区别](functional-programming/result.png)
+![区别](result.png)
 ```js
 function validator(message, fun) {
 	var f = function(/* args */) {

@@ -25,7 +25,7 @@ var p = {name: 'p'};
 var o4 = Object.create(p);
 ```
 <!--more-->
-![工作原理](prototype-1/object.png)
+![工作原理](object.png)
 
 
 # 原型、构造函数、实例、原型链
@@ -43,11 +43,11 @@ var o4 = Object.create(p);
 
 工作原理eg.
 
-![工作原理](prototype-1/workPrinciple.png)
+![工作原理](workPrinciple.png)
 
 ==那么生成的实例和原型对象之间是什么关系？==
 实例的__proto__属性指向构造函数的prototype属性
-![实例和原型对象之间的关系](prototype-1/relationship.png)
+![实例和原型对象之间的关系](relationship.png)
 
 ==什么是原型链？==
 大白话说，原型链就是从一个对象往上找，构造这个实例的相关联的对象，然后这个关联的对象再往上找，它又有创造它的上一级的原型对象，以此类推，一直到Object.prototype原型对象终止。也就是说Object.prototype是整个原型链的顶端。
@@ -58,7 +58,7 @@ var o4 = Object.create(p);
 ==原型链和原型对象之间到底起到了一个什么作用呢？==
 构造函数中增加了很多属性和方法，当每个实例都需要共用某个方法，不能每个实例拷贝一份他们之间共用的这个方法可以考虑放到他们共同拥有的原型对象上。
 
-![作用](prototype-1/effect.png)
+![作用](effect.png)
 
 按照JS对象JS引擎的分析方式，在访问一个实例的时候，比如实例上访问一个方法，如果实例本身没有找到这个方法时，往这个实例本身的原型对象上找，也就通过__proto__它的上一级原型对象上找，如果在它的上一级原型对象上还没有找到这个属性和方法，它会在它原型对象的基础上在通过原型对象的这个__proto__再往上一级查找，以此类推，直到找到Object.prototype，如果到此还没有找到那个属性和方法，则原路返回，告诉他没有找到没有定义。如果在中间任意一个环节找到了，就停止继续向上查找，直接返回这个方法用处。
 
@@ -66,12 +66,12 @@ var o4 = Object.create(p);
 1、构造函数也就是函数才会有prototype,对象是没有prototype的；
 2、只有实例对象才有__proto__，（函数也有__proto__属性，是因为函数既是函数，也是一个对象，所以会有这个属性）
 
-![函数的隐式原型](prototype-1/function.__proto__.png)
+![函数的隐式原型](function.__proto__.png)
 
 说明M的构造函数式Function也就是M这个普通函数式Function构造函数的一个实例。
 3、实例明明是被构造函数所生成的，那么它是如何和原型对象产生关联的，也就是构造函数的prototype属性，也就是说修改实例的属性，也就是修改了实例上一级的原型对象
 
-![prototype](prototype-1/prototype.png)
+![prototype](prototype.png)
 
 
 

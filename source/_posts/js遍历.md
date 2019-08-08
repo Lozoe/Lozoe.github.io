@@ -250,7 +250,7 @@ for(var i = 0; i < 100; i++){
 那我们对比一下 for for len forEach for-in for-of map filter 循环的速度
 [测试地址](https://jsperf.com/js-loop-compare123)
 
-![工作原理](js遍历/js-loop-compare.png)
+![工作原理](js-loop-compare.png)
 
 
 可以看到 for循环的速度是最快的,是最老的循环,也是优化得最好的,其次是for-of这个是es6才新增的循环非常好用,最慢是for-in我们可以作一下速度排序
