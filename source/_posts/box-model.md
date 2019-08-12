@@ -8,12 +8,12 @@ tags:
 
 ### 分类
 - 标准盒模型（W3C盒模型）content-box   Element width = content
-![标准](box-model/标准.png)
+![标准](标准.png)
 
 <!-- more -->
 
 - 怪异盒模型（IE盒模型）border-box  Element width = Border +Padding +Content
-![IE](box-model/IE.png)
+![IE](IE.png)
 注意：box-sizing属性从IE8开始被支持，其它浏览器可放心使用
 
 盒子模型：由content, padding, border, margin组成的视觉格式化模型，被称之为盒模型；
