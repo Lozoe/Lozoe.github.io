@@ -3,6 +3,7 @@ title: webpack长缓存优化
 date: 2019-07-30 20:55:54
 tags:
   - webpack
+  - 性能优化
 ---
 
 ## 什么是长缓存优化，webpack如何做到
