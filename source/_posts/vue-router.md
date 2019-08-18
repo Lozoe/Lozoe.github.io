@@ -44,27 +44,28 @@ location / {
 ```
 
 注意：
-这么做以后，你的服务器就不再返回 404 错误页面，因为对于所有路径都会返回 index.html 文件。为了避免这种情况，你应该在 Vue 应用里面覆盖所有的路由情况，然后在给出一个 404 页面。后端只管返回index.html,js去判断跳哪个组件页面,以及是否404.
+这么做以后，你的服务器就不再返回 404 错误页面，因为对于所有路径都会返回 index.html 文件。为了避免这种情况，你应该在 Vue 应用里面覆盖所有的路由情况，然后在给出一个 404 页面。后端只管返回index.html,js去判断跳哪个组件页面,以及是否404
+
 ```js
 const router = new VueRouter({
   mode: 'history',
   routes: [
     // 后端old入口页面
-    { 
+    {
         name: 'a',
-        path: '/myproject/a.do', 
+        path: '/myproject/a.do',
         component: aPage, 
-        meta: { isEnter: true } 
-    }, 
+        meta: { isEnter: true }
+    },
     // 本地入口页面
-    { 
+    {
         name: 'b',
-        path: '/myproject/b.html', 
-        component: bPage, 
-        meta: { isEnter: true } 
-    }, 
-    { 
-        path: '*', 
+        path: '/myproject/b.html',
+        component: bPage,
+        meta: { isEnter: true }
+    },
+    {
+        path: '*',
         component: NotFoundComponent
     }
   ]
@@ -124,11 +125,11 @@ const routes = [
 
 // 3. 创建 router 实例，然后传 `routes` 配置
 const router = new VueRouter({
-  routes 
+  routes
 })
 
 // 4. 创建和挂载根实例。记得要通过 router 配置参数注入路由，从而让整个应用都有路由功能
- 
+
 const app = new Vue({
   router
 }).$mount('#app')
@@ -161,7 +162,7 @@ const router = new VueRouter({
 模板里(src/App.vue)用 `$route.name`来接收
 比如： `<p>{{ $route.name}}</p>`
 
-### 2、通过 <router-link> 标签中的to传参
+### 2、通过 `<router-link>` 标签中的to传参
 
 这种传参方法的基本语法：
 
@@ -192,6 +193,7 @@ const router = new VueRouter({
 ```
 
 ### 3、利用url传递参数----在配置文件里以冒号的形式设置参数。
+
 我们在/src/router/index.js文件里配置路由
 
 ```js
@@ -216,6 +218,7 @@ const User = {
 ```js
 <router-link to="/params/198/jspang website is very good">params</router-link>
 ```
+
 ### 4、使用path来匹配路由，然后通过query来传递参数
 
 ```js
@@ -223,6 +226,7 @@ const User = {
 ```
 
 对应路由配置：
+
 ```js
 {
 
@@ -242,7 +246,7 @@ this.$route.query.queryId
 
 实际生活中的应用界面，通常由多层嵌套的组件组合而成。同样地，URL中各段动态路径也按某种结构对应嵌套的各层组件，例如：
 
-```
+```js
 /user/foo/profile                     /user/foo/posts
 +------------------+                  +-----------------+
 | User             |                  | User            |
@@ -283,6 +287,7 @@ const router = new VueRouter({
 ## 单页面多路由区域操作
 
 // app.vue
+
 ```html
 <router-view></router-view>
 <router-view name="left" style="float: left;width: 50%; height: 300px;background-color: #ccc;"></router-view>
@@ -290,6 +295,7 @@ const router = new VueRouter({
 ```
 
 // index.js
+
 ```js
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -316,10 +322,159 @@ export default new Router ({
         default : Hello,
         left : First2,
         right : First1
-      }      
+      }
     }
   ]
 })
 ```
 
-参考：https://router.vuejs.org/zh/
+## vue-router钩子函数
+
+### 1、全局的钩子
+
+```js
+beforeEach（to，from，next）
+afterEach（to，from，next）
+```
+
+### 2、组件内的导航钩子
+
+组件内的导航钩子主要有这三种：beforeRouteEnter、beforeRouteUpdate、beforeRouteLeave。他们是直接在路由组件内部直接进行定义的
+
+```js
+methods: {},
+beforeRouteLeave (to, from, next) {}
+```
+
+> beforeRouteEnter 不能获取组件实例 this，因为当守卫执行前，组件实例被没有被创建出来，剩下两个钩子则可以正常获取组件实例 this
+
+beforeRouteEnter获取到this实例
+
+```js
+beforeRouteEnter (to, from, next) {
+  next(vm => {
+    // 通过 `vm` 访问组件实例
+  })
+}
+```
+
+最后是完整的导航解析流程：
+
+最后是完整的导航解析流程：
+1、导航被触发
+2、在失活的组件里调用离开守卫
+3、调用全局的 beforeEach 守卫
+4、在重用的组件里调用 beforeRouteUpdate 守卫
+5、在路由配置里调用 beforEnter
+6、解析异步路由组件
+7、在被激活的组件里调用 beforeRouteEnter
+8、调用全局的 beforeResolve 守卫
+9、导航被确认
+10、调用全局的 afterEach 钩子
+11、触发 DOM 更新
+12、在创建好的实例调用 beforeRouteEnter 守卫中传给 next 的回调函数
+
+```js
+import Vue from "vue";
+import Router from "vue-router";
+
+Vue.use(Router);
+
+const router = new Router({
+  routes: [
+    {
+      path: "/",
+      /*
+      * 按需加载
+      */
+      component: resolve => {
+        require(["../components/Home"], resolve);
+      }
+    },
+    {
+      path: "/record",
+      name: "record",
+      component: resolve => {
+        require(["../components/Record"], resolve);
+      }
+    },
+    {
+      path: "/Register",
+      name: "Register",
+      component: resolve => {
+        require(["../components/Register"], resolve);
+      }
+    },
+    {
+      path: "/Luck",
+      name: "Luck",
+      // 需要登录才能进入的页面可以增加一个meta属性
+      meta: {
+        requireAuth: true
+      },
+      component: resolve => {
+        require(["../components/luck28/Luck"], resolve);
+      }
+    }
+  ]
+});
+// 判断是否需要登录权限 以及是否登录
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(res => res.meta.requireAuth)) {
+    // 判断是否需要登录权限
+    if (localStorage.getItem("username")) {
+      // 判断是否登录
+      next();
+    } else {
+      // 没登录则跳转到登录界面
+      next({
+        path: "/Register",
+        query: { redirect: to.fullPath }
+      });
+    }
+  } else {
+    next();
+  }
+});
+export default router;
+```
+
+> 当router的mode为history时，去掉#
+
+```js
+router.beforeEach((route, redirect, next) => {
+  let title = route.meta.title;
+  document.title = title || "";
+  console.log(route.hash);
+  if (route.hash !== "") {
+    const id = route.hash.replace("#", "");
+    const element = document.getElementById(id);
+    if (element) element.scrollIntoView();
+  }
+  if (route.path !== "/") {
+    indexScrollTop = document.body.scrollTop;
+  }
+  next();
+});
+router.afterEach((route, redirect) => {
+  if (route.hash !== "") {
+    const id = route.hash.replace("#", "");
+    const element = document.getElementById(id);
+    if (element) element.scrollIntoView();
+  }
+  if (route.path !== "/") {
+    document.body.scrollTop = 0;
+  } else {
+    Vue.nextTick(() => {
+      document.body.scrollTop = indexScrollTop;
+    });
+  }
+});
+
+```
+
+这样就做好了登录拦截.我们只需在main.js中引入router就可以了.
+
+参考：
+https://router.vuejs.org/zh/
+https://www.jianshu.com/p/96cfc1b9ff21
