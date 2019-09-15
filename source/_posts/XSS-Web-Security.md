@@ -1,5 +1,5 @@
 ---
-title: XSS Web Security
+title: Web Security
 date: 2016-06-26 16:46:59
 categories: [安全]
 tags:
@@ -8,12 +8,15 @@ tags:
   - XSS防范措施
 ---
 
+## 什么是XSS
 
-# 什么是XSS
 ### 简介
 
 跨站脚本攻击(Cross Site Scripting)，为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，故将跨站脚本攻击缩写为XSS。恶意攻击者通常往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中Web里面的Script代码会被执行，从而达到恶意攻击用户的目的, 还有另外一种产常见的就是CSRF(Cross-site request forgery)跨站点请求伪造。
 <!--more-->
+
+![csrf.png]csrf.png
+
 ### 主要分类
 
 反射型：发出请求时，XSS代码出现在URL中，作为输入提交到服务器端，服务器端解析响应之后，XSS代码随着响应内容一起传回给浏览器，最后浏览器解析执行XSS代码。
@@ -40,28 +43,34 @@ XSS的反射型攻击演示
 express -e ./使用express脚手架，用ejs作为模板引擎，在当前目录执行
 npm install安装依赖
 2.在routes/index.js下设置路由：
-```
-router.get('/', function(req, res, next) {
-	res.set('X-XSS-Protection',0);	//关掉浏览器对XSS的检测
-	res.render('index',{ title:'Express',xss:req.query.xss });	
-});	//query是express获取search的字段
 
+```js
+router.get('/', function(req, res, next) {
+  res.set('X-XSS-Protection',0); //关掉浏览器对XSS的检测
+  res.render('index',{ title:'Express',xss:req.query.xss });
+}); //query是express获取search的字段
 ```
+
 3.在views/index.ejs中的body部分添加：
-```
+
+```html
 <div class="">
-	<%- xss %><!--'-'表示允许输入html，不需要转义-->
+  <%- xss %><!--'-'表示允许输入html，不需要转义-->
 </div>
 ```
+
 4.npm start 启动服务
 
 5.在http://localhost:3000/后输入
-```
+
+```html
 ?xss=<iframe src="//baidu.com/h.html"></iframe>或者?xss=<img src="null" onerror="alert("1")">或者>xss=<p onclick="alert("1")">点我</p>
 ```
+
 进行模仿XSS的放射型攻击。
 
 ### XSS的防范措施
+
 XSS不止是==URL注入 ，或者评论代码注入，还有cookie 劫持==等多种形式
 
 对于评论代码注入的三大步骤：
@@ -71,3 +80,92 @@ XSS不止是==URL注入 ，或者评论代码注入，还有cookie 劫持==等�
 校正：避免直接对HTML Entity解码；使用DOM Parse转换，校正不配对的DOM标签（DOM Parse指将字符串或文本解析成DOM结构）
 实战
 [github](https://github.com/Lozoe/xss)
+
+## 什么是CSRF
+
+CSRF，全称跨站请求伪造（Cross-site request forgery)，也称one click attack/session riding,还可以缩写为XSRF。通俗的说就是利用被害者的身份去发送请求。
+
+### 浏览器的Cookie保存机制
+
+- Session Cookie,浏览器不关闭则不失效
+- 本地Cookie,过期时间内不管浏览器关闭与否均不失效
+
+自动带cookie和浏览器特性有关（safari IE678不可以自动携带cookie）
+
+```html
+<body onload="javascript:document.forms[0].submit()">
+  <!-- <iframe src="http://lz.qunar.com/xxx" frameborder="0"></iframe> -->
+  <form action="http://lz.qunar.com/xxx" method="post">
+    <input type="hidden" name="param1" value="123123123" />
+    <input type="hidden" name="param2" value="123" />
+</body>
+```
+
+### CSRF几种攻击方式
+
+- HTML CSRF
+- JSON HiJacking
+- Flash CSRF
+
+#### HTML CSRF
+
+通过html标签进行发起CSRF请求的，可以发起Get请求的标签
+
+```html
+<link href="">
+<img src="">
+<frame src="">
+<script src="">
+<video src="">
+background: url("");
+```
+
+POST攻击： form表单构造
+
+```html
+<body onload="javascript:document.forms[0].submit()">
+  <!-- <iframe src="http://lz.qunar.com/xxx" frameborder="0"></iframe> -->
+  <form action="http://lz.qunar.com/xxx" method="post">
+    <input type="hidden" name="param1" value="123123123" />
+    <input type="hidden" name="param2" value="123" />
+</body>
+```
+
+#### JSON HiJacking
+
+构造自定义的会回调函数
+
+```html
+<script>
+  function hijack(data) {
+    console.log(data);
+  }
+</script>
+<script src="http://www.a.com/json?callback=hijack">
+```
+
+#### Flash CSRF
+
+通过flash来实现跨域请求
+
+import flash.net.URLRequest
+
+```js
+function get() {
+  var url = new URLRequest("http://a.com/json?callback=hijack");
+  url.method = "GET";
+  sendToUrl(url);
+}
+```
+
+### CSRF 的防御方法
+
+- 通过验证码进行防御
+- 检查请求来源（reffer验证） 也可以被篡改
+- 增加请求参数 token
+
+## CSRF与XSS的区别
+
+XSS: 利用对用户的输入不严谨然后执行JS语句
+CSRF: 通过伪造受信任用户发送请求
+CSRF可以通过XSS来实现

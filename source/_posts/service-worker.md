@@ -124,6 +124,10 @@ self.addEventListener('fetch', function (event) {
 });
 ```
 
+![life-cycle.png](life-cycle.png)
+
+![life-cycle-detail.png](life-cycle-detail.png)
+
 ## 五、项目如何快速接入Service Worker
 
 方案一： workbox方案（我在项目中采用这种方式）
@@ -217,9 +221,99 @@ if (navigator.serviceWorker) {
 }
 ```
 
+七、代码
+
+1）通过service worker直接返回 Network-only
+
+```js
+self.addEventListener('fetch', event => {
+  event.respondWith(fetch(event.request));
+  );
+});
+```
+
+2）stale-while-revalite
+
+```js
+self.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.open('my-cache').then(cache => {
+      return caches.match(event.request).then(cacheResponse => {
+        const fetchPromise = fetch(event.request).then(netWorkResponse => {
+          cache.put(event.request, netWorkResponse.clone());
+          return netWorkResponse;
+        })
+        return cacheResponse || fetchPromise;
+      })
+    });
+  );
+});
+
+// workbox实现
+workbox.strategies.staleWhileRevalidate({
+  cacheName: 'prefix' + ':js',
+  plugins: [
+    new workbox.expiration.Plugin({
+      maxEntries: 20, // 限制缓存条目数
+      maxAgeSeconds: 7 * 24 * 60 * 60  // 7天后过期
+    })
+  ]
+});
+```
+
+3）cache-first
+
+```js
+// workbox实现 service worker可以告诉web app这是一个导航请求，从fetch event事件去获取信息，service worker 知道这个url被请求过，使用先前已经预缓存的通用应用程序，并且最终从缓存中返回到Web应用程序，完全避免网络请求。
+
+// 对于不同路径（单页应用）需要返回同样的html，配置实现
+
+// 先检查cache,如果可用，则直接返回，否则去请求网络。
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response) => {
+      return response || fetch(event.request);
+    })
+  );
+  );
+});
+
+workbox.router.registerNavigationRoute({
+  blackList: [
+    new RegExp('/about'),
+    new RegExp('/email/(remove|add)')
+  ]
+});
+```
+
+3）network-first
+
+```js
+// workbox实现 service worker可以告诉web app这是一个导航请求，从fetch event事件去获取信息，service worker 知道这个url被请求过，使用先前已经预缓存的通用应用程序，并且最终从缓存中返回到Web应用程序，完全避免网络请求。
+
+// 对于不同路径（单页应用）需要返回同样的html，配置实现
+
+// 先检查cache,如果可用，则直接返回，否则去请求网络。
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    fetch(event.request).cache(() => {
+      return caches.match(event.request);
+    })
+  );
+  );
+});
+```
+
 参考：
 
+https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers
+https://jakearchibald.com/2014/offline-cookbook/#cache-then-network
+https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/?hl=zh-cn
 https://blog.caowencheng.cn/2018/11/20/service-worker/
 http://taobaofed.org/blog/2018/08/08/workbox3/
 https://codelabs.developers.google.com/codelabs/workbox-lab-cn/index.html?index=..%2F..gddchina#0
 https://zoumiaojiang.com/article/amazing-workbox-3/
+https://huangxuan.me/2017/07/12/upgrading-eleme-to-pwa/
+https://www.youtube.com/watch?v=q4k-GOmI8Tg
