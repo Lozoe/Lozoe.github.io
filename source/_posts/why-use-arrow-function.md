@@ -2,8 +2,6 @@
 title: 为什么使用箭头函数
 date: 2018-09-14 18:15:37
 categories: [JavaScript]
-tags:
-  - 箭头函数
 ---
 
 

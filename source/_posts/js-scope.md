@@ -2,8 +2,6 @@
 title: js中的作用域
 date: 2018-09-15 17:07:31
 categories: [JavaScript]
-tags:
-  - js作用域
 ---
 
 在上一次学习分享了函数式编程后对JavaScript 的作用域颇有感想，今天小编就本人的理解来谈一下js中的作用域以及作用域的改变

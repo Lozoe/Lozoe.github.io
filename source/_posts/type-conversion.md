@@ -1,6 +1,7 @@
 ---
 title: 类型转换
 date: 2018-09-14 10:46:07
+categories: [Javascript]
 tags:
   - 类型转换
 ---

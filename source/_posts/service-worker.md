@@ -1,6 +1,7 @@
 ---
 title: service-worker
 date: 2019-08-19 11:14:10
+categories: [Browser]
 tags:
 ---
 

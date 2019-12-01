@@ -1,6 +1,7 @@
 ---
 title: 前端代码规范之JavaScript
 date: 2019-07-22 10:38:07
+categories: [JavaScript]
 tags:
   - 代码规范
 ---

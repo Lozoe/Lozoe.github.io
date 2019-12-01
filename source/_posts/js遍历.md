@@ -2,9 +2,6 @@
 title: js遍历
 date: 2018-08-25 17:04:01
 categories: [JavaScript]
-tags:
-  - 遍历
-  - for-of
 ---
 
 ## JavaScript 数组遍历方法的对比

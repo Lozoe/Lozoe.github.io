@@ -1,6 +1,7 @@
 ---
 title: PWA实践
 date: 2019-08-31 13:11:37
+categories: [Javascript]
 tags:
 ---
 

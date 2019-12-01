@@ -2,8 +2,6 @@
 title: js中的深拷贝与浅拷贝
 date: 2019-08-15 08:39:19
 categories: [JavaScript]
-tags:
-  - 深拷贝与浅拷贝
 ---
 
 ## 1、javaScript的数据类型

@@ -2,8 +2,6 @@
 title: 错误监控
 date: 2017-09-10 16:04:04
 categories: [JavaScript]
-tags:
-  - 错误监控
 ---
 
 ### 前端错误分类

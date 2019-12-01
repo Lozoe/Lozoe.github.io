@@ -1,9 +1,7 @@
 ---
 title: css 3D立方体
 date: 2019-06-16 12:01:43
-categories: [CSS3]
-tags:
-  - css
+categories: [CSS]
 ---
 
 曾经被问过实现一个3d立方体，太久不写css了，有些css3的属性一时还有点陌生了，这次通过这个小case也来复习一下css3的变换相关的内容。

@@ -1,9 +1,7 @@
 ---
 title: gulp插件之require-dir
 date: 2018-07-24 17:09:21
-tags:
-  - gulp 
-  - require-dir
+categories: [JavaScript]
 ---
 
 ### gulp之 require-dir 分离任务到多个文件中

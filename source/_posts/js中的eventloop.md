@@ -2,7 +2,6 @@
 title: js中的eventloop
 date: 2019-07-18 07:09:24
 tags:
-  - 事件循环
   - Event Loop
 ---
 
@@ -62,7 +61,7 @@ setTimeout(() => {
 
 据此，代码的执行情况可以如下解释：
 
-![setTimeout](https://1shark.com/word-img-1256165110/timeout.png)
+![setTimeout](timeout.png)
 
 由此可知，0比1先被打印（如果for耗时很短，那肯定是1先打印了），时间间隔大概10ms。
 嘿嘿嘿，然鹅时间间隔并非一定是10ms，这取决于for循环执行耗时。

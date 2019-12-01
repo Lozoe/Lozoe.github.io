@@ -2,8 +2,6 @@
 title: 移动端1px边框解决方案
 date: 2015-11-10 18:25:26
 categories: [CSS]
-tags:
-  - css
 ---
 
 在移动端web页面开发中，为了使css中使用的尺寸与设计稿一致，通常会采用 rem 单位配合 [lib-flexible](https://github.com/amfe/lib-flexible) 来实现移动端的适配，在IOS设备上 flexible.js 会根据设备的分辨率动态的调整 viewport 的 width 和 scale 来达到目的。

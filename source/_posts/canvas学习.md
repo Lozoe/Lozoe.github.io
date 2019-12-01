@@ -1,8 +1,7 @@
 ---
 title: canvas学习
 date: 2019-07-31 15:35:24
-tags:
-  - html5
+categories: [CSS]
 ---
 
 ## Canvas是用来干嘛的

@@ -1,6 +1,7 @@
 ---
 title: vue父子组件通信
 date: 2018-11-22 13:19:09
+categories: [Framework]
 tags:
 ---
 

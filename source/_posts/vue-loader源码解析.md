@@ -1,6 +1,7 @@
 ---
 title: vue-loader源码解析
 date: 2019-08-01 22:54:07
+categories: [Framework]
 tags:
 ---
 

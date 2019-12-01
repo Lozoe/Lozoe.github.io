@@ -2,9 +2,6 @@
 title: js函数式编程
 date: 2017-08-10 21:51:21
 categories: [JavaScript]
-tags:
-  - 编程范式
-  - 函数式编程
 ---
 
 ### 前言
@@ -320,7 +317,9 @@ const shout = compose(exclaim, toUpperCase);
 shout("send in the clowns");
 //=> "SEND IN THE CLOWNS!"
 ```
+
 eg2.
+
 ```js
 const compose = (f, g) => x => f(g(x))
 
@@ -344,13 +343,40 @@ lastUpperAnother(['jumpkick', 'roundhouse', 'uppercut']); //"UPPERCUT"
 
 结合律：
 
-
 函数组合优点：
+
 - 利用了函数封装性将功能做拆解
 - 增强函数复用性和可维护性
 - 代码实现一目了然，逻辑清晰
 - 数据流从右向左，可读性高于嵌套一堆的函数调用
 ![区别](association.png)
+
+一起来实现一个通用的组合函数
+
+```js
+const head = x => x[0]; // 取第一个元素
+const reverse = arr => arr.reduce((acc, x) => [x].concat(acc), []); // 反转
+const toUpperCase = x => x.toUpperCase(); // 大写
+const removeSpace = x => x.replace(/\s*/g, ''); // 去除空格
+function compose(...funcs) {
+    if (funcs.length === 0) {
+        return arg => arg
+    }
+
+    if (funcs.length === 1) {
+        return funcs[0]
+    }
+
+    return funcs.reduce((a, b) => (...args) => a(b(...args))) // 参数从右向左执行
+    return funcs.reduce((a, b) => {
+        return (...args) => {
+            return a(b(...args);
+        };
+    })
+}
+const last = compose(removeSpace, toUpperCase, head, reverse);
+last(['hello world', 'Bye', 'good morning']); // GOODMORNING
+```
 
 #### 高阶函数
 

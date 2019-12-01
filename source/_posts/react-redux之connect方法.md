@@ -1,6 +1,7 @@
 ---
 title: react-redux之connect方法
 date: 2019-04-26 18:47:43
+categories: [Framework]
 tags:
   - react
 ---

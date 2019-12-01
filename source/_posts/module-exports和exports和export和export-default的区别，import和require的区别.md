@@ -1,6 +1,7 @@
 ---
 title: module.exports和exports和export和export default的区别，import和require的区别
 date: 2019-07-19 18:38:20
+categories: [Javascript]
 tags:
 ---
 

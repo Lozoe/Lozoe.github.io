@@ -1,7 +1,7 @@
 ---
 title: DNS预解析
 date: 2019-08-15 11:11:05
-categories: [前端]
+categories: [Network]
 ---
 
 ## 从浏览器输入一个url回车都发生了什么

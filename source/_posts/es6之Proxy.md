@@ -1,8 +1,7 @@
 ---
 title: es6之Proxy
 date: 2019-07-27 10:15:06
-tags:
-  - es6
+categories: [JavaScript]
 ---
 
 Vue3.0开始使用Proxy取代defineProperty，关于Proxy，今天小编也来研究一番。

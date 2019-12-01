@@ -2,8 +2,6 @@
 title: css3-transition
 date: 2016-08-16 09:33:34
 categories: [CSS]
-tags:
-  - css
 ---
 
 CSS3提供了transition的动画支持，transition动画可以控制HTML组件的某个属性发生改变时会经历一段时间、以平滑渐变的方式发生改变，从而产生动画效果。

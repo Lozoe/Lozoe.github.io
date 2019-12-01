@@ -2,8 +2,6 @@
 title: CORS
 date: 2016-07-28 20:24:51
 categories: [JavaScript]
-tags:
-  - CORS
 ---
 
 CORS是一个W3C标准，全称是"跨域资源共享"（Cross-origin resource sharing）。

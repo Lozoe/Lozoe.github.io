@@ -2,11 +2,10 @@
 title: Generator两个简单运用
 date: 2018-08-24 16:43:37
 categories: [JavaScript]
-tags:
-  - 长轮询
 ---
 
 偶尔在论坛中发现了两个非常优秀的代码实践，特此学习。
+
 ```javascript
 {
   let draw = function count(count) {

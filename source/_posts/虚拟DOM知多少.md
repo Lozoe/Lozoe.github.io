@@ -10,17 +10,160 @@ Virtual DOM是对DOM的抽象,本质上是JavaScript对象,这个对象就是更
 
 ![virtual dom](virtual-dom.png)
 
+- virtual dom，虚拟dom
+- 用js模拟dom结构
+- DOM变化的对比，放在JS层来做
+- 提高重回性能
+
+### 真实的DOM
+
+```html
+<ul id='list'>
+    <li class='item'>item1</li>
+    <li class='item'>item2</li>
+</ul>
+```
+
+### 虚拟DOM:只模拟了DOM的一部分节点，实际DOM节点中的属性是很复杂的
+
+```js
+{
+    tag: 'ul',
+    attrs:{
+        id: 'list'
+    },
+    children:[
+       {
+            tag: 'li',
+            attrs: {
+                className: 'item',
+                children: ['item']
+            }
+            tag: 'li',
+            attrs:{
+                className: 'item',
+                children: ['item2']
+            }
+       }
+    ]
+}
+```
+
 ## 为什么需要Virtual DOM
 
 既然我们已经有了DOM,为什么还需要额外加一层抽象?
 
-首先,我们都知道在前端性能优化的一个秘诀就是尽可能少地操作DOM,不仅仅是DOM相对较慢,更因为频繁变动DOM会造成浏览器的回流或者重绘,这些都是性能的杀手,因此我们需要这一层抽象,在patch过程中尽可能地一次性将差异更新到DOM中,这样保证了DOM不会出现性能很差的情况.
+首先,我们都知道在前端性能优化的一个秘诀就是尽可能少地操作DOM,不仅仅是DOM相对较慢,更因为频繁变动DOM会造成浏览器的回流或者重绘,这些都是性能的杀手,因此我们需要这一层抽象,在patch过程中尽可能地一次性将差异更新到DOM中,这样保证了DOM不会出现性能很差的情况.（DOM操作是昂贵的，js的运行效率高；尽量减少DOM操作，找出DOM必须更新的节点来更新，其他的不更新）
 
-其次,现代前端框架的一个基本要求就是无须手动操作DOM,一方面是因为手动操作DOM无法保证程序性能,多人协作的项目中如果review不严格,可能会有开发者写出性能较低的代码,另一方面更重要的是省略手动DOM操作可以大大提高开发效率.
+其次,现代前端框架的一个基本要求就是无须手动操作DOM,一方面是因为手动操作DOM无法保证程序性能,多人协作的项目中如果review不严格,可能会有开发者写出性能较低的代码,另一方面更重要的是省略手动DOM操作可以大大提高开发效率.（项目越复杂，影响越严重）
 
 最后,也是Virtual DOM最初的目的,就是更好的跨平台,比如Node.js就没有DOM,如果想实现SSR(服务端渲染),那么一个方式就是借助Virtual DOM,因为Virtual DOM本身是JavaScript对象.
 
 ## Virtual DOM的关键要素
+
+### 虚拟DOM的核心类库 —— snabbdom
+
+#### 核心函数有h函数和patch函数
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <div id="container"></div>
+    <button id="btn-change">change</button>
+
+    <script src="https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom.js"></script>
+    <script src="https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-class.js"></script>
+    <script src="https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-props.js"></script>
+    <script src="https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-style.js"></script>
+    <script src="https://cdn.bootcss.com/snabbdom/0.7.0/snabbdom-eventlisteners.js"></script>
+    <script src="https://cdn.bootcss.com/snabbdom/0.7.0/h.js"></script>
+    <script type="text/javascript">
+        var snabbdom = window.snabbdom
+        // 定义关键函数 patch
+        var patch = snabbdom.init([
+            snabbdom_class,
+            snabbdom_props,
+            snabbdom_style,
+            snabbdom_eventlisteners
+        ])
+
+        // 定义关键函数 h
+        var h = snabbdom.h
+
+        // 原始数据
+        var data = [
+            {
+                name: '张三',
+                age: '20',
+                address: '北京'
+            },
+            {
+                name: '李四',
+                age: '21',
+                address: '上海'
+            },
+            {
+                name: '王五',
+                age: '22',
+                address: '广州'
+            }
+        ]
+        // 把表头也放在 data 中
+        data.unshift({
+            name: '姓名',
+            age: '年龄',
+            address: '地址'
+        })
+
+        var container = document.getElementById('container')
+
+        // 渲染函数
+        var vnode
+        function render(data) {
+            var newVnode = h('table', {}, data.map(function (item) {
+                var tds = []
+                var i
+                for (i in item) {
+                    if (item.hasOwnProperty(i)) {
+                        tds.push(h('td', {}, item[i] + ''))
+                    }
+                }
+                return h('tr', {}, tds)
+            }))
+
+            if (vnode) {
+                // re-render
+                patch(vnode, newVnode)
+            } else {
+                // 初次渲染
+                patch(container, newVnode)
+            }
+
+            // 存储当前的 vnode 结果
+            vnode = newVnode
+        }
+
+        // 初次渲染
+        render(data)
+
+
+        var btnChange = document.getElementById('btn-change')
+        btnChange.addEventListener('click', function () {
+            data[1].age = 30
+            data[2].address = '深圳'
+            // re-render
+            render(data)
+        })
+
+    </script>
+</body>
+</html>
+```
 
 ### Virtual DOM的创建
 
@@ -126,6 +269,40 @@ export default h;
 
 Virtual DOM 归根到底是JavaScript对象,我们得想办法将Virtual DOM与真实的DOM对应起来,也就是说,需要我们声明一个函数,此函数可以将vnode转化为真实DOM.
 
+先来个简化版本
+
+```js
+function createElement(vnode) {
+    var tag = vnode.tag  // 'ul'
+    var attrs = vnode.attrs || {}
+    var children = vnode.children || []
+    if (!tag) {
+        return null
+    }
+
+    // 创建真实的 DOM 元素
+    var elem = document.createElement(tag)
+    // 属性
+    var attrName
+    for (attrName in attrs) {
+        if (attrs.hasOwnProperty(attrName)) {
+            // 给 elem 添加属性
+            elem.setAttribute(attrName, attrs[attrName])
+        }
+    }
+    // 子元素
+    children.forEach(function (childVnode) {
+        // 给 elem 添加子元素
+        elem.appendChild(createElement(childVnode))  // 递归
+    })
+
+    // 返回真实的 DOM 元素
+    return elem
+}
+```
+
+再看源版
+
 ```typescript
 function createElm(vnode: VNode, insertedVnodeQueue: VNodeQueue): Node {
     let i: any, data = vnode.data;
@@ -178,6 +355,12 @@ function createElm(vnode: VNode, insertedVnodeQueue: VNodeQueue): Node {
 上述函数其实工作很简单,就是根据 type 生成对应的 DOM，把 data 里定义的 各种属性设置到 DOM 上.
 
 ### Virtual DOM 的diff
+
+#### vdom为什么使用diff算法
+
+- DOM操作是昂贵的，尽量减少DOM操作
+- 找出DOM必须更新的节点来更新，其他的不更新
+- 找出的过程，就是diff算法的实现
 
 Virtual DOM 的 diff才是整个Virtual DOM 中最难理解也最核心的部分,diff的目的就是比较新旧Virtual DOM Tree找出差异并更新.
 
@@ -355,3 +538,5 @@ snabbdom.js已经是社区内主流的Virtual DOM实现了,vue 2.0阶段与snabb
 https://github.com/snabbdom/snabbdom
 
 https://mp.weixin.qq.com/s/7VucLP5iFhEUIYQJJSmxeQ
+
+https://juejin.im/post/5d7f32d5518825570327eff2

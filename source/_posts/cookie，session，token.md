@@ -1,6 +1,7 @@
 ---
 title: cookie，session，token
 date: 2019-08-07 16:01:51
+categories: [Browser]
 tags:
 ---
 

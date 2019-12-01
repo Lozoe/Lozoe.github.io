@@ -2,8 +2,6 @@
 title: Javascript的数据结构与算法(一)
 date: 2015-8-28 20:24:51
 categories: 数据结构与算法
-tags: 
-  - 数据结构与算法
 keywords: javascript,html,css,web
 description: Javascript的数据结构与算法(一)
 ---

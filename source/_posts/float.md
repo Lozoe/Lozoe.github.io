@@ -1,7 +1,7 @@
 ---
 title: js精度问题解决方案
 date: 2018-08-24 08:40:39
-categories: [JavaScript]
+categories: [CSS]
 tags:
 ---
 

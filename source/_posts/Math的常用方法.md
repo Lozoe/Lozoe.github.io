@@ -1,6 +1,7 @@
 ---
 title: Math的常用方法
 date: 2019-08-01 21:31:56
+categories: [JavaScript]
 tags:
 ---
 

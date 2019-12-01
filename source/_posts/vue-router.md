@@ -1,8 +1,7 @@
 ---
 title: vue-router
 date: 2019-08-14 20:44:54
-tags:
-  - vue
+categories: [Framework]
 ---
 
 ## vue-router是什么

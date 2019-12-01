@@ -1,6 +1,7 @@
 ---
 title: vuex的使用方法示例
 date: 2019-01-02 08:14:45
+categories: [Framework]
 tags:
     - vue
 ---

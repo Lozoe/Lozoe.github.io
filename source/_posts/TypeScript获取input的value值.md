@@ -1,6 +1,7 @@
 ---
 title: TypeScript获取input的value值
 date: 2019-07-26 11:53:45
+categories: [Javascript]
 tags:
   - typescript
 ---

@@ -2,8 +2,6 @@
 title: js精度问题
 date: 2019-06-25 17:04:01
 categories: [JavaScript]
-tags:
-  - js精度
 ---
 
 ## JavaScript 为什么不能处理小数运算
