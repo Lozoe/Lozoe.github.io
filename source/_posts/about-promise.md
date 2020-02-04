@@ -1,7 +1,7 @@
 ---
 title: 关于Promise那点事儿
 date: 2017-09-15 20:33:31
-categories: [Javascript]
+categories: [JavaScript]
 tags:
   - Promise
 ---

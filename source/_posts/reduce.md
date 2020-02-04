@@ -1,7 +1,7 @@
 ---
 title: reduce
 date: 2018-09-27 15:34:11
-categories: [Javascript]
+categories: [JavaScript]
 tags: reduce
 ---
 经常用到的方法有push、join、indexOf、slice等等，但是有一个经常被我们忽略的方法：reduce，这个方法简直强大的不要不要的。

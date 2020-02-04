@@ -1,7 +1,7 @@
 ---
 title: 模块化发展历程
 date: 2019-07-20 11:25:05
-categories: [Javascript]
+categories: [JavaScript]
 ---
 
 模块化主要是用来抽离公共代码，隔离作用域，避免变量冲突等。

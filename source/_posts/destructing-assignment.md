@@ -1,7 +1,7 @@
 ---
 title: ES6中的解构赋值
 date: 2018-08-16 16:16:43
-categories: [Javascript]
+categories: [JavaScript]
 ---
 
 ### 什么是解构赋值？

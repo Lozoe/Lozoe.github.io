@@ -1,7 +1,7 @@
 ---
 title: 观察者模式
 date: 2017-09-16 20:00:11
-categories: [Javascript]
+categories: [JavaScript]
 tags:
   - 设计模式
 ---
