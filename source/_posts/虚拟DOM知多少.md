@@ -15,6 +15,8 @@ Virtual DOM是对DOM的抽象,本质上是JavaScript对象,这个对象就是更
 - DOM变化的对比，放在JS层来做
 - 提高重回性能
 
+<!-- more -->
+
 ### 真实的DOM
 
 ```html

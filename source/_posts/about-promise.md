@@ -9,6 +9,8 @@ tags:
 Promise 是一个非常简单的概念，
 Promise 的价值在于使得异步代码以一个更可读的风格结构化，而不是因异步函数嵌套显得混乱不堪。这篇文章会接触到 6 个你可能不知道的关于 Promise 的事。
 
+<!-- more -->
+
 创建 Promise
 ```js
 var p = new Promise(function(resolve, reject) {

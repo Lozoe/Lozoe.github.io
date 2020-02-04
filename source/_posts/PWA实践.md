@@ -13,6 +13,8 @@ PWA的中文名叫做渐进式网页应用，早在2014年， W3C 公布过 Serv
 
 需要特别说明的是，PWA 不是特指某一项技术，而是应用了多项技术的 Web App。其核心技术包括 App Manifest、Service Worker、Web Push，等等。
 
+<!-- more -->
+
 ## 为什么W3C和谷歌在推广这项技术
 
 这就要从前端的现状说起：

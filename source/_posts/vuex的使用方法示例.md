@@ -8,6 +8,8 @@ tags:
 
 ## 一、直接引入
 
+<!-- more -->
+
 ```html
 <!DOCTYPE html>
 <html lang="en">

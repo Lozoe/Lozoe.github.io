@@ -9,6 +9,8 @@ tags:
 
 service worker是一个浏览器背后运行的脚步，独立于web页面，为无需一个页面或用户交互的功能打开了大门。今日，它包含了推送通知和背景异步（push notifications and background sync）的功能。将来，service worker将支持包括periodic sync or geofencing的功能。 本教程中讨论的核心功能是拦截和处理网络请求的能力，包括以编程方式管理响应缓存。
 
+<!-- more -->
+
 ## 二、PWA和Service Worker的关系
 
 PWA (Progressive Web Apps) 不是一项技术，也不是一个框架，我们可以把她理解为一种模式，一种通过应用一些技术将 Web App 在安全、性能和体验等方面带来渐进式的提升的一种 Web App的模式。对于 webview 来说，Service Worker 是一个独立于js主线程的一种 Web Worker 线程， 一个独立于主线程的 Context，但是面向开发者来说 Service Worker 的形态其实就是一个需要开发者自己维护的文件，我们假设这个文件叫做 sw.js。通过 service worker 我们可以代理 webview 的请求相当于是一个正向代理的线程，fiddler也是干这些事情），在特定路径注册 service worker 后，可以拦截并处理该路径下所有的网络请求，进而实现页面资源的可编程式缓存，在弱网和无网情况下带来流畅的产品体验，所以 service worker 可以看做是实现pwa模式的一项技术实现。
