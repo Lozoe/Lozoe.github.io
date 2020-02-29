@@ -30,6 +30,7 @@ window.addEventListener('error', funtion() {}, false)
 ```js
 1)object.onerror(script错误不冒泡到window)
 2)performance.getEnties() 获取所有已经加载资源加载时长
+```
 
 ```js
 for(let [key, value] of performance.getEntries().entries()) {
