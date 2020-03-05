@@ -17,11 +17,12 @@ tags:
 
 ![csrf.png]csrf.png
 
-### 主要分类
+### XSS主要分类
 
 反射型：发出请求时，XSS代码出现在URL中，作为输入提交到服务器端，服务器端解析响应之后，XSS代码随着响应内容一起传回给浏览器，最后浏览器解析执行XSS代码。
 存储型：存储型XSS和反射型XSS的差别在于,提交的代码会存储在服务器中(例如数据库,内存,文件系统等),下次请求页面时不用再提交XSS代码。
-特点
+
+### 特点
 
 1.耗时间
 2.有一定几率不成功
@@ -36,7 +37,9 @@ DoS(Denial of Service)拒绝服务攻击、DDoS(Distributed Denial of Service)�
 这两种攻击方式利用目标系统网络服务功能缺陷或者直接消耗其系统资源，使得该目标系统无法提供正常的服务。单一的DoS攻击一般是采用一对一方式的，而DDoS利用更多的傀儡机（肉鸡）来发起进攻，以比从前更大的规模来进攻受害者。
 Server Limit DOS服务器限制拒绝服务攻击
 比如： 攻击导致http request header过长而导致web server产生400或者4开头的一个错误。如果浏览器中这些数据保存在cookies中，会导致用户无法正常访问域名或者这个站点
-XSS的反射型攻击演示
+
+### XSS的反射型攻击演示
+
 构建Node服务进行演示
 1.新建文件夹，命令行输入：
 
@@ -78,7 +81,9 @@ XSS不止是==URL注入 ，或者评论代码注入，还有cookie 劫持==等�
 编码：对用户输入的数据进行HTML Entity编码，比如字符"转义成转义字符&quot
 过滤：移除用户上传的DOM属性，如onerror等，还有用户上传的Style节点、Script节点，Iframe节点，frame节点等
 校正：避免直接对HTML Entity解码；使用DOM Parse转换，校正不配对的DOM标签（DOM Parse指将字符串或文本解析成DOM结构）
-实战
+
+### 实战
+
 [github](https://github.com/Lozoe/xss)
 
 ## 什么是CSRF
@@ -133,7 +138,7 @@ POST攻击： form表单构造
 
 #### JSON HiJacking
 
-构造自定义的会回调函数
+构造自定义的回调函数
 
 ```html
 <script>
