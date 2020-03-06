@@ -9,6 +9,8 @@ tags:
 
 CSRF，通常称为跨站请求伪造，英文名Cross-site request forgery
 
+<!-- more -->
+
 ## CSRF攻击原理
 
 ![csrf攻击过程](csrf攻击过程.png)

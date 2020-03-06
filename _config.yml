@@ -65,6 +65,7 @@ category_map:
 	Network: network
 	Tool: tool
 	Framework: framework
+	安全: safe
 	生活: life
 	其他: other
 tag_map:
