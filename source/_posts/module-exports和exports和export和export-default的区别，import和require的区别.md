@@ -492,10 +492,6 @@ console.log(_a2.default);
 `a` 模块 `export defualt` 会被转换成 `exports.default = 1;`，这也是平时前端项目开发中使用 `require` 为什么还常常需要 `.default` 才能取到目标值的原因。
 接着当运行 `import a from './a.js'` 时，`es module` 预期的是返回 `export` 的内容。工具会将代码转换为 `_interopRequireDefault` 包裹，在里面判断是否为 esModule，是的话直接返回，如果是 commonjs 模块的话则包裹一层 `{default: obj}`，最后获取 a 的值时，也会被装换成 _a1.default。
 
-作者：HelKyle
-链接：https://juejin.im/post/5e5f10176fb9a07cd443c1e2
-来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 ## 其他
 
 除了在语法上的区别，在编译加载上es5和es6的模式也是有区别的。
