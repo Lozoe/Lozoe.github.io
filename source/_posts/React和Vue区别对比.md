@@ -1,7 +1,7 @@
 ---
 title: React和Vue区别对比
 date: 2020-03-24 17:17:38
-tags:
+categories: [Framework]
 ---
 
 ## React和Vue区别
