@@ -52,5 +52,6 @@ Props: 父组件往子组件传送数据
 周边生态: 路由、状态管理
 vue-router、vuex   react-router redux mobx
 UI生态：
-vue:   pc（iview/elementUI）、h5（有赞vant/mintUI）、混合开发（weex）、微信小程序（iview weapp/zanui）
-react: pc（ant design）、h5（ant design mobile）、混合开发（rn）、微信小程序（taro）
+vue   -  pc（iview/elementUI）、h5（有赞vant/mintUI）、混合开发（weex）、微信小程序（iview weapp/zanui）
+react - pc（ant design）、h5（ant design mobile）、混合开发（react-native-elements）、微信小程序（taro ui）
+使用场景：web app混合 微信小程序(mpvue/taro) 结合electron开发桌面程序
