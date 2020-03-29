@@ -73,7 +73,7 @@ Props: 父组件往子组件传送数据
 构建工具: vue-cli create-react-app
 开发调试: vue-dev-tools react-dev-tools
 周边生态: 路由、状态管理
-vue-router、vuex   react-router redux mobx
+vue-router、vuex react-router redux mobx
 UI生态：
 vue   -  pc（iview/elementUI）、h5（有赞vant/mintUI）、混合开发（weex）、微信小程序（iview weapp/zanui）
 react - pc（ant design）、h5（ant design mobile）、混合开发（react-native-elements）、微信小程序（taro ui）
