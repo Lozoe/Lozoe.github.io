@@ -11,7 +11,7 @@ categories: [Framework]
 vue的官网中说它是一款渐进式框架，采用自底向上增量开发的设计。
 react主张函数式编程，所以推崇纯组件，数据不可变，单向数据流，当然需要双向的地方也可以手动实现，
 比如借助 onChange 和 setState 来实现一个双向的数据流。
-
+<!-- more -->
 ### 2）编写语法
 
 Vue推荐的做法是webpack+vue-loader的单文件组件格式，vue保留了html、css、js分离的写法
