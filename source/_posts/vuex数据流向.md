@@ -13,11 +13,11 @@ https://vuex.vuejs.org/zh-cn
 
 原vue结构图
 
-![vue数据流向](vue数据流向.png)
+![vue结构图](vue结构图.png)
 
 vuex结构图
 
-![vuex数据流向](vuex数据流向.png)
+![vuex结构图](vuex结构图.png)
 
 Vuex对象结构 （state，mutations，getters，actions） 
 
