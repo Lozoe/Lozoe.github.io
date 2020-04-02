@@ -13,13 +13,13 @@ https://vuex.vuejs.org/zh-cn
 
 原vue结构图
 
-![vue结构图](vue结构图.png)
+<img src="vue结构图.png" alt="vue结构图" width="487" height="329" align="bottom" />
 
 vuex结构图
 
 ![vuex结构图](vuex结构图.png)
 
-Vuex对象结构 （state，mutations，getters，actions） 
+Vuex对象结构 （state，mutations，getters，actions）
 
 - state 对象数据
 
