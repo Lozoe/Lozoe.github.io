@@ -155,7 +155,7 @@ plugins: [
 
 构建后生成的sw-register.js文件变化如图：
 
-![result.png](result.png.png)
+![result.png](result.png)
 
 这样处理后，sw-register.js文件就不会被浏览器缓存，也即每次刷新会多一次sw-register.js的文件请求，由于它只是用来做注册的工作，体量不会太大，可以接受，关键是前端可以自行控制;
 
