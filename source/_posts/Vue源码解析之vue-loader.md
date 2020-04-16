@@ -1,15 +1,18 @@
 ---
-title: vue-loader源码解析
+title: Vue源码解析之vue-loader
 date: 2019-08-01 22:54:07
 categories: [Framework]
 tags:
 ---
 
 ## 观察输入输出
+
 ### 输入
+
 测试是最好的文档，所以我们从测试用例开始分析，找到test/fixture/basic.vue，内容如下：
 <!-- more -->
-```
+
+```html
 <template>
   <h2 class="red">{{msg}}</h2>
 </template>
@@ -35,7 +38,7 @@ comp-a h2 {
 
 通过运行测试之后，可以得到以下输出，但是由于文件巨大，笔者只抽出部分开始分析，如下
 
-```
+```js
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -114,6 +117,7 @@ if (Component.esModule && Object.keys(Component.esModule).some(function (key) { 
 
 以上四个 loader ，除了 babel-loader 是外部的package，其他三个都存在于 vue-loader 的内部（lib/style-compiler 和 lib/template-compiler 和 lib/selector）。
 首先 vue-loader 将 basic.vue 编译成以下内容
+
 ```js
 /* script */
 import __vue_script__ from "!!babel-loader!../../lib/selector?type=script&index=0&bustCache!./basic.vue"
@@ -134,8 +138,10 @@ var Component = normalizeComponent(
 为了方便理解，笔者删除修改了一些内容。
 在三个 import 语句中，不管它们用了多少个不同的 loader 去加载，loader chain 的源头都是 basic.vue。
 JavaScript 部分
-#### 首先分析 script 部分
-```
+
+### 首先分析 script 部分
+
+```js
 /* script */
 import __vue_script__ from "!!babel-loader!../../lib/selector?type=script&index=0&bustCache!./basic.vue"
 ```
@@ -143,23 +149,27 @@ import __vue_script__ from "!!babel-loader!../../lib/selector?type=script&index=
 从右到左，也就是 basic.vue 被先后被 selector 和 babel-loader 处理过了。
 selector（参数type=script） 的处理结果是将 basic.vue 中的 javaScript 抽出来之后交给babel-loader去处理，最后生成可用的 javaScript
 
-#### Template 部分
+### Template 部分
+
 再来分析 template 部分
 
-```
+```js
 /* template */
 import __vue_template__ from "!!../../lib/template-compiler/index?{\"id\":\"data-v-793be54c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!../../lib/selector?type=template&index=0&bustCache!./basic.vue"
 ```
 
 同样的，从左到右，basic.vue 先后被 selector 和 template-compiler 处理过了。
 selector (参数type=template) 的处理结果是将 basic.vue 中的 template 抽出来之后交给 template-compiler 处理，最终输出成可用的 HTML。
-#### Style 部分
+
+### Style 部分
 
 最后分析 style 部分
+
 ```js
 /* styles */
 import __vue_styles__ from "!!vue-style-loader!css-loader!../../lib/style-compiler/index?{\"vue\":true,\"id\":\"data-v-793be54c\",\"scoped\":false,\"hasInlineConfig\":false}!../../lib/selector?type=styles&index=0&bustCache!./basic.vue"
 ```
+
 style 涉及的 loader 较多，一个一个来分析， 从上代码可知，basic.vue 先后要被 selector, style-compiler, css-loader 以及 vue-style-loader 处理。
 selector (参数type=style) 的处理结果是将 basic.vue 中的 css 抽出来之后交给 style-compiler 处理成 css, 然后交给 css-loader 处理生成 module, 最后通过 vue-style-loader 将 css 放在 `<style>` 里面，然后注入到 HTML 里。
 注意，这里之所以没有用 style-loader 是因为 vue-style-loader 是在 fork 了 style-loader 的基础上，增加了后端绘制 (SSR) 的支持。具体的不同，读者可以查看官方文档，笔者这里不再累述。
