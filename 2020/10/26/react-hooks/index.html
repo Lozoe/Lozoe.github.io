@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="L.Zoe">
 <meta property="og:description" content="前言在vue项目中，.vue 文件称为 SFC(Single File Components)，在vue的源码中，有一个sfc模块专门负责.vue单文件组件的解析 vue 会先对 .vue 文件进行解析，分成 template、script、styles、customBlocks 四个部分，称为 descriptor。之后，再对这四个部分分别进行编译最终得到可以在浏览器中执行的 .js 文件。 S">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-12-10T07:07:01.662Z">
+<meta property="og:updated_time" content="2020-12-11T03:23:22.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React之hooks">
 <meta name="twitter:description" content="前言在vue项目中，.vue 文件称为 SFC(Single File Components)，在vue的源码中，有一个sfc模块专门负责.vue单文件组件的解析 vue 会先对 .vue 文件进行解析，分成 template、script、styles、customBlocks 四个部分，称为 descriptor。之后，再对这四个部分分别进行编译最终得到可以在浏览器中执行的 .js 文件。 S">
@@ -187,8 +187,7 @@
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在vue项目中，.vue 文件称为 SFC(Single File Components)，在vue的源码中，有一个sfc模块专门负责.vue单文件组件的解析</p>
 <p>vue 会先对 .vue 文件进行解析，分成 template、script、styles、customBlocks 四个部分，称为 descriptor。之后，再对这四个部分分别进行编译最终得到可以在浏览器中执行的 .js 文件。</p>
-<p>SFCDescriptor，是表示 .vue 各个代码块的对象，为以下数据格式：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// an object format describing a single-file component.</span></span><br><span class="line">declare type SFCDescriptor = &#123;</span><br><span class="line">    template: ?SFCBlock;</span><br><span class="line">    script: ?SFCBlock;</span><br><span class="line">    styles: <span class="built_in">Array</span>&lt;SFCBlock&gt;;</span><br><span class="line">    customBlocks: <span class="built_in">Array</span>&lt;SFCBlock&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>SFCDescriptor，是表示 .vue 各个代码块的对象，为以下数据格式：<br>Object<br><a id="more"></a><br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// an object format describing a single-file component.</span></span><br><span class="line">declare type SFCDescriptor = &#123;</span><br><span class="line">    template: ?SFCBlock;</span><br><span class="line">    script: ?SFCBlock;</span><br><span class="line">    styles: <span class="built_in">Array</span>&lt;SFCBlock&gt;;</span><br><span class="line">    customBlocks: <span class="built_in">Array</span>&lt;SFCBlock&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
 <p>vue 提供了一个 <a href="https://github.com/vuejs/vue/tree/dev/packages/vue-template-compiler#compilerparsecomponentfile-options" target="_blank" rel="noopener">compiler.parseComponent(file, [options])</a>方法，来将 .vue 文件解析成一个 SFCDescriptor。</p>
 <h2 id="1-文件入口"><a href="#1-文件入口" class="headerlink" title="1. 文件入口"></a>1. 文件入口</h2><p>解析 sfc 文件的源码入口在 src/sfc/parser.js 中，编译后的产出在 /packages/vue-template-compiler 和 /packages/vue-server-renderer 下的 build.js 中。</p>
 <p>build.js 文件中直接 export 出了parseComponent方法。</p>
@@ -473,11 +472,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -509,11 +508,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
