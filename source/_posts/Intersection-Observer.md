@@ -69,6 +69,27 @@ interface IntersectionObserverEntry {
   readonly attribute Element target;
 };
 
+{
+    time: 3893.92,
+    rootBounds: ClientRect {
+        bottom: 920,
+        height: 1024,
+        left: 0,
+        right: 1024,
+        top: 0,
+        width: 920
+    },
+    boundingClientRect: ClientRect {
+        // ...
+    },
+    intersectionRect: ClientRect {
+        // ...
+    },
+    isIntersecting: 0.54,
+    intersectionRatio: 0.54,
+    target: element
+}
+
 ```
 
 [![](https://user-gold-cdn.xitu.io/2019/8/29/16cdccc7f71311ee?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)](https://user-gold-cdn.xitu.io/2019/8/29/16cdccc7f71311ee?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
