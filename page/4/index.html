@@ -166,6 +166,219 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-对MVC、MVP-、MVVM的理解" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/08/对MVC、MVP-、MVVM的理解/">对MVC、MVP、MVVM的理解</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/08/对MVC、MVP-、MVVM的理解/" class="archive-article-date">
+  	<time datetime="2020-03-08T08:22:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p>MVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用一种业务逻辑、数据、界面显示分离的方法组织代码，将业务逻辑聚集到一个部件里面，在改进和个性化定制界面及用户交互的同时，不需要重新编写业务逻辑。MVC被独特的发展起来用于映射传统的输入、处理和输出功能在一个逻辑的图形化用户界面的结构中。</p>
+        
+          <a class="article-more-a" href="/2020/03/08/对MVC、MVP-、MVVM的理解/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/08/对MVC、MVP-、MVVM的理解/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-redux、koa、express-中间件源码解读" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/06/redux、koa、express-中间件源码解读/">redux、koa、express 中间件源码解读</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/06/redux、koa、express-中间件源码解读/" class="archive-article-date">
+  	<time datetime="2020-03-06T02:42:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>express 和 koa 的中间件是用于处理 http 请求和响应的，但是二者的设计思路确不尽相同。大部分人了解的express和koa的中间件差异在于：</p>
+<ul>
+<li>express采用尾递归方式，中间件一个接一个的顺序执行, 习惯于将response响应写在最后一个中间件中；</li>
+<li>而koa的中间件支持 generator, 执行顺序是“洋葱圈”模型。</li>
+</ul>
+<p>所谓的“洋葱圈”模型:</p>
+<p><img src="/2020/03/06/redux、koa、express-中间件源码解读/onion-model.png" alt="onion-model"></p>
+<p>不过实际上，express 的中间件也可以形成“洋葱圈”模型，在 next 调用后写的代码同样会执行到，不过express中一般不会这么做，因为 express的response一般在最后一个中间件，那么其它中间件 next() 后的代码已经影响不到最终响应结果了;</p>
+<h2 id="express"><a href="#express" class="headerlink" title="express"></a>express</h2><h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><p>首先看一下 express 的实现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// express.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> proto = <span class="built_in">require</span>(<span class="string">'./application'</span>);</span><br><span class="line"><span class="keyword">var</span> mixin = <span class="built_in">require</span>(<span class="string">'merge-descriptors'</span>);</span><br><span class="line"></span><br><span class="line">exports = <span class="built_in">module</span>.exports = createApplication;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createApplication</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// app 同时是一个方法，作为http.createServer的处理函数</span></span><br><span class="line">    <span class="keyword">var</span> app = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, next</span>) </span>&#123;</span><br><span class="line">        app.handle(req, res, next);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mixin(app, proto, <span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">return</span> app;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里其实很简单，就是一个 createApplication 方法用于创建 express 实例，要注意返回值 app 既是实例对象，上面挂载了很多方法，同时它本身也是一个方法，作为 http.createServer的处理函数, 具体代码在 application.js 中：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// application.js</span></span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">var</span> flatten = <span class="built_in">require</span>(<span class="string">'array-flatten'</span>);</span><br><span class="line"><span class="keyword">var</span> app = exports = <span class="built_in">module</span>.exports = &#123;&#125;</span><br><span class="line"></span><br><span class="line">app.listen = <span class="function"><span class="keyword">function</span> <span class="title">listen</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> server = http.createServer(<span class="keyword">this</span>)</span><br><span class="line">  <span class="keyword">return</span> server.listen.apply(server, <span class="built_in">arguments</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里 app.listen 调用 nodejs 的http.createServer 创建web服务，可以看到这里 var server = http.createServer(this) 其中 this 即 app 本身, 然后真正的处理程序即 app.handle;</p>
+<h3 id="中间件处理-express"><a href="#中间件处理-express" class="headerlink" title="中间件处理 - express"></a>中间件处理 - express</h3><p>express 本质上就是一个中间件管理器，当进入到 app.handle 的时候就是对中间件进行执行的时候，所以，最关键的两个函数就是：</p>
+<ul>
+<li><code>app.handle</code> 尾递归调用中间件处理 req 和 res</li>
+<li><code>app.use</code> 添加中间件</li>
+</ul>
+<p>全局维护一个stack数组用来存储所有中间件，app.use 的实现就很简单了，可以就是一行代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// app.use</span></span><br><span class="line">app.use = <span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.stack.push(fn);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>express 的真正实现当然不会这么简单，它内置实现了路由功能，其中有 router, route, layer 三个关键的类，有了 router 就要对 path 进行分流，stack 中保存的是 layer实例，app.use 方法实际调用的是 router 实例的 use 方法, 有兴趣的可以自行去阅读。</p>
+<p>app.handle 即对 stack 数组进行处理</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">app.handle = <span class="function"><span class="keyword">function</span>(<span class="params">req, res, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> stack = <span class="keyword">this</span>.stack;</span><br><span class="line">    <span class="keyword">var</span> idx = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">next</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (idx &gt;= stack.length) &#123;</span><br><span class="line">            callback(<span class="string">'err'</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> mid;</span><br><span class="line">        <span class="keyword">while</span>(idx &lt; stack.length) &#123;</span><br><span class="line">            mid = stack[idx++];</span><br><span class="line">            mid(req, res, next);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    next();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里就是所谓的”尾递归调用”，next 方法不断的取出stack中的“中间件”函数进行调用，同时把next 本身传递给“中间件”作为第三个参数，每个中间件约定的固定形式为 (req, res, next) =&gt; {}, 这样每个“中间件“函数中只要调用 next 方法即可传递调用下一个中间件。</p>
+<p>之所以说是”尾递归“是因为递归函数的最后一条语句是调用函数本身，所以每一个中间件的最后一条语句需要是next()才能形成尾递归，否则就是普通递归，尾递归相对于普通递归的好处在于节省内存空间，不会形成深度嵌套的函数调用栈。</p>
+<p>至此，express 的中间件实现就完成了。</p>
+<h2 id="koa"><a href="#koa" class="headerlink" title="koa"></a>koa</h2><p>不得不说，相比较 express 而言，koa 的整体设计和代码实现显得更高级，更精炼；代码基于ES6 实现，支持generator(async await), 没有内置的路由实现和任何内置中间件，context 的设计也很是巧妙。</p>
+<h3 id="入口及目录"><a href="#入口及目录" class="headerlink" title="入口及目录"></a>入口及目录</h3><p>一共只有4个文件：</p>
+<ul>
+<li>application.js 入口文件，koa应用实例的类</li>
+<li>context.js ctx 实例，代理了很多request和response的属性和方法，作为全局对象传递</li>
+<li>request.js koa 对原生 req 对象的封装</li>
+<li>response.js koa 对原生 res 对象的封装</li>
+</ul>
+<p>request.js 和 response.js 没什么可说的，任何 web 框架都会提供req和res 的封装来简化处理。所以主要看一下 context.js 和 application.js的实现</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// context.js</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Response delegation.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">delegate(proto, <span class="string">'res'</span>)</span><br><span class="line">  .method(<span class="string">'setHeader'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Request delegation.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">delegate(proto, <span class="string">'req'</span>)</span><br><span class="line">  .access(<span class="string">'url'</span>)</span><br><span class="line">  .setter(<span class="string">'href'</span>)</span><br><span class="line">  .getter(<span class="string">'ip'</span>);</span><br></pre></td></tr></table></figure>
+<p>context 就是这类代码，主要功能就是在做代理，使用了 delegate 库。</p>
+<p>简单说一下这里代理的含义，比如delegate(proto, ‘res’).method(‘setHeader’) 这条语句的作用就是：当调用proto.setHeader时，会调用proto.res.setHeader 即，将proto的 setHeader方法代理到proto的res属性上，其它类似。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// application.js 中部分代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">super</span>()</span><br><span class="line">    <span class="keyword">this</span>.middleware = []</span><br><span class="line">    <span class="keyword">this</span>.context = <span class="built_in">Object</span>.create(context)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">use(fn) &#123;</span><br><span class="line">    <span class="keyword">this</span>.middleware.push(fn)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">listen(...args) &#123;</span><br><span class="line">    debug(<span class="string">'listen'</span>)</span><br><span class="line">    <span class="keyword">const</span> server = http.createServer(<span class="keyword">this</span>.callback());</span><br><span class="line">    <span class="keyword">return</span> server.listen(...args);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">callback() &#123;</span><br><span class="line">    <span class="comment">// 这里即中间件处理代码</span></span><br><span class="line">    <span class="keyword">const</span> fn = compose(<span class="keyword">this</span>.middleware);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> handleRequest = <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// ctx 是koa的精髓之一, req, res上的很多方法代理到了ctx上, 基于 ctx 很多问题处理更加方便</span></span><br><span class="line">        <span class="keyword">const</span> ctx = <span class="keyword">this</span>.createContext(req, res);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.handleRequest(ctx, fn);</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> handleRequest;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">handleRequest(ctx, fnMiddleware) &#123;</span><br><span class="line">    ctx.statusCode = <span class="number">404</span>;</span><br><span class="line">    <span class="keyword">const</span> onerror = <span class="function"><span class="params">err</span> =&gt;</span> ctx.onerror(err);</span><br><span class="line">    <span class="keyword">const</span> handleResponse = <span class="function"><span class="params">()</span> =&gt;</span> respond(ctx);</span><br><span class="line">    <span class="keyword">return</span> fnMiddleware(ctx).then(handleResponse).catch(onerror);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同样的在listen方法中创建 web 服务, 没有使用 express 那么绕的方式，<code>const server = http.createServer(this.callback())</code>; 用<code>this.callback()</code>生成 web 服务的处理程序</p>
+<h3 id="中间件处理-koa"><a href="#中间件处理-koa" class="headerlink" title="中间件处理 - koa"></a>中间件处理 - koa</h3><p>构造函数 constructor 中维护全局中间件数组 this.middleware和全局的this.context 实例（源码中还有request，response对象和一些其他辅助属性）。和 express 不同，因为没有router的实现，所有this.middleware 中就是普通的”中间件“函数而非复杂的 layer 实例，<br>this.handleRequest(ctx, fn); 中 ctx 为第一个参数，fn = compose(this.middleware) 作为第二个参数, handleRequest 会调用 fnMiddleware(ctx).then(handleResponse).catch(onerror); 所以中间处理的关键在compose方法, 它是一个独立的包koa-compose, 把它拿了出来看一下里面的内容：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// compose.js</span></span><br><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"><span class="built_in">module</span>.exports = compose</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span> (<span class="params">middleware</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">context, next</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">-1</span></span><br><span class="line">    <span class="keyword">return</span> dispatch(<span class="number">0</span>)</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span> (<span class="params">i</span>) </span>&#123;</span><br><span class="line">      index = i</span><br><span class="line">      <span class="keyword">let</span> fn = middleware[i]</span><br><span class="line">      <span class="keyword">if</span> (i === middleware.length) fn = next</span><br><span class="line">      <span class="keyword">if</span> (!fn) <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve()</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(fn(context, dispatch.bind(<span class="literal">null</span>, i + <span class="number">1</span>)));</span><br><span class="line">      &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(err)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>和express中的next 是不是很像，只不过他是promise形式的，因为要支持异步，所以理解起来就稍微麻烦点：每个中间件是一个<code>async (ctx, next) =&gt; {}</code>, 执行后返回的是一个promise, 第二个参数 next的值为 dispatch.bind(null, i + 1) , 用于传递”中间件“的执行，一个个中间件向里执行，直到最后一个中间件执行完，resolve 掉，它前一个”中间件“接着执行 await next() 后的代码，然后 resolve 掉，在不断向前直到第一个”中间件“ resolve掉，最终使得最外层的promise resolve掉。</p>
+<p>这里和express很不同的一点就是koa的响应的处理并不在”中间件”中，而是在中间件执行完返回的promise resolve后：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> fnMiddleware(ctx).then(handleResponse).catch(onerror);</span><br></pre></td></tr></table></figure>
+<p>通过 handleResponse 最后对响应做处理，中间件会设置ctx.body, handleResponse也会主要处理 ctx.body ，所以 koa 的”洋葱圈“模型才会成立，await next()后的代码也会影响到最后的响应。</p>
+<p>至此，koa的中间件实现就完成了。</p>
+<h2 id="redux"><a href="#redux" class="headerlink" title="redux"></a>redux</h2><h3 id="入口及目录-redux"><a href="#入口及目录-redux" class="headerlink" title="入口及目录 - redux"></a>入口及目录 - redux</h3><p>本文还是主要看一下它的中间件实现, 先简单说一下 redux 的核心处理逻辑, createStore 是其入口程序，工厂方法，返回一个 store 实例，store实例的最关键的方法就是 dispatch , 而 dispatch 要做的就是一件事：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">currentState = currentReducer(currentState, action);</span><br></pre></td></tr></table></figure>
+<p>即调用reducer, 传入当前state和action返回新的state。</p>
+<p>所以要模拟基本的 redux 执行只要实现 createStore , dispatch 方法即可。其它的内容如 bindActionCreators, combineReducers 以及 subscribe 监听都是辅助使用的功能，可以暂时不关注。</p>
+<h3 id="中间件处理-redux"><a href="#中间件处理-redux" class="headerlink" title="中间件处理 - redux"></a>中间件处理 - redux</h3><p>然后就到了核心的”中间件” 实现部分即 applyMiddleware.js：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// applyMiddleware.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> compose <span class="keyword">from</span> <span class="string">'./compose'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">applyMiddleware</span>(<span class="params">...middlewares</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="params">createStore</span> =&gt;</span> (...args) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> store = createStore(...args)</span><br><span class="line">    <span class="keyword">let</span> dispatch = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(</span><br><span class="line">        <span class="string">`Dispatching while constructing your middleware is not allowed. `</span> +</span><br><span class="line">          <span class="string">`Other middleware would not be applied to this dispatch.`</span></span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> middlewareAPI = &#123;</span><br><span class="line">      getState: store.getState,</span><br><span class="line">      dispatch: <span class="function">(<span class="params">...args</span>) =&gt;</span> dispatch(...args)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> chain = middlewares.map(<span class="function"><span class="params">middleware</span> =&gt;</span> middleware(middlewareAPI))</span><br><span class="line">    dispatch = compose(...chain)(store.dispatch)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      ...store,</span><br><span class="line">      dispatch</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>redux 中间件提供的扩展是在 action 发起之后，到达 reducer 之前，它的实现思路就和express 、 koa 有些不同了，它没有通过封装 store.dispatch, 在它前面添加 中间件处理程序，而是通过递归覆写 dispatch ，不断的传递上一个覆写的 dispatch 来实现。</p>
+<p>每一个 redux 中间件的形式为 <code>store =&gt; next =&gt; action =&gt; { xxx }</code></p>
+<p>这里主要有两层函数嵌套：</p>
+<p>最外层函数接收参数store, 对应于 applyMiddleware.js 中的处理代码是 <code>const chain = middlewares.map(middleware =&gt; middleware(middlewareAPI))</code>, middlewareAPI 即为传入的store 。这一层是为了把 store 的 api 传递给中间件使用，主要就是两个api:</p>
+<p>getState, 直接传递store.getState.<br>dispatch: (…args) =&gt; dispatch(…args)，这里的实现就很巧妙了，并不是store.dispatch, 而是一个外部的变量dispatch, 这个变量最终指向的是覆写后的dispatch, 这样做的原因在于，对于 redux-thunk 这样的异步中间件，内部调用store.dispatch 的时候仍然后走一遍所有“中间件”。</p>
+<p>返回的chain就是第二层的数组，数组的每个元素都是这样一个函数next =&gt; action =&gt; { xxx }, 这个函数可以理解为 接受一个dispatch返回一个dispatch, 接受的dispatch 是后一个中间件返回的dispatch.</p>
+<p>还有一个关键函数即 compose, 主要作用是 <code>compose(f, g, h)</code> 返回 <code>() =&gt; f(g(h(..args)))</code></p>
+<p>现在在来理解 <code>dispatch = compose(...chain)(store.dispatch)</code> 就相对容易了，原生的 store.dispatch 传入最后一个“中间件”，返回一个新的 dispatch , 再向外传递到前一个中间件，直至返回最终的 dispatch, 当覆写后的dispatch 调用时，每个“中间件“的执行又是从外向内的”洋葱圈“模型。</p>
+<p>至此，redux中间件就完成了。</p>
+<p>参考：</p>
+<p>尾调用：<a href="http://www.ruanyifeng.com/blog/2015/04/tail-call.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2015/04/tail-call.html</a><br>redux: <a href="https://redux.js.org/advanced/middleware/" target="_blank" rel="noopener">https://redux.js.org/advanced/middleware/</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/06/redux、koa、express-中间件源码解读/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-数字签名与https" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -276,98 +489,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/03/05/CSRF/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vuex数据流向" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/vuex数据流向/">vuex数据流向</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/02/vuex数据流向/" class="archive-article-date">
-  	<time datetime="2020-03-02T09:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="vuex基础"><a href="#vuex基础" class="headerlink" title="vuex基础"></a>vuex基础</h2><p><a href="https://vuex.vuejs.org/zh-cn" target="_blank" rel="noopener">https://vuex.vuejs.org/zh-cn</a></p>
-<p>多组件共享状态， 之前操作方式，由父组件传递到各个子组件。 当路由等加入后，会变得复杂。 引入viewx 解决共享问题。</p>
-<p>原vue结构图</p>
-<p><img src="/2020/03/02/vuex数据流向/vue结构图.png" alt="vue结构图" width="487" height="329" align="bottom"></p>
-<p>vuex结构图</p>
-<p><img src="/2020/03/02/vuex数据流向/vuex结构图.png" alt="vuex结构图"></p>
-<p>Vuex对象结构 （state，mutations，getters，actions）</p>
-<ul>
-<li><p>state 对象数据</p>
-</li>
-<li><p>mutations 操作变更state数据</p>
-</li>
-<li><p>getters 计算state</p>
-</li>
-<li><p>actions  触发mutations</p>
-</li>
-</ul>
-<p><img src="/2020/03/02/vuex数据流向/vuex解析图优化.png" alt="vuex解析图优化"></p>
-<p>参考：<br><a href="https://www.cnblogs.com/reeber/p/10628935.html" target="_blank" rel="noopener">https://www.cnblogs.com/reeber/p/10628935.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/02/vuex数据流向/">展开全文 >></a>
         </p>
       
 
@@ -524,6 +645,98 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/03/02/redux/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vuex数据流向" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/02/vuex数据流向/">vuex数据流向</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/02/vuex数据流向/" class="archive-article-date">
+  	<time datetime="2020-03-02T09:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="vuex基础"><a href="#vuex基础" class="headerlink" title="vuex基础"></a>vuex基础</h2><p><a href="https://vuex.vuejs.org/zh-cn" target="_blank" rel="noopener">https://vuex.vuejs.org/zh-cn</a></p>
+<p>多组件共享状态， 之前操作方式，由父组件传递到各个子组件。 当路由等加入后，会变得复杂。 引入viewx 解决共享问题。</p>
+<p>原vue结构图</p>
+<p><img src="/2020/03/02/vuex数据流向/vue结构图.png" alt="vue结构图" width="487" height="329" align="bottom"></p>
+<p>vuex结构图</p>
+<p><img src="/2020/03/02/vuex数据流向/vuex结构图.png" alt="vuex结构图"></p>
+<p>Vuex对象结构 （state，mutations，getters，actions）</p>
+<ul>
+<li><p>state 对象数据</p>
+</li>
+<li><p>mutations 操作变更state数据</p>
+</li>
+<li><p>getters 计算state</p>
+</li>
+<li><p>actions  触发mutations</p>
+</li>
+</ul>
+<p><img src="/2020/03/02/vuex数据流向/vuex解析图优化.png" alt="vuex解析图优化"></p>
+<p>参考：<br><a href="https://www.cnblogs.com/reeber/p/10628935.html" target="_blank" rel="noopener">https://www.cnblogs.com/reeber/p/10628935.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/02/vuex数据流向/">展开全文 >></a>
         </p>
       
 
@@ -911,157 +1124,6 @@
 
 
   
-    <article id="post-字节流和字符流" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/24/字节流和字符流/">字节流和字符流</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/24/字节流和字符流/" class="archive-article-date">
-  	<time datetime="2019-09-24T06:35:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="流的概念和作用"><a href="#流的概念和作用" class="headerlink" title="流的概念和作用"></a>流的概念和作用</h2><p>流是一组有顺序的，有起点和终点的字节集合，是对数据传输的总称或抽象。即数据在两设备间的传输称为流，流的本质是数据传输，根据数据传输特性将流抽象为各种类，方便更直观的进行数据操作。</p>
-        
-          <a class="article-more-a" href="/2019/09/24/字节流和字符流/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/24/字节流和字符流/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Nodejs之Crypto" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/24/Nodejs之Crypto/">Nodejs之Crypto</a>
-    </h1>
-  
-
-        
-        <a href="/2019/09/24/Nodejs之Crypto/" class="archive-article-date">
-  	<time datetime="2019-09-24T03:35:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Crypto概述"><a href="#Crypto概述" class="headerlink" title="Crypto概述"></a>Crypto概述</h2><p>互联网时代，网络上的数据量每天都在以惊人的速度增长。同时，各类网络安全问题层出不穷。在信息安全重要性日益凸显的今天，作为一名开发者，需要加强对安全的认识，并通过技术手段增强服务的安全性。</p>
-<p>crypto模块是nodejs的核心模块之一，它提供了安全相关的功能，如摘要运算、加密、电子签名等。很多初学者对着长长的API列表，不知如何上手，因此它背后涉及了大量安全领域的知识。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/node/" class="article-tag-list-link color5">Node</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/09/24/Nodejs之Crypto/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1183,15 +1245,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1215,19 +1277,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1239,15 +1293,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1276,6 +1330,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">重绘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">

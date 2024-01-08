@@ -20,7 +20,7 @@
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/8/29/16cdcce2aeb7262b?imageslim">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/8/29/16cdccd6278eb25a?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
 <meta property="og:image" content="https://user-gold-cdn.xitu.io/2019/8/29/16cdccd7bbc36332?imageView2/0/w/1280/h/960/format/webp/ignore-error/1">
-<meta property="og:updated_time" content="2024-01-08T09:13:38.846Z">
+<meta property="og:updated_time" content="2024-01-08T09:45:16.982Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Intersection Observer">
 <meta name="twitter:description" content="IntersectionObserver接口 (从属于Intersection Observer API) 提供了一种异步观察目标元素与其祖先元素或顶级文档视窗(viewport)交叉状态的方法。祖先元素与视窗(viewport)被称为根(root)。（简言之，提供给web开发者，一种异步查询元素相对于其他元素或窗口位置的能力。它常用于追踪一个元素在窗口的可视问题。） 当一个Intersectio">
@@ -200,7 +200,7 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">callback IntersectionObserverCallback = <span class="keyword">void</span> (</span><br><span class="line">    sequence&lt;IntersectionObserverEntry&gt; entries, </span><br><span class="line">    IntersectionObserver observer</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 <p>回调的参数，entries 是一个IntersectionObserverEntry数组，数组的长度是我们监控目标元素的个数，另一个参数是 IntersectionObserver 对象。</p>
 <h4 id="2-IntersectionObserver-Entry"><a href="#2-IntersectionObserver-Entry" class="headerlink" title="2. IntersectionObserver Entry"></a>2. IntersectionObserver Entry</h4><p>IntersectionObserverEntry 对象提供了目标元素与跟元素相交的详细信息。他有如下几个属性。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">interface IntersectionObserverEntry &#123;</span><br><span class="line">  readonly attribute DOMHighResTimeStamp time;</span><br><span class="line">  readonly attribute DOMRectReadOnly? rootBounds;</span><br><span class="line">  readonly attribute DOMRectReadOnly boundingClientRect;</span><br><span class="line">  readonly attribute DOMRectReadOnly intersectionRect;</span><br><span class="line">  readonly attribute boolean isIntersecting;</span><br><span class="line">  readonly attribute double intersectionRatio;</span><br><span class="line">  readonly attribute Element target;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">interface IntersectionObserverEntry &#123;</span><br><span class="line">  readonly attribute DOMHighResTimeStamp time;</span><br><span class="line">  readonly attribute DOMRectReadOnly? rootBounds;</span><br><span class="line">  readonly attribute DOMRectReadOnly boundingClientRect;</span><br><span class="line">  readonly attribute DOMRectReadOnly intersectionRect;</span><br><span class="line">  readonly attribute boolean isIntersecting;</span><br><span class="line">  readonly attribute double intersectionRatio;</span><br><span class="line">  readonly attribute Element target;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    time: <span class="number">3893.92</span>,</span><br><span class="line">    rootBounds: ClientRect &#123;</span><br><span class="line">        bottom: <span class="number">920</span>,</span><br><span class="line">        height: <span class="number">1024</span>,</span><br><span class="line">        left: <span class="number">0</span>,</span><br><span class="line">        right: <span class="number">1024</span>,</span><br><span class="line">        top: <span class="number">0</span>,</span><br><span class="line">        width: <span class="number">920</span></span><br><span class="line">    &#125;,</span><br><span class="line">    boundingClientRect: ClientRect &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;,</span><br><span class="line">    intersectionRect: ClientRect &#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;,</span><br><span class="line">    isIntersecting: <span class="number">0.54</span>,</span><br><span class="line">    intersectionRatio: <span class="number">0.54</span>,</span><br><span class="line">    target: element</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><a href="https://user-gold-cdn.xitu.io/2019/8/29/16cdccc7f71311ee?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" target="_blank" rel="noopener"><img src="https://user-gold-cdn.xitu.io/2019/8/29/16cdccc7f71311ee?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt=""></a></p>
 <ul>
 <li>time：发生相交到相应的时间，毫秒。</li>
@@ -493,15 +493,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -525,19 +525,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -549,15 +541,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -586,6 +578,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">重绘</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
