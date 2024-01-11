@@ -90,9 +90,10 @@ theme: yilia
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
+## repository: https://github.com/Lozoe/Lozoe.github.io.git
 deploy:
   type: git
-  repository: https://github.com/Lozoe/Lozoe.github.io.git
+  repository: git@github.com:Lozoe/Lozoe.github.io.git
   branch: master
 
 
