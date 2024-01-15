@@ -166,6 +166,379 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-前后端同构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/21/前后端同构/">前后端同构和SSR服务端渲染</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/21/前后端同构/" class="archive-article-date">
+  	<time datetime="2020-03-21T14:27:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在前端页面的渲染这块，近几年来感觉经历了从服务端渲染(多页面)=&gt;客户端渲染(SPA)=&gt;同构渲染的演变，同构渲染是15年左右React火了一段时间后提出的概念（也差不多是《三体》那个时候），原文是 Isomorphic rendering，但是很快就有人驳斥不应该用 Isomorphic 这个词，而应该用 Universal Rendering。</p>
+<p>提前列举一下术语：</p>
+<p>1、前端渲染：浏览器一侧使用js，借助模版或vue、react、angular等框架做的DOM结构生成（首屏展示出来时，必然是 render.js 通过网络请求完毕，然后加上 JavaScript 执行完成之后的。）</p>
+<p>2、后端渲染：服务器一侧，使用php、jsp、velocity、nodejs等技术实现DOM结构生成，并在HTTP请求中返回给浏览器（好处是转化 HTML 到 DOM，浏览器原生会比 JavaScript 生成 DOM 的时间短；省去了 SPA 中 JavaScript 的请求与编译执行时间）</p>
+<p>3、同构渲染：简单来说就是一份代码，服务端先通过服务端渲染(server-side rendering，下称ssr)，生成html以及初始化数据，客户端拿到html和初始化数据后，通过对html的dom进行patch和事件绑定对dom进行客户端激活(client-side hydration，下称csh)，这个整体的过程叫同构渲染。其实就是满足三个条件：1)同一份代码  2)ssr  3)csh</p>
+<p>Q. 问题来了，同构渲染和php,jsp的渲染有什么不同，同构渲染称得上ssr吗？</p>
+<p>既然同构渲染就是一份代码ssr加csh，那么ssr部分本质上跟php，jsp也是一样，也就是模版引擎出来html字符串，但是同构要求能通过一份代码实现ssr，csh，同时服务端需要提供一份初始化数据以便csh，而且传统php，jsp不关注csh过程。</p>
+<p>Q. 同构渲染能解决首屏加载和seo的问题吗？</p>
+<p>其实解决这两个问题，是ssr来解决的，csh解决的只是交互问题。既然文件已经交由服务端渲染完，展示的速度肯定是提升的(因为不需要等待客户端渲染)，同样seo蜘蛛一般是分析服务端出来的html的，那么没有ssr的spa客户端等同于无法seo(当然一些蜘蛛也会提供spa的方案)，同构包括ssr，当然可以解决seo的问题</p>
+<p>但解决归解决，不一定能很好解决。毕竟这几个其实不是同样的问题。就像我个人觉得ssr来实现seo本身就是个伪需求，同理首屏加载问题也是。</p>
+<p>seo其实还能通过预渲染或者通过ua判断让蜘蛛走headless chrome渲染来解决。另外首屏加载速度问题的解决方案就更多了。</p>
+<p>比较前后端还是属于不同环境，同构考验开发人员对大局观的考虑，约束了特定环境的一些开发灵活性，同时也影响代码解耦。ssr抛开这两点好处，甚至没有找到任何优点。所以这是当前前后端同构不温不火的重要原因</p>
+<h2 id="同构的历史背景"><a href="#同构的历史背景" class="headerlink" title="同构的历史背景"></a>同构的历史背景</h2><ul>
+<li>Web开发的历程是很有趣的，最初php、asp的年代，一切内容都是服务器渲染的；</li>
+<li>后来为了节省服务器资源，也更大限度利用客户端缓存，又出现了前后端分离的模式，从而有了专业的前端开发和后台开发。此时Web的特点是，js和html放到静态目录或者CDN，并以ajax方式获取后台的数据，在前端进行DOM组装。这种开发方式沿用至今，这是一个好的工作模式，专业的人做专业的事，确实有利于工作效率提高。引领SPA时代到来，但是JavaScirpt给我们带来的无刷新体验和组件化带来的开发效率的同时，白屏和SEO问题也随之而来。</li>
+<li>随着nodejs的流行，前端jser们又开始蠢蠢欲动，尝试吞并web接入这个后台的前沿地盘，把后台推到更后。大概2014年后，又出现了很多nodejs直出的方案，把页面数据都一次在HTML的请求中返回，无需浏览器端再发起ajax获取数据，而且服务器端把DOM结构都渲染好，拿到初始化数据给浏览器，浏览器得到html和初始数据进行patch和事件绑定对客户端激活。不得不说，这个方案带来了很多好处：既解决了白屏和 SEO 问题，又继承了SPA无刷新的用户体验和开发的组件化带来的效率。首屏速度更快，浏览器更省电。当然，随之而来的，就是更复杂的工作模式，jser需要做服务器端的逻辑，甚至一些代码需要同时用在浏览器和nodejs上。同构应运而生。</li>
+</ul>
+<p><img src="/2020/03/21/前后端同构/同构.png" alt="同构"></p>
+<p>百度搜一下前后端同构，清一色的vue、react。这些确实是同构，但我认为范围太窄，同构不是框架带来的问题，而是因为前后端独立渲染这种架构层面带来的问题</p>
+<h2 id="SSR核心原理"><a href="#SSR核心原理" class="headerlink" title="SSR核心原理"></a>SSR核心原理</h2><p>整体来说服务端渲染原理不复杂，其中最核心的内容就是同构。</p>
+<p>1)node server 接收客户端请求，得到当前的req url path<br>2)然后在已有的路由表内查找到对应的组件，拿到需要请求的数据，将数据作为 props<br>、context或者store 形式传入组件<br>3)然后基于react内置的服务端渲染api renderToString() or renderToNodeStream() 把组件渲染为 html字符串或者 stream 流, 在把最终的html进行输出前需要将数据注入到浏览器端(注水)，<br>4)server 输出(response)后浏览器端可以得到数据(脱水)，浏览器开始进行渲染和节点对比，然后执行组件的componentDidMount完成组件内事件绑定和一些交互，浏览器重用了服务端输出的 html 节点，整个流程结束。</p>
+<p><img src="/2020/03/21/前后端同构/核心原理.png" alt="核心原理"></p>
+<h2 id="同构之道"><a href="#同构之道" class="headerlink" title="同构之道"></a>同构之道</h2><p>如何从实际项目需求的角度来看，找出自己所需的同构之道</p>
+<p>同构，是为了提高用户体验的同时，提高团队的工作效率。接下来，我想根据项目的类型，说说自己的看法。</p>
+<h3 id="第一种，单页面应用"><a href="#第一种，单页面应用" class="headerlink" title="第一种，单页面应用"></a>第一种，单页面应用</h3><p>这个网站很类似一个APP，确实很有必要做成单页应用，有助于提高用户体验。<br>如果第一步选择了单页面应用，这里就衍生了另外的问题——SEO。而react等框架做了服务器渲染，最大目的其实也是解决SEO。<br>既然浏览器端选择了某个框架，例如React，而同时又考虑nodejs直出提高首屏的速度，那么就没有讨价还价的余地了，当然上react全家桶，前后端都用react。</p>
+<h3 id="第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要"><a href="#第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要" class="headerlink" title="第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要"></a>第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要</h3><p>如果项目是这样的情况，使用nodejs直出，无非就是提高打开速度。而前后端基本八竿子打不着，最多就是一些工具函数（转换一下日期格式，输入框校验）要做复用。</p>
+<p>此时，没必要大费周折去考虑什么框架，因地制宜，想想自己需要什么即可。</p>
+<p>要解决函数库的前后端复用，可以简单做commonjs/window的兼容。</p>
+<p>如果浏览器端的代码比较多，就可以考虑粒度化，使用webpack做浏览器端代码打包，同时commonjs的写法也可以复用到nodejs层。</p>
+<h3 id="第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用"><a href="#第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用" class="headerlink" title="第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用"></a>第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用</h3><p>用webpack做前端打包，这样前端各种代码和后台代码都是commonjs风格，可以二合一。而且发布前打包为一个大js文件，也省去nodejs每次请求动态合并js的消耗。<br>html模版发布前先做预编译，从html+模版语法，转为纯js代码，随着webpack打包到浏览器端大js文件中。<br>后端和前端都用到的代码，基于commonjs，尽可能的抽离封装。<br>最终合并的浏览器端大js还是动态合并到首屏HTML中。</p>
+<p>引入了webpack到浏览器端，就能很好的解决了原先html模版传播的尴尬。而模块风格的统一，也有利于前后端代码更好的复用。</p>
+<p>至于最终浏览器js是否打包到首屏HTML中，还是单独的部署CDN，这个其实就不是同构的问题了。不过对于移动端而言，还是建议合并在一起。</p>
+<p>抽象一下，对于第三种项目情况，跳出我原先的项目。我认为，关键是要把前后端使用的模版统一为一个方式引入。</p>
+<h3 id="第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种"><a href="#第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种" class="headerlink" title="第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种"></a>第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种</h3><p>或者说，这个不是一个单独的项目情况，只是因为用的技术方案不同。跟第三种情况一样，但次屏的渲染，我们不在浏览器端执行，而是继续交给nodejs。浏览器端通过ajax把次屏html片段拉取回来，然后直接塞到body中。而且，除此之外，浏览器端没有用户交互会导致已有的DOM发生重绘，或者极少内容重绘，不需要动用到模版。</p>
+<p>在这个情况下，浏览器端js更纯粹的只关注事件处理。</p>
+<p>我觉得这个又回到了第二种情况，只需要简单把一些库函数封装一下，做成前后端共用即可。</p>
+<p>第四种情况，因为彻底抛弃了浏览器渲染，整个情况就简单多了，不需要考虑模版和很多逻辑js的前后端复用问题。</p>
+<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>上帝为了我们开了一扇窗，同时也会为我们关上一扇门。</p>
+<p>我们所知的传统型 SPA，单页面应用，贴近用户端越近，交互越复杂，它的弊端就越明显，在我们享受 JavaScirpt 给我们带来的无刷新体验和组件化带来的开发效率的同时，『白屏』这个随着 SPA 各种优点随之而来的缺点被遗忘，我们拥有菊花方案在 JavaScript 没有将 DOM 构建好之前蒙层，或者是骨架屏方案让用户提前感知页面结构，拥有白屏监控方案将真实用户数据上报改进，但并没有触碰到白屏问题的本质，那就是『DOM 的构建者是 JavaScript，而非原生的浏览器』。</p>
+<p>同构的到来既解决了白屏和 SEO 问题，又继承了SPA无刷新的用户体验和开发的组件化带来的效率。但是面临更大的挑战。</p>
+<p>参考：<br><a href="https://juejin.im/post/5c821dc45188257e1f2915b1" target="_blank" rel="noopener">https://juejin.im/post/5c821dc45188257e1f2915b1</a><br><a href="https://segmentfault.com/a/1190000016722457" target="_blank" rel="noopener">https://segmentfault.com/a/1190000016722457</a><br><a href="https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics?hl=zh-cn" target="_blank" rel="noopener">https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics?hl=zh-cn</a><br><a href="https://juejin.im/post/5d7deef6e51d453bb13b66cd#heading-5" target="_blank" rel="noopener">https://juejin.im/post/5d7deef6e51d453bb13b66cd#heading-5</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/21/前后端同构/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Node-js垃圾回收与内存管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/17/Node-js垃圾回收与内存管理/">Node.js垃圾回收与内存管理</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/17/Node-js垃圾回收与内存管理/" class="archive-article-date">
+  	<time datetime="2020-03-17T13:03:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>使用JavaScript进行前端开发时几乎完全不需要关心内存管理问题，对于前端编程来说，V8限制的内存几乎不会出现用完的情况，但是由于后端程序往往进行的操作更加复杂，并且长期运行在服务器不重启，如果不关注内存管理，导致内存泄漏，就算1GB，也会很快用尽。</p>
+<p>垃圾回收器是一把十足的双刃剑。其好处是可以大幅简化程序的内存管理代码，因为内存管理无需程序员来操作，由此也减少了（但没有根除）长时间运转的程序的内存泄漏。对于某些程序员来说，它甚至能够提升代码的性能。另一方面，选择垃圾回收器也就意味着程序当中无法完全掌控内存，而这正是移动终端开发的症结。对于JavaScript，程序中没有任何内存管理的可能——ECMAScript标准中没有暴露任何垃圾回收器的接口。网页应用既没有办法管理内存，也没办法给垃圾回收器进行提示。</p>
+<p>Node.js构建于Chrome V8引擎之上，因此本文首先讲解V8引擎的内存管理机制，了解底层原理后，再讲解Node开发中的内存管理与优化。</p>
+<p>nodeJs查看垃圾回收日志的方式主要是在启动时添加 –trace_gc 参数。</p>
+        
+          <a class="article-more-a" href="/2020/03/17/Node-js垃圾回收与内存管理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/node/" class="article-tag-list-link color5">Node</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/17/Node-js垃圾回收与内存管理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-css单位" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/17/css单位/">css单位</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/17/css单位/" class="archive-article-date">
+  	<time datetime="2020-03-17T05:38:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、px，em，rem、vw、vh、pt"><a href="#一、px，em，rem、vw、vh、pt" class="headerlink" title="一、px，em，rem、vw、vh、pt"></a>一、px，em，rem、vw、vh、pt</h2><h3 id="1-px-pixel，像素"><a href="#1-px-pixel，像素" class="headerlink" title="1.px (pixel，像素)"></a>1.px (pixel，像素)</h3><p>是一个虚拟长度单位，是计算机系统的数字化图像长度单位，如果px要换算成物理长度，需要指定精度DPI(Dots Per Inch，每英寸像素数)，在扫描打印时一般都有DPI可选。Windows系统默认是96dpi，Apple系统默认是72dpi。px 单位的值必须是整数值.</p>
+<p>与px相关的一些单位</p>
+<p>in - 表示英寸，是一个物理单位，在CSS中被直接映射成为px; 转换的方法是 1in = 96px</p>
+<p>cm - 表示厘米，在生活中常用的单位，同样被映射为 px; 转换方法为 1cm = 37.8px</p>
+<p>mm - 表示毫米，与cm类似，转换方法为 1mm = 0.1cm = 3.78px</p>
+<h3 id="2-em-相对长度单位，相对于当前对象内文本的字体尺寸"><a href="#2-em-相对长度单位，相对于当前对象内文本的字体尺寸" class="headerlink" title="2.em(相对长度单位，相对于当前对象内文本的字体尺寸)"></a>2.em(相对长度单位，相对于当前对象内文本的字体尺寸)</h3><p>是一个相对长度单位，指的是字符宽度的倍数，用法类似百分比，如：0.8em, 1.2em,2em等。通常1em=16px。</p>
+<h3 id="3-rem-root-em，根em"><a href="#3-rem-root-em，根em" class="headerlink" title="3.rem(root em，根em)"></a>3.rem(root em，根em)</h3><p>rem是一个相对单位，1rem等于html元素上字体设置的大小。我们只要设置html上font-size的大小，就可以改变rem所代表的大小。这样我们就有了一个可控的统一参考系。我们现在有两个目标：rem单位所代表的尺寸大小和屏幕宽度成正比，也就是设置html元素的font-size和屏幕宽度成正比rem单位和px单位很容易进行换算，方便我们按照标注稿写css</p>
+<h4 id="rem与em的区别"><a href="#rem与em的区别" class="headerlink" title="rem与em的区别"></a>rem与em的区别</h4><p>rem是相对于根元素（html）的字体大小</p>
+<p>em是相对于其父元素的字体大小em最多取到小数点的后三位</p>
+<h3 id="4-vw、vh"><a href="#4-vw、vh" class="headerlink" title="4.vw、vh"></a>4.vw、vh</h3><p>css3中引入了一个新的单位vw/vh，与视图窗口有关，vw表示相对于视图窗口的宽度，vh表示相对于视图窗口高度，除了vw和vh外，还有vmin和vmax两个相关的单位。</p>
+<p>各个单位具体的含义如下：单位含义vw相对于视窗的宽度，视窗宽度是100vwvh相对于视窗的高度，视窗高度是100vhvminvw和vh中的较小值vmax vw和vh中的较大值 这里我们发现视窗宽高都是100vw／100vh，那么vw或者vh，下简称vw，很类似百分比单位。</p>
+<p>vw和%的区别为：<br>%大部分相对于祖先元素，也有相对于自身的情况比如（border-radius、translate等)<br>vw/vh相对于视窗的尺寸</p>
+<h3 id="5-pt-（点）"><a href="#5-pt-（点）" class="headerlink" title="5.pt （点）"></a>5.pt （点）</h3><p>绝对长度单位，多用于字体尺寸，1px = 0.75pt</p>
+<p>in:寸</p>
+<p>cm:厘米</p>
+<p>mm:毫米</p>
+<p>q: 1/4毫米（quarter-millimeters）。绝对长度单位。</p>
+<p>pt:point，大约1/72寸</p>
+<p>pc:pica，大约6pt，1/6寸</p>
+<p>1in = 2.54cm = 25.4mm = 101.6q = 72pt = 6pc = 96px</p>
+<h3 id="6"><a href="#6" class="headerlink" title="6.%"></a>6.%</h3><p>一般宽泛的讲是相对于父元素，但是并不是十分准确。</p>
+<p>1、对于普通定位元素就是我们理解的父元素</p>
+<p>2、对于position: absolute;的元素是相对于已定位的父元素</p>
+<p>3、对于position: fixed;的元素是相对于 ViewPort（可视窗口）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/17/css单位/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-CSS之BFC、IFC、GFC和FFC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/17/CSS之BFC、IFC、GFC和FFC/">CSS之BFC、IFC、GFC和FFC</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/17/CSS之BFC、IFC、GFC和FFC/" class="archive-article-date">
+  	<time datetime="2020-03-17T05:22:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>CSS2.1中只有BFC和IFC, CSS3中才有GFC和FFC。</p>
+<h2 id="What’s-FC"><a href="#What’s-FC" class="headerlink" title="What’s FC"></a>What’s FC</h2><p>FC的全称是：Formatting Contexts，是W3C CSS2.1规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。</p>
+<h2 id="BFC"><a href="#BFC" class="headerlink" title="BFC"></a>BFC</h2><p>BFC(<code>Block Formatting Contexts</code>)块级格式化上下文。<code>Block Formatting Contexts</code>就是页面上的一个隔离的渲染区域，容器里面的子元素不会在布局上影响到外面的元素，反之也是如此。</p>
+<h3 id="如何产生BFC"><a href="#如何产生BFC" class="headerlink" title="如何产生BFC"></a>如何产生BFC</h3><p>float的值不为none。<br>overflow的值不为visible。<br>position的值不为relative和static。<br>display的值为table-cell, table-caption, inline-block中的任何一个。</p>
+<h3 id="那BFC一般有什么用呢"><a href="#那BFC一般有什么用呢" class="headerlink" title="那BFC一般有什么用呢"></a>那BFC一般有什么用呢</h3><h2 id="IFC"><a href="#IFC" class="headerlink" title="IFC"></a>IFC</h2><p>IFC(Inline Formatting Contexts)内联格式化上下文，IFC的line box（线框）高度由其包含行内元素中最高的实际高度计算而来（不受到竖直方向的padding/margin影响)<br>IFC中的line box一般左右都贴紧整个IFC，但是会因为float元素而扰乱。float元素会位于IFC与与line box之间，使得line box宽度缩短。 同个ifc下的多个line box高度会不同。 IFC中时不可能有块级元素的，当插入块级元素时（如p中插入div）会产生两个匿名块与div分隔开，即产生两个IFC，每个IFC对外表现为块级元素，与div垂直排列。</p>
+<h3 id="那么IFC一般有什么用呢"><a href="#那么IFC一般有什么用呢" class="headerlink" title="那么IFC一般有什么用呢"></a>那么IFC一般有什么用呢</h3><p>水平居中：当一个块要在环境中水平居中时，设置其为<code>inline-block</code>则会在外层产生IFC，通过<code>text-align</code>则可以使其水平居中。<br>垂直居中：创建一个IFC，用其中一个元素撑开父元素的高度，然后设置其<code>vertical-align: middle</code>，其他行内元素则可以在此父元素下垂直居中。</p>
+<h2 id="GFC"><a href="#GFC" class="headerlink" title="GFC"></a>GFC</h2><p>GFC(GridLayout Formatting Contexts)网格布局格式化上下文，当为一个元素设置display值为grid的时候，此元素将会获得一个独立的渲染区域，我们可以通过在网格容器（grid container）上定义网格定义行（grid definition rows）和网格定义列（grid definition columns）属性各在网格项目（grid item）上定义网格行（grid row）和网格列（grid columns）为每一个网格项目（grid item）定义位置和空间。</p>
+<h3 id="GFC作用"><a href="#GFC作用" class="headerlink" title="GFC作用"></a>GFC作用</h3><p>和table又有什么区别呢？首先同样是一个二维的表格，但GridLayout会有更加丰富的属性来控制行列，控制对齐以及更为精细的渲染语义和控制。</p>
+<h2 id="FFC"><a href="#FFC" class="headerlink" title="FFC"></a>FFC</h2><p>FFC(Flex Formatting Contexts)自适应格式化上下文，display值为flex或者inline-flex的元素将会生成自适应容器（flex container），可惜这个牛逼的属性只有谷歌和火狐支持，不过在移动端也足够了，至少safari和chrome还是OK的，毕竟这俩在移动端才是王道。</p>
+<p>Flex Box 由伸缩容器和伸缩项目组成。通过设置元素的 display 属性为 flex 或 inline-flex 可以得到一个伸缩容器。设置为 flex 的容器被渲染为一个块级元素，而设置为 inline-flex 的容器则渲染为一个行内元素。<br>伸缩容器中的每一个子元素都是一个伸缩项目。伸缩项目可以是任意数量的。伸缩容器外和伸缩项目内的一切元素都不受影响。简单地说，Flexbox 定义了伸缩容器内伸缩项目该如何布局</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">BFC</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/css/" class="article-tag-list-link color4">CSS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/17/CSS之BFC、IFC、GFC和FFC/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-http1-0和http1-1以及http2-0区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -609,162 +982,6 @@
 
 
   
-    <article id="post-redux" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/redux/">redux</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/02/redux/" class="archive-article-date">
-  	<time datetime="2020-03-02T09:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><p>（1）Web 应用是一个状态机，视图与状态是一一对应的。<br>（2）所有的状态，保存在一个对象里面。</p>
-<h2 id="三大原则"><a href="#三大原则" class="headerlink" title="三大原则"></a>三大原则</h2><pre><code>1. 单一数据源
-2. 状态是只读的
-3. 状态修改均由纯函数完成
-</code></pre><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h3><p>Store 就是保存数据的地方，你可以把它看成一个容器。整个应用只能有一个 Store。<br>Redux 提供createStore这个函数，用来生成 Store。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br></pre></td></tr></table></figure>
-<p>上面代码中，createStore函数接受另一个函数作为参数，返回新生成的 Store 对象。</p>
-<h3 id="State"><a href="#State" class="headerlink" title="State"></a>State</h3><p>Store对象包含所有数据。如果想得到某个时点的数据，就要对 Store 生成快照。这种时点的数据集合，就叫做 State。<br>当前时刻的 State，可以通过store.getState()拿到。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(fn);</span><br><span class="line"><span class="keyword">const</span> state = store.getState();</span><br></pre></td></tr></table></figure>
-<p>Redux 规定， 一个 State 对应一个 View。只要 State 相同，View 就相同。你知道 State，就知道 View 是什么样，反之亦然。</p>
-<h3 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h3><p>State 的变化，会导致 View 的变化。但是，用户接触不到 State，只能接触到 View。所以，State 的变化必须是 View 导致的。Action 就是 View 发出的通知，表示 State 应该要发生变化了。<br>Action 是一个对象。其中的type属性是必须的，表示 Action 的名称。其他属性可以自由设置，社区有一个规范可以参考。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> action = &#123;</span><br><span class="line">  type: <span class="string">'ADD_TODO'</span>,</span><br><span class="line">  payload: <span class="string">'Learn Redux'</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>上面代码中，Action 的名称是ADD_TODO，它携带的信息是字符串Learn Redux。<br>可以这样理解，Action 描述当前发生的事情。改变 State 的唯一办法，就是使用 Action。它会运送数据到 Store。</p>
-<h3 id="Action-Creator"><a href="#Action-Creator" class="headerlink" title="Action Creator"></a>Action Creator</h3><p>View 要发送多少种消息，就会有多少种 Action。如果都手写，会很麻烦。可以定义一个函数来生成 Action，这个函数就叫 Action Creator。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> ADD_TODO = <span class="string">'添加 TODO'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">addTodo</span>(<span class="params">text</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    type: ADD_TODO,</span><br><span class="line">    text</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> action = addTodo(<span class="string">'Learn Redux'</span>);</span><br></pre></td></tr></table></figure>
-<p>上面代码中，addTodo函数就是一个 Action Creator。</p>
-<h3 id="store-dispatch"><a href="#store-dispatch" class="headerlink" title="store.dispatch()"></a>store.dispatch()</h3><p>store.dispatch()是 View 发出 Action 的唯一方法。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">import &#123; createStore &#125; from &apos;redux&apos;;</span><br><span class="line">const store = createStore(fn);</span><br><span class="line">store.dispatch(&#123;</span><br><span class="line">  type: &apos;ADD_TODO&apos;,</span><br><span class="line">  payload: &apos;Learn Redux&apos;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>上面代码中，store.dispatch接受一个 Action 对象作为参数，将它发送出去。<br>结合 Action Creator，这段代码可以改写如下。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">store.dispatch(addTodo(<span class="string">'Learn Redux'</span>));</span><br></pre></td></tr></table></figure>
-<h3 id="Reducer"><a href="#Reducer" class="headerlink" title="Reducer"></a>Reducer</h3><p>Store 收到 Action 以后，必须给出一个新的 State，这样 View 才会发生变化。这种 State 的计算过程就叫做 Reducer。<br>Reducer 是一个函数，它接受 Action 和当前 State 作为参数，返回一个新的 State。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducer = <span class="function"><span class="keyword">function</span> (<span class="params">state, action</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">  <span class="keyword">return</span> new_state;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>整个应用的初始状态，可以作为 State 的默认值。下面是一个实际的例子。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> defaultState = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> reducer = <span class="function">(<span class="params">state = defaultState, action</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">'ADD'</span>:</span><br><span class="line">      <span class="keyword">return</span> state + action.payload;</span><br><span class="line">    <span class="keyword">default</span>: </span><br><span class="line">      <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> state = reducer(<span class="number">1</span>, &#123;</span><br><span class="line">  type: <span class="string">'ADD'</span>,</span><br><span class="line">  payload: <span class="number">2</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>上面代码中，reducer函数收到名为ADD的 Action 以后，就返回一个新的 State，作为加法的计算结果。其他运算的逻辑（比如减法），也可以根据 Action 的不同来实现。<br>实际应用中，Reducer 函数不用像上面这样手动调用，store.dispatch方法会触发 Reducer 的自动执行。为此，Store 需要知道 Reducer 函数，做法就是在生成 Store 的时候，将 Reducer 传入createStore方法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br></pre></td></tr></table></figure>
-<h3 id="纯函数"><a href="#纯函数" class="headerlink" title="纯函数"></a>纯函数</h3><p>Reducer 函数最重要的特征是，它是一个纯函数。也就是说，只要是同样的输入，必定得到同样的输出。</p>
-<p>纯函数是函数式编程的概念，必须遵守以下一些约束。</p>
-<ul>
-<li style="list-style: none"><input type="checkbox"> 不得改写参数</li>
-<li style="list-style: none"><input type="checkbox"> 不能调用系统 I/O 的API</li>
-<li style="list-style: none"><input type="checkbox"> 不能调用Date.now()或者Math.random()等不纯的方法，因为每次会得到不一样的结果</li>
-</ul>
-<p>由于 Reducer 是纯函数，就可以保证同样的State，必定得到同样的 View。但也正因为这一点，==Reducer 函数里面不能改变 State，必须返回一个全新的对象==，请参考下面的写法。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// State 是一个对象</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123; thingToChange &#125;);</span><br><span class="line">  <span class="comment">// 或者</span></span><br><span class="line">  <span class="keyword">return</span> &#123; ...state, ...newState &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// State 是一个数组</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> [...state, newItem];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>最好把 State 对象设成只读。你没法改变它，要得到新的 State，唯一办法就是生成一个新对象。这样的好处是，任何时候，与某个 View 对应的 State 总是一个不变的对象。</p>
-<h3 id="store-subscribe"><a href="#store-subscribe" class="headerlink" title="store.subscribe()"></a>store.subscribe()</h3><p>Store 允许使用store.subscribe方法设置监听函数，一旦 State 发生变化，就自动执行这个函数。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer);</span><br><span class="line"></span><br><span class="line">store.subscribe(listener);</span><br></pre></td></tr></table></figure>
-<p>显然，只要把 View 的更新函数（对于 React 项目，就是组件的render方法或setState方法）放入listen，就会实现 View 的自动渲染。</p>
-<p>store.subscribe方法返回一个函数，调用这个函数就可以解除监听。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> unsubscribe = store.subscribe(<span class="function"><span class="params">()</span> =&gt;</span></span><br><span class="line">  <span class="built_in">console</span>.log(store.getState())</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">unsubscribe();</span><br></pre></td></tr></table></figure>
-<h3 id="Store-的实现"><a href="#Store-的实现" class="headerlink" title="Store 的实现"></a>Store 的实现</h3><p>了解Redux 涉及的基本概念后，可以发现 Store 提供了三个方法。</p>
-<pre><code>- [ ] store.getState()
-- [ ] store.dispatch()
-- [ ] store.subscribe()
-</code></pre><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">let</span> &#123; subscribe, dispatch, getState &#125; = createStore(reducer);</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>createStore方法还可以接受第二个参数，表示 State 的最初状态。这通常是服务器给出的。  </p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> store = createStore(todoApp, <span class="built_in">window</span>.STATE_FROM_SERVER)</span><br></pre></td></tr></table></figure>
-<p>上面代码中，window.STATE_FROM_SERVER就是整个应用的状态初始值。注意，如果提供了这个参数，它会覆盖 Reducer 函数的默认初始值。<br>createStore方法的一个简单实现</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> createStore = <span class="function">(<span class="params">reducer</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> state;</span><br><span class="line">  <span class="keyword">let</span> listeners = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> getState = <span class="function"><span class="params">()</span> =&gt;</span> state;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> dispatch = <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">    state = reducer(state, action);</span><br><span class="line">    listeners.forEach(<span class="function"><span class="params">listener</span> =&gt;</span> listener());</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> subscribe = <span class="function">(<span class="params">listener</span>) =&gt;</span> &#123;</span><br><span class="line">    listeners.push(listener);</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      listeners = listeners.filter(<span class="function"><span class="params">l</span> =&gt;</span> l !== listener);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  dispatch(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; getState, dispatch, subscribe &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h2 id="Reducer-的拆分"><a href="#Reducer-的拆分" class="headerlink" title="Reducer 的拆分"></a>Reducer 的拆分</h2><p>Reducer 函数负责生成 State。由于整个应用只有一个 State 对象，包含所有数据，对于大型应用来说，这个 State 必然十分庞大，导致 Reducer 函数也十分庞大。</p>
-<p>请看下面的例子。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> chatReducer = <span class="function">(<span class="params">state = defaultState, action = &#123;&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; type, payload &#125; = action;</span><br><span class="line">  <span class="keyword">switch</span> (type) &#123;</span><br><span class="line">    <span class="keyword">case</span> ADD_CHAT:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">        chatLog: state.chatLog.concat(payload)</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> CHANGE_STATUS:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">        statusMessage: payload</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">case</span> CHANGE_USERNAME:</span><br><span class="line">      <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, state, &#123;</span><br><span class="line">        userName: payload</span><br><span class="line">      &#125;);</span><br><span class="line">    <span class="keyword">default</span>: <span class="keyword">return</span> state;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>上面代码中，三种 Action 分别改变 State 的三个属性。</p>
-<pre><code>- [ ] ADD_CHAT：chatLog属性
-- [ ] CHANGE_STATUS：statusMessage属性
-- [ ] CHANGE_USERNAME：userName属性
-</code></pre><p>这三个属性之间没有联系，这提示我们可以把 Reducer 函数拆分。不同的函数负责处理不同属性，最终把它们合并成一个大的 Reducer 即可。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> chatReducer = <span class="function">(<span class="params">state = defaultState, action = &#123;&#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    chatLog: chatLog(state.chatLog, action),</span><br><span class="line">    statusMessage: statusMessage(state.statusMessage, action),</span><br><span class="line">    userName: userName(state.userName, action)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>上面代码中，Reducer 函数被拆成了三个小函数，每一个负责生成对应的属性。</p>
-<p>这样一拆，Reducer 就易读易写多了。而且，这种拆分与 React 应用的结构相吻合：一个 React 根组件由很多子组件构成。这就是说，子组件与子 Reducer 完全可以对应。</p>
-<p>Redux 提供了一个combineReducers方法，用于 Reducer 的拆分。你只要定义各个子 Reducer 函数，然后用这个方法，将它们合成一个大的 Reducer。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reducer = combineReducers(&#123;</span><br><span class="line">  a: doSomethingWithA,</span><br><span class="line">  b: processB,</span><br><span class="line">  c: c</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等同于</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state = &#123;&#125;, action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    a: doSomethingWithA(state.a, action),</span><br><span class="line">    b: processB(state.b, action),</span><br><span class="line">    c: c(state.c, action)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总之，combineReducers()做的就是产生一个整体的 Reducer 函数。该函数根据 State 的 key 去执行相应的子 Reducer，并将返回结果合并成一个大的 State 对象。</p>
-<p>下面是combineReducer的简单实现。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> combineReducers = <span class="function"><span class="params">reducers</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">state = &#123;&#125;, action</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Object</span>.keys(reducers).reduce(</span><br><span class="line">      (nextState, key) =&gt; &#123;</span><br><span class="line">        nextState[key] = reducers[key](state[key], action);</span><br><span class="line">        <span class="keyword">return</span> nextState;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;&#125; </span><br><span class="line">    );</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>你可以把所有子 Reducer 放在一个文件里面，然后统一引入。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; combineReducers &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> reducers <span class="keyword">from</span> <span class="string">'./reducers'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reducer = combineReducers(reducers)</span><br></pre></td></tr></table></figure>
-<p>参考：<br><a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html</a><br><a href="https://juejin.im/entry/59fd15b951882534af2552af" target="_blank" rel="noopener">Redux 异步流最佳实践 - 前端 - 掘金</a></p>
-<p>#fe/framework/react</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/02/redux/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
     <article id="post-vuex数据流向" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -828,287 +1045,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/03/02/vuex数据流向/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vuex面试题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/vuex面试题/">vuex面试题</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/02/vuex面试题/" class="archive-article-date">
-  	<time datetime="2020-03-02T09:08:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://juejin.im/post/5dba91e4518825647e4ef18b" target="_blank" rel="noopener">https://juejin.im/post/5dba91e4518825647e4ef18b</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/02/vuex面试题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-浏览器键入url回车后经历的那些事儿" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/浏览器键入url回车后经历的那些事儿/">浏览器键入url回车后经历的那些事儿</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/01/浏览器键入url回车后经历的那些事儿/" class="archive-article-date">
-  	<time datetime="2020-03-01T04:57:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="整体步骤"><a href="#整体步骤" class="headerlink" title="整体步骤"></a>整体步骤</h2><p>1、URL解析<br>2、DNS域名解析<br>3、浏览器主机根据ip地址与服务器建立TCP连接<br>4、发送HTTP请求<br>5、服务器处理请求<br>6、断开TCP连接<br>7、浏览器解析文件<br>8、浏览器布局渲染</p>
-<h3 id="1、URL解析"><a href="#1、URL解析" class="headerlink" title="1、URL解析"></a>1、URL解析</h3><p>一个URL包括协议，网络地址（域名 + 端口），资源路径</p>
-<p>协议：最常用的比如HTTP（超文本传输协议）FTP（文件传输协议）</p>
-<p>网络地址：可以是域名或者ip地址，包括端口号，如果没有默认为80</p>
-<p>如果是不合法的地址，会转给默认的搜索引擎,例如如果你正在使用chrome，可以在url输入框输入你想要搜索的内容，然后搜索引擎会根据关键字进行搜索。</p>
-<h3 id="2、DNS域名解析"><a href="#2、DNS域名解析" class="headerlink" title="2、DNS域名解析"></a>2、DNS域名解析</h3><p>例如：baidu.com就是域名</p>
-<p>1）先到各种缓存信息中查找</p>
-<p>先到浏览器缓存记录中查找 - 浏览器会缓存DNS一段时间（浏览器缓存）</p>
-<p>如果浏览器中没有找到，浏览器会有一个系统调用，获得系统缓存中的记录（系统缓存）</p>
-<p>接着将请求发给路由器，路由器一般也有自己的DNS缓存（路由器缓存）</p>
-<p>2）DNS服务器查找</p>
-<p>没有则发送请求到本地域名服务器，每一个本地域名服务器都维护一个高速缓存，存放最近用过的域名及其IP地址.如果还没有则发出递归查询（本地服务器请求比他高一级的服务器，如此递归直到根域名服务器，肯定能找到这个服务器的IP地址）通过这个IP可以找到客户端到服务器端的唯一路径.</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/dns解析.png" alt="dns解析"></p>
-<p>总结起来就是：<br>浏览器缓存 =&gt; 系统缓存 =&gt; 路由器缓存 =&gt;ISP(运营商)DNS缓存 =&gt; 根域名服务器 =&gt; 顶级域名服务器 =&gt; 主域名服务器的顺序</p>
-<h3 id="3、浏览器主机根据ip地址与服务器建立TCP连接"><a href="#3、浏览器主机根据ip地址与服务器建立TCP连接" class="headerlink" title="3、浏览器主机根据ip地址与服务器建立TCP连接"></a>3、浏览器主机根据ip地址与服务器建立TCP连接</h3><p>浏览器向服务器端发送SYN连接请求，经过服务器与浏览器三次报文的交互连接建立完成，就可以发送数据了。</p>
-<p>找到了正确的IP地址以后就要开始建立连接了，建立连接的过程一般会使用TCP协议，通过三次握手建立连接。</p>
-<h4 id="TCP-三次握手"><a href="#TCP-三次握手" class="headerlink" title="TCP 三次握手"></a>TCP 三次握手</h4><p>客户端发出建立连接的请求。数据包携带有SYN。</p>
-<p>如果服务端有开放的端口，可以接受并建立连接，那么服务端会返回SYN + ACK,告诉客户端我可以接受你的请求。</p>
-<p>客户端收到服务端的回应，发送ACK给服务端。 连接建立。</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/TCP三次握手.png" alt="TCP三次握手"></p>
-<h3 id="4、发送HTTP请求"><a href="#4、发送HTTP请求" class="headerlink" title="4、发送HTTP请求"></a>4、发送HTTP请求</h3><p>与服务器建立了连接后，就可以向服务器发起请求了</p>
-<p>根据HTTP协议的要求，组织一个HTTP数据包，向服务器发送HTTP请求，HTTP的请求报头有请求行和请求报头，空行，请求体。</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/request.png" alt="request"></p>
-<p>在浏览器中查看报文首部:</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/request-example.png" alt="request-example"></p>
-<p>请求报文主要包括</p>
-<p>1）请求行:http方法、页面地址、协议、版本</p>
-<p>2）请求头:key、value告诉服务端需要内容，注意什么类型</p>
-<p>3）空行:告诉服务端请求头已经结束</p>
-<p>4）请求体</p>
-<h3 id="5、服务器处理请求"><a href="#5、服务器处理请求" class="headerlink" title="5、服务器处理请求"></a>5、服务器处理请求</h3><p>服务器收到请求并响应，生成一个HTTP响应报文，通过TCP协议发送给浏览器主机</p>
-<p>通过HTTP请求服务后，服务器会向浏览器返回一个应答信息 - HTTP响应，</p>
-<p>在HTTP里，有请求就会有响应，哪怕是错误信息。这里我们同样看下响应报文的组成结构：</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/response.png" alt="response"></p>
-<p>在响应结果中都会有个一个HTTP状态码，比如我们熟知的200、301、404、500等。通过这个状态码我们可以知道服务器端的处理是否正常，并能了解具体的错误。</p>
-<p>状态码由3位数字和原因短语组成。根据首位数字，状态码可以分为五类：</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/response-status.png" alt="response-status"></p>
-<h3 id="6、断开TCP连接"><a href="#6、断开TCP连接" class="headerlink" title="6、断开TCP连接"></a>6、断开TCP连接</h3><p>为了避免服务器与客户端双方的资源占用和损耗，当双方没有请求或响应传递时，任意一方都可以发起关闭请求。与创建TCP连接的3次握手类似，关闭TCP连接，需要4次握手。</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/TCP四次握手.png" alt="TCP四次握手"></p>
-<p>1) 客户端发起中断请求，发送FIN到服务端<br>2) 服务端收到请求，可能数据还没有发完。这个时候不会关闭socket，而是回复ACK，告诉客户端知道了<br>3) 客户端进入Fin_Wait状态，继续等待服务端端的FIN报文。服务端端发送完毕后，会向客户端发送FIN<br>4) 客户端客服端收到后就回复ACK，并关闭连接</p>
-<p>上图可以这么理解：</p>
-<ul>
-<li>客户端：“兄弟，我这边没数据要传了，咱关闭连接吧。”</li>
-<li>服务端：“收到，我看看我这边有木有数据了。”</li>
-<li>服务端：“兄弟，我这边也没数据要传你了，咱可以关闭连接了。”</li>
-<li>客户端：“好嘞。”</li>
-</ul>
-<h3 id="7、浏览器解析文件"><a href="#7、浏览器解析文件" class="headerlink" title="7、浏览器解析文件"></a>7、浏览器解析文件</h3><blockquote>
-<p>浏览器通过解析HTML，生成DOM树，解析CSS，生成CSS规则树，然后通过DOM树和CSS规则树生成渲染树。渲染树与DOM树不同，渲染树中并没有head、display为none等不必显示的节点。<br>要注意的是，浏览器的解析过程并非是串连进行的，比如在解析CSS的同时，可以继续加载解析HTML，但在解析执行JS脚本时，会停止解析后续HTML，这就会出现阻塞问题，关于JS阻塞相关问题</p>
-</blockquote>
-<h3 id="8、浏览器布局渲染"><a href="#8、浏览器布局渲染" class="headerlink" title="8、浏览器布局渲染"></a>8、浏览器布局渲染</h3><p>根据渲染树布局，计算CSS样式，即每个节点在页面中的大小和位置等几何信息。HTML默认是流式布局的，CSS和js会打破这种布局，改变DOM的外观样式以及大小和位置。这时就要提到两个重要概念：repaint(重绘)和reflow(回流)。</p>
-<p>repaint：屏幕的一部分重画，不影响整体布局，比如某个CSS的背景色变了，但元素的几何尺寸和位置不变。</p>
-<p>reflow： 意味着元件的几何尺寸变了，我们需要重新验证并计算渲染树。是渲染树的一部分或全部发生了变化。这就是Reflow，或是Layout。</p>
-<p>所以我们应该尽量减少reflow和repaint,良好的css规范会减少这种操作, <a href="https://juejin.im/post/5d552252f265da03a14852cc" target="_blank" rel="noopener">CSS书写规范和顺序</a></p>
-<p>最后浏览器绘制各个节点，将页面展示给用户。</p>
-<p>致此输入url到展现页面的一个周期就完成了。</p>
-<p>参考：</p>
-<p><a href="https://juejin.im/post/5d5a622ef265da03f47c20e9" target="_blank" rel="noopener">https://juejin.im/post/5d5a622ef265da03f47c20e9</a></p>
-<p><a href="https://juejin.im/post/5d552252f265da03a14852cc" target="_blank" rel="noopener">https://juejin.im/post/5d552252f265da03a14852cc</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/NetWork/" class="article-tag-list-link color3">NetWork</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/01/浏览器键入url回车后经历的那些事儿/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-进程和线程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/02/27/进程和线程/">进程和线程</a>
-    </h1>
-  
-
-        
-        <a href="/2020/02/27/进程和线程/" class="archive-article-date">
-  	<time datetime="2020-02-27T14:27:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-02-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="线程和进程的区别是什么"><a href="#线程和进程的区别是什么" class="headerlink" title="线程和进程的区别是什么"></a>线程和进程的区别是什么</h2><p>进程是资源分配的最小单位，线程是CPU调度的最小单位</p>
-<p>做个简单的比喻：进程=火车，线程=车厢</p>
-<ul>
-<li>线程在进程下行进（单纯的车厢无法运行）</li>
-<li>一个进程可以包含多个线程（一辆火车可以有多个车厢）</li>
-<li>不同进程间数据很难共享（一辆火车上的乘客很难换到另外一辆火车，比如站点换乘）</li>
-<li>同一进程下不同线程间数据很易共享（A车厢换到B车厢很容易）</li>
-<li>进程要比线程消耗更多的计算机资源（采用多列火车相比多个车厢更耗资源）</li>
-<li>进程间不会相互影响，一个线程挂掉将导致整个进程挂掉（一列火车不会影响到另外一列火车，但是如果一列火车上中间的一节车厢着火了，将影响到所有车厢）</li>
-<li>进程可以拓展到多机，进程最多适合多核（不同火车可以开在多个轨道上，同一火车的车厢不能在行进的不同的轨道上）</li>
-<li>进程使用的内存地址可以上锁，即一个线程使用某些共享内存时，其他线程必须等它结束，才能使用这一块内存。（比如火车上的洗手间）－”互斥锁”</li>
-<li>进程使用的内存地址可以限定使用量（比如火车上的餐厅，最多只允许多少人进入，如果满了需要在门口等，等有人出来了才能进去）－“信号量”</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/network/" class="article-tag-list-link color3">Network</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/02/27/进程和线程/">展开全文 >></a>
         </p>
       
 
@@ -1247,6 +1183,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1259,19 +1203,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1287,7 +1223,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1295,7 +1231,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1304,10 +1244,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">原型链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1359,6 +1295,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -1368,14 +1312,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">

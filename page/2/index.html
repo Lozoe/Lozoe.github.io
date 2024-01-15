@@ -166,6 +166,305 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-react-hooks" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/26/react-hooks/">React之hooks</a>
+    </h1>
+  
+
+        
+        <a href="/2020/10/26/react-hooks/" class="archive-article-date">
+  	<time datetime="2020-10-26T06:17:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在vue项目中，.vue 文件称为 SFC(Single File Components)，在vue的源码中，有一个sfc模块专门负责.vue单文件组件的解析</p>
+<p>vue 会先对 .vue 文件进行解析，分成 template、script、styles、customBlocks 四个部分，称为 descriptor。之后，再对这四个部分分别进行编译最终得到可以在浏览器中执行的 .js 文件。</p>
+<p>SFCDescriptor，是表示 .vue 各个代码块的对象，为以下数据格式：<br>Object<br></p>
+        
+          <a class="article-more-a" href="/2020/10/26/react-hooks/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/10/26/react-hooks/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-使用Vue自定义一个v-model" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/13/使用Vue自定义一个v-model/">使用Vue2.0自定义一个v-model</a>
+    </h1>
+  
+
+        
+        <a href="/2020/10/13/使用Vue自定义一个v-model/" class="archive-article-date">
+  	<time datetime="2020-10-13T07:14:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Vue2-0"><a href="#Vue2-0" class="headerlink" title="Vue2.0"></a>Vue2.0</h2><ol>
+<li>组件代码</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"custom-input"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">:value</span>=<span class="string">"value"</span> @<span class="attr">input</span>=<span class="string">"$_handleChange"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span></span><br><span class="line"><span class="undefined">    props: &#123;</span></span><br><span class="line"><span class="undefined">        value: &#123;</span></span><br><span class="line"><span class="javascript">        type: <span class="built_in">String</span>,</span></span><br><span class="line"><span class="javascript">        <span class="keyword">default</span>: <span class="string">''</span></span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;,</span></span><br><span class="line"><span class="undefined">    methods: &#123;</span></span><br><span class="line"><span class="undefined">        $_handleChange(e) &#123;</span></span><br><span class="line"><span class="javascript">        <span class="keyword">this</span>.$emit(<span class="string">'input'</span>, e.target.value)</span></span><br><span class="line"><span class="undefined">        &#125;</span></span><br><span class="line"><span class="undefined">    &#125;</span></span><br><span class="line"><span class="undefined">&#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>在代码中使用组件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;custom-input v-model=&quot;value&quot;&gt;&lt;/custom-input&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    export default &#123;</span><br><span class="line">        data() &#123;</span><br><span class="line">            return &#123;</span><br><span class="line">                value: &apos;&apos;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>在Vue2.0中我们通过为组件设置名为value属性同时触发名为input的事件来实现的v-model，当然也可以通过model来修改属性名和事件名</p>
+<h2 id="使用Vue3-0自定义一个v-model示例"><a href="#使用Vue3-0自定义一个v-model示例" class="headerlink" title="使用Vue3.0自定义一个v-model示例"></a>使用Vue3.0自定义一个v-model示例</h2><ol>
+<li>组件代码</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;div class=&quot;custom-input&quot;&gt;</span><br><span class="line">    &lt;input :value=&quot;value&quot; @input=&quot;_handleChangeValue&quot; /&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    props: &#123;</span><br><span class="line">        value: &#123;</span><br><span class="line">        type: String,</span><br><span class="line">        default: &quot;&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    name: &quot;CustomInput&quot;,</span><br><span class="line">    setup(props, &#123; emit &#125;) &#123;</span><br><span class="line">        function _handleChangeValue(e) &#123;</span><br><span class="line">            // vue3.0 是通过emit事件名为 update:modelValue来更新v-model的</span><br><span class="line">            emit(&quot;update:value&quot;, e.target.value);</span><br><span class="line">        &#125;</span><br><span class="line">        return &#123;</span><br><span class="line">            _handleChangeValue</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>在代码中使用组件</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">  &lt;!--在使用v-model需要指定modelValue--&gt;</span><br><span class="line">  &lt;custom-input v-model:value=&quot;state.inputValue&quot;&gt;&lt;/custom-input&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">import &#123; reactive &#125; from &quot;vue&quot;;</span><br><span class="line">import CustomInput from &quot;../components/custom-input&quot;;</span><br><span class="line">export default &#123;</span><br><span class="line">    name: &quot;Home&quot;,</span><br><span class="line">    components: &#123;</span><br><span class="line">        CustomInput</span><br><span class="line">    &#125;,</span><br><span class="line">    setup() &#123;</span><br><span class="line">        const state = reactive(&#123;</span><br><span class="line">            inputValue: &quot;&quot;</span><br><span class="line">        &#125;);</span><br><span class="line">        return &#123;</span><br><span class="line">            state</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>到了Vue3.0中，因为一个组件支持多个v-model，所以v-model的实现方式有了新的改变。首先我们不需要使用固定的属性名和事件名了，在上例中因为是input输入框，属性名我们依然使用的是value，但是也可以是其他任何的比如name,data,val等等，而在值发生变化后对外暴露的事件名变成了update:value，即update:属性名。而在调用组件的地方也就使用了v-model:属性名来区分不同的v-model。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/10/13/使用Vue自定义一个v-model/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-拖拽的那些事儿" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/08/06/拖拽的那些事儿/">拖拽的那些事儿</a>
+    </h1>
+  
+
+        
+        <a href="/2020/08/06/拖拽的那些事儿/" class="archive-article-date">
+  	<time datetime="2020-08-06T09:41:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-08-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div</span><br><span class="line">        class=&quot;contain&quot;</span><br><span class="line">        :id=&quot;`drag`+index&quot;</span><br><span class="line">        :ref=&quot;`drag`+index&quot;</span><br><span class="line">        draggable=&quot;true&quot;</span><br><span class="line">        @dragstart=&quot;handleDragstart&quot;</span><br><span class="line">        @drag=&quot;handleDrag&quot;</span><br><span class="line">        @drop=&quot;handleOndrop&quot;</span><br><span class="line">        @dragover=&quot;allowDrop&quot;</span><br><span class="line">    &gt;</span><br><span class="line">        &lt;slot&gt;&lt;/slot&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;&#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">    // 唯一标识，必传</span><br><span class="line">    props: &#123;</span><br><span class="line">        index: &#123;</span><br><span class="line">            type: Number,</span><br><span class="line">            required: true,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">        swapElements(a, b) &#123;</span><br><span class="line">            // 交换两个dom元素</span><br><span class="line">            if (a === b) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            // 记录父元素</span><br><span class="line">            const bParent = b.parentNode;</span><br><span class="line">            const aParent = a.parentNode;</span><br><span class="line">            // 记录下一个同级元素</span><br><span class="line">            const aNext = a.nextElementSibling;</span><br><span class="line">            const bNext = b.nextElementSibling;</span><br><span class="line">            // 如果参照物是邻近元素则直接调整位置</span><br><span class="line">            if (aNext === b) &#123;</span><br><span class="line">                bParent.insertBefore(b, a);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            if (bNext === a) &#123;</span><br><span class="line">                aParent.insertBefore(a, b);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            if (a.contains(b)) &#123;</span><br><span class="line">                aParent.insertBefore(b, a);</span><br><span class="line">                bParent.insertBefore(a, bNext);</span><br><span class="line">                // return aParent.insertBefore(b, a), bParent.insertBefore(a, bn);</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">            bParent.insertBefore(a, b);</span><br><span class="line">            aParent.insertBefore(b, aNext);</span><br><span class="line">        &#125;,</span><br><span class="line">        handleDragstart(ev) &#123;</span><br><span class="line">            ev.dataTransfer.setData(&apos;dragDom&apos;, ev.target.id);</span><br><span class="line">        &#125;,</span><br><span class="line">        handleDrag() &#123;</span><br><span class="line">            // eslint-disable-next-line no-console</span><br><span class="line">            console.log(&apos;drag-在元素开始时反复触发&apos;);</span><br><span class="line">        &#125;,</span><br><span class="line">        handleDragend() &#123;</span><br><span class="line">            // eslint-disable-next-line no-console</span><br><span class="line">            console.log(&apos;dragend-在拖动操作完成时触发&apos;);</span><br><span class="line">        &#125;,</span><br><span class="line">        allowDrop(ev) &#123;</span><br><span class="line">            ev.preventDefault();</span><br><span class="line">        &#125;,</span><br><span class="line">        handleOndrop(event) &#123;</span><br><span class="line">            const data = event.dataTransfer.getData(&apos;dragDom&apos;);</span><br><span class="line">            console.log(document.getElementById(data), event.target, &apos;这两个dom&apos;);</span><br><span class="line">            this.swapElements(document.getElementById(data), event.currentTarget);</span><br><span class="line">            console.log(event.target, &apos;dragend-放下时时触发&apos;);</span><br><span class="line">        &#125;,</span><br><span class="line">        // eslint-disable-next-line @typescript-eslint/no-empty-function</span><br><span class="line">        dragInit() &#123;&#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    components: &#123;&#125;,</span><br><span class="line">    mounted() &#123;</span><br><span class="line">        this.dragInit();</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.contain &#123;</span><br><span class="line">  cursor: pointer;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
+<p>调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">&lt;template&gt;</span><br><span class="line">    &lt;div class=&quot;box&quot;&gt;</span><br><span class="line">        &lt;dragAndDrop</span><br><span class="line">            class=&quot;contain&quot;</span><br><span class="line">            v-for=&quot;(item, index) in arr&quot;</span><br><span class="line">            :key=&quot;index&quot;</span><br><span class="line">            :index=&quot;index&quot;</span><br><span class="line">        &gt;</span><br><span class="line">            &#123;&#123;index&#125;&#125;</span><br><span class="line">        &lt;/dragAndDrop&gt;</span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">import dragAndDrop from &apos;./components/drag&apos;;</span><br><span class="line">export default &#123;</span><br><span class="line">    data() &#123;</span><br><span class="line">        return &#123;</span><br><span class="line">            arr: [],</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;,</span><br><span class="line">    methods: &#123;</span><br><span class="line">    &#125;,</span><br><span class="line">    components: &#123;</span><br><span class="line">        dragAndDrop,</span><br><span class="line">    &#125;,</span><br><span class="line">    mounted() &#123;</span><br><span class="line">        this.arr = new Array(9).fill(null);</span><br><span class="line">        // this.dragInit();</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;style&gt;</span><br><span class="line">.box &#123;</span><br><span class="line">  display: flex;</span><br><span class="line">  flex-wrap: wrap;</span><br><span class="line">&#125;</span><br><span class="line">.contain &#123;</span><br><span class="line">  width: 200px;</span><br><span class="line">  height: 200px;</span><br><span class="line">  background: purple;</span><br><span class="line">  margin: 20px;</span><br><span class="line">  font-size: 40px;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure></p>
+<p>参考：<br>可实现demo: <a href="https://juejin.im/post/6844903824784621581" target="_blank" rel="noopener">https://juejin.im/post/6844903824784621581</a></p>
+<p>前置知识：<br><a href="https://juejin.im/post/6844903513491767303#heading-6" target="_blank" rel="noopener">https://juejin.im/post/6844903513491767303#heading-6</a></p>
+<p>sortablejs中文配置：<br><a href="http://www.sortablejs.com/options.html" target="_blank" rel="noopener">http://www.sortablejs.com/options.html</a></p>
+<p>sortablejs demo:<br><a href="https://sortablejs.github.io/Sortable/#swap" target="_blank" rel="noopener">https://sortablejs.github.io/Sortable/#swap</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/08/06/拖拽的那些事儿/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Vue源码解析之render" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/03/Vue源码解析之render/">Vue之render源码解析</a>
+    </h1>
+  
+
+        
+        <a href="/2020/06/03/Vue源码解析之render/" class="archive-article-date">
+  	<time datetime="2020-06-03T12:42:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>render函数可以作为一道分割线，render函数的左边可以称之为编译期，将Vue的模板转换为渲染函数。render函数的右边是Vue的运行时，主要是基于渲染函数生成Virtual DOM树，Diff和Patch。</p>
+<p>render渲染函数将结合数据生成Virtual DOM<br>有了虚拟的DOM树后，再交给Patch函数，负责把这些虚拟DOM真正施加到真实的DOM上。在这个过程中，Vue有自身的响应式系统来侦测在渲染过程中所依赖到的数据来源。在渲染过程中，侦测到数据来源之后就可以精确感知数据源的变动。<br>根据需要重新进行渲染。当重新进行渲染之后，会生成一个新的树，将新的树与旧的树进行diff对比，就可以最终落实到真实DOM上的改动。</p>
+<p>一个简单的实例：</p>
+<p><img src="/2020/06/03/Vue源码解析之render/render-example.png" alt="render-example"></p>
+<p>vue的渲染机制可以总结如下：</p>
+<p><img src="/2020/06/03/Vue源码解析之render/render-process.png" alt="render-process"></p>
+<h2 id="render前置操作"><a href="#render前置操作" class="headerlink" title="render前置操作"></a>render前置操作</h2><ol>
+<li>为何要用with(this){}包裹？</li>
+<li>何时将render函数的字符串转成函数？</li>
+</ol>
+<h3 id="1-为何要用with-this-包裹"><a href="#1-为何要用with-this-包裹" class="headerlink" title="1. 为何要用with(this){}包裹"></a>1. 为何要用with(this){}包裹</h3><blockquote>
+<p>with通常被当做重复引用同一个对象中的多个属性的快捷方式，可以不需要重复引用对象本身。引自《你不知道的JavaScript》上2.2.2节with</p>
+</blockquote>
+<h3 id="2-何时将render函数的字符串转成函数-vue2-6-11"><a href="#2-何时将render函数的字符串转成函数-vue2-6-11" class="headerlink" title="2. 何时将render函数的字符串转成函数(vue2.6.11)"></a>2. 何时将render函数的字符串转成函数(vue2.6.11)</h3><blockquote>
+<p>经过parse生成AST和optimize对AST树的优化，会生成render函数的字符串。在createCompilerCreator（在src\compiler\create-compiler.js）中，调用createCompileToFunctionFn将字符串转成函数。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src\compiler\index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; parse &#125; <span class="keyword">from</span> <span class="string">'./parser/index'</span></span><br><span class="line"><span class="keyword">import</span> &#123; optimize &#125; <span class="keyword">from</span> <span class="string">'./optimizer'</span></span><br><span class="line"><span class="keyword">import</span> &#123; generate &#125; <span class="keyword">from</span> <span class="string">'./codegen/index'</span></span><br><span class="line"><span class="keyword">import</span> &#123; createCompilerCreator &#125; <span class="keyword">from</span> <span class="string">'./create-compiler'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// `createCompilerCreator` allows creating compilers that use alternative</span></span><br><span class="line"><span class="comment">// parser/optimizer/codegen, e.g the SSR optimizing compiler.</span></span><br><span class="line"><span class="comment">// Here we just export a default compiler using the default parts.</span></span><br><span class="line"><span class="comment">// createCompilerCreator做了render的前置操作</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> createCompiler = createCompilerCreator(<span class="function"><span class="keyword">function</span> <span class="title">baseCompile</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  template: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  options: CompilerOptions</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">CompiledResult</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ast = parse(template.trim(), options)</span><br><span class="line">  <span class="keyword">if</span> (options.optimize !== <span class="literal">false</span>) &#123;</span><br><span class="line">    optimize(ast, options)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> code = generate(ast, options)</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    ast,</span><br><span class="line">    render: code.render, <span class="comment">// 此时还是render函数的字符串</span></span><br><span class="line">    staticRenderFns: code.staticRenderFns</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src\compiler\create-compiler.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; extend &#125; <span class="keyword">from</span> <span class="string">'shared/util'</span></span><br><span class="line"><span class="keyword">import</span> &#123; detectErrors &#125; <span class="keyword">from</span> <span class="string">'./error-detector'</span></span><br><span class="line"><span class="keyword">import</span> &#123; createCompileToFunctionFn &#125; <span class="keyword">from</span> <span class="string">'./to-function'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createCompilerCreator</span> (<span class="params">baseCompile: Function</span>): <span class="title">Function</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">createCompiler</span> (<span class="params">baseOptions: CompilerOptions</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">compile</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">      template: string,</span></span></span><br><span class="line"><span class="function"><span class="params">      options?: CompilerOptions</span></span></span><br><span class="line"><span class="function"><span class="params">    </span>): <span class="title">CompiledResult</span> </span>&#123;</span><br><span class="line">      <span class="keyword">const</span> finalOptions = <span class="built_in">Object</span>.create(baseOptions)</span><br><span class="line">      <span class="keyword">const</span> errors = []</span><br><span class="line">      <span class="keyword">const</span> tips = []</span><br><span class="line">      finalOptions.warn = <span class="function">(<span class="params">msg, tip</span>) =&gt;</span> &#123;</span><br><span class="line">        (tip ? tips : errors).push(msg)</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (options) &#123;</span><br><span class="line">        <span class="comment">// merge custom modules</span></span><br><span class="line">        <span class="keyword">if</span> (options.modules) &#123;</span><br><span class="line">          finalOptions.modules =</span><br><span class="line">            (baseOptions.modules || []).concat(options.modules)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// merge custom directives</span></span><br><span class="line">        <span class="keyword">if</span> (options.directives) &#123;</span><br><span class="line">          finalOptions.directives = extend(</span><br><span class="line">            <span class="built_in">Object</span>.create(baseOptions.directives || <span class="literal">null</span>),</span><br><span class="line">            options.directives</span><br><span class="line">          )</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// copy other options</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> options) &#123;</span><br><span class="line">          <span class="keyword">if</span> (key !== <span class="string">'modules'</span> &amp;&amp; key !== <span class="string">'directives'</span>) &#123;</span><br><span class="line">            finalOptions[key] = options[key]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> compiled = baseCompile(template, finalOptions)</span><br><span class="line">      <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">        errors.push.apply(errors, detectErrors(compiled.ast))</span><br><span class="line">      &#125;</span><br><span class="line">      compiled.errors = errors</span><br><span class="line">      compiled.tips = tips</span><br><span class="line">      <span class="keyword">return</span> compiled</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      compile,</span><br><span class="line">      compileToFunctions: createCompileToFunctionFn(compile)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>createCompileToFunctionFn（在src\compiler\to-function.js）中，会优先读缓存信息，若没有才会执行编译方法，同时将render字符串通过createFunction调用New Function()的方法，创造render函数，然后缓存信息。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* @flow */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; noop, extend &#125; <span class="keyword">from</span> <span class="string">'shared/util'</span></span><br><span class="line"><span class="keyword">import</span> &#123; warn <span class="keyword">as</span> baseWarn, tip &#125; <span class="keyword">from</span> <span class="string">'core/util/debug'</span></span><br><span class="line"><span class="keyword">import</span> &#123; generateCodeFrame &#125; <span class="keyword">from</span> <span class="string">'./codeframe'</span></span><br><span class="line"></span><br><span class="line">type CompiledFunctionResult = &#123;</span><br><span class="line">  render: <span class="built_in">Function</span>;</span><br><span class="line">  staticRenderFns: <span class="built_in">Array</span>&lt;<span class="built_in">Function</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createFunction</span> (<span class="params">code, errors</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Function</span>(code)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    errors.push(&#123; err, code &#125;)</span><br><span class="line">    <span class="keyword">return</span> noop</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createCompileToFunctionFn</span> (<span class="params">compile: Function</span>): <span class="title">Function</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> cache = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">compileToFunctions</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    template: string,</span></span></span><br><span class="line"><span class="function"><span class="params">    options?: CompilerOptions,</span></span></span><br><span class="line"><span class="function"><span class="params">    vm?: Component</span></span></span><br><span class="line"><span class="function"><span class="params">  </span>): <span class="title">CompiledFunctionResult</span> </span>&#123;</span><br><span class="line">    options = extend(&#123;&#125;, options)</span><br><span class="line">    <span class="keyword">const</span> warn = options.warn || baseWarn</span><br><span class="line">    <span class="keyword">delete</span> options.warn</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="comment">// detect possible CSP restriction</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">'return 1'</span>)</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (e.toString().match(<span class="regexp">/unsafe-eval|CSP/</span>)) &#123;</span><br><span class="line">          warn(</span><br><span class="line">            <span class="string">'It seems you are using the standalone build of Vue.js in an '</span> +</span><br><span class="line">            <span class="string">'environment with Content Security Policy that prohibits unsafe-eval. '</span> +</span><br><span class="line">            <span class="string">'The template compiler cannot work in this environment. Consider '</span> +</span><br><span class="line">            <span class="string">'relaxing the policy to allow unsafe-eval or pre-compiling your '</span> +</span><br><span class="line">            <span class="string">'templates into render functions.'</span></span><br><span class="line">          )</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check cache</span></span><br><span class="line">    <span class="keyword">const</span> key = options.delimiters</span><br><span class="line">      ? <span class="built_in">String</span>(options.delimiters) + template</span><br><span class="line">      : template</span><br><span class="line">    <span class="keyword">if</span> (cache[key]) &#123;</span><br><span class="line">      <span class="keyword">return</span> cache[key]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// compile</span></span><br><span class="line">    <span class="keyword">const</span> compiled = compile(template, options)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check compilation errors/tips</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (compiled.errors &amp;&amp; compiled.errors.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (options.outputSourceRange) &#123;</span><br><span class="line">          compiled.errors.forEach(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">            warn(</span><br><span class="line">              <span class="string">`Error compiling template:\n\n<span class="subst">$&#123;e.msg&#125;</span>\n\n`</span> +</span><br><span class="line">              generateCodeFrame(template, e.start, e.end),</span><br><span class="line">              vm</span><br><span class="line">            )</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          warn(</span><br><span class="line">            <span class="string">`Error compiling template:\n\n<span class="subst">$&#123;template&#125;</span>\n\n`</span> +</span><br><span class="line">            compiled.errors.map(<span class="function"><span class="params">e</span> =&gt;</span> <span class="string">`- <span class="subst">$&#123;e&#125;</span>`</span>).join(<span class="string">'\n'</span>) + <span class="string">'\n'</span>,</span><br><span class="line">            vm</span><br><span class="line">          )</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (compiled.tips &amp;&amp; compiled.tips.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (options.outputSourceRange) &#123;</span><br><span class="line">          compiled.tips.forEach(<span class="function"><span class="params">e</span> =&gt;</span> tip(e.msg, vm))</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          compiled.tips.forEach(<span class="function"><span class="params">msg</span> =&gt;</span> tip(msg, vm))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// turn code into functions</span></span><br><span class="line">    <span class="keyword">const</span> res = &#123;&#125;</span><br><span class="line">    <span class="keyword">const</span> fnGenErrors = []</span><br><span class="line">    res.render = createFunction(compiled.render, fnGenErrors)</span><br><span class="line">    res.staticRenderFns = compiled.staticRenderFns.map(<span class="function"><span class="params">code</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> createFunction(code, fnGenErrors)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check function generation errors.</span></span><br><span class="line">    <span class="comment">// this should only happen if there is a bug in the compiler itself.</span></span><br><span class="line">    <span class="comment">// mostly for codegen development use</span></span><br><span class="line">    <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> ((!compiled.errors || !compiled.errors.length) &amp;&amp; fnGenErrors.length) &#123;</span><br><span class="line">        warn(</span><br><span class="line">          <span class="string">`Failed to generate render function:\n\n`</span> +</span><br><span class="line">          fnGenErrors.map(<span class="function">(<span class="params">&#123; err, code &#125;</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;err.toString()&#125;</span> in\n\n<span class="subst">$&#123;code&#125;</span>\n`</span>).join(<span class="string">'\n'</span>),</span><br><span class="line">          vm</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (cache[key] = res)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<p><a href="https://juejin.im/post/5d09c587e51d454f71439ce2" target="_blank" rel="noopener">https://juejin.im/post/5d09c587e51d454f71439ce2</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/06/03/Vue源码解析之render/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Vue之vuex在ts中的应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -714,452 +1013,6 @@
 
 
   
-    <article id="post-React中组件通信的几种方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/02/React中组件通信的几种方式/">React中组件通信的几种方式</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/02/React中组件通信的几种方式/" class="archive-article-date">
-  	<time datetime="2020-04-02T07:35:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在使用 React 的过程中，不可避免的需要组件间进行消息传递（通信），组件间通信大体有下面几种情况：</p>
-<ul>
-<li>父组件向子组件通信</li>
-<li>子组件向父组件通信</li>
-<li>非嵌套组件间通信</li>
-<li>跨级组件之间通信</li></ul>
-        
-          <a class="article-more-a" href="/2020/04/02/React中组件通信的几种方式/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/02/React中组件通信的几种方式/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vue之keep-alive" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/02/vue之keep-alive/">vue之keep-alive</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/02/vue之keep-alive/" class="archive-article-date">
-  	<time datetime="2020-04-02T02:37:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="页面缓存"><a href="#页面缓存" class="headerlink" title="页面缓存"></a>页面缓存</h2><p>在Vue构建的单页面应用（SPA）中，路由模块一般使用vue-router。vue-router不保存被切换组件的状态，它进行push或者replace时，旧组件会被销毁，而新组件会被新建，走一遍完整的生命周期。</p>
-<p>但有时候，我们有一些需求，比如跳转到详情页面时，需要保持列表页的滚动条的深度，等返回的时候依然在这个位置，这样可以提高用户体验。在Vue中，对于这种“页面缓存”的需求，我们可以使用keep-alive组件来解决这个需求。</p>
-<h2 id="keep-alive是什么"><a href="#keep-alive是什么" class="headerlink" title="keep-alive是什么"></a>keep-alive是什么</h2><p>keepalive 是 Vue 内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染，将组件进行持久化。也就是所谓的组件缓存</p>
-<h2 id="keep-alive使用方式"><a href="#keep-alive使用方式" class="headerlink" title="keep-alive使用方式"></a>keep-alive使用方式</h2><p>keep-alive是个抽象组件（或称为功能型组件），实际上不会被渲染在DOM树中。它的作用是在内存中缓存组件（不让组件销毁），等到下次再渲染的时候，还会保持其中的所有状态，并且会触发activated钩子函数。因为缓存的需要通常出现在页面切换时，所以常与router-view一起出现：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;keep-alive&gt;</span><br><span class="line">    &lt;router-view /&gt;</span><br><span class="line">&lt;<span class="regexp">/keep-alive&gt;</span></span><br></pre></td></tr></table></figure>
-<p>如此一来，每一个在router-view中渲染的组件，都会被缓存起来。</p>
-<p>如果只想渲染某一些页面/组件，可以使用keep-alive组件的include/exclude属性。include属性表示要缓存的组件名（即组件定义时的name属性），接收的类型为string、RegExp或string数组；exclude属性有着相反的作用，匹配到的组件不会被缓存。exclude优先级更高。假如可能出现在同一router-view的N个页面中，我只想缓存列表页和详情页，那么可以这样写：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">keep-alive</span> <span class="attr">:include</span>=<span class="string">"['ListView', 'DetailView']"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">router-view</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>被keepalive包含的组件不会被再次初始化，也就意味着不会重走生命周期函数。但是有时候是希望我们缓存的组件可以能够再次进行渲染，这时 Vue 为我们解决了这个问题 被包含在 keep-alive 中创建的组件，会多出两个生命周期的钩子: activated 与 deactivated：</p>
-<ul>
-<li>activated 当 keepalive 包含的组件再次渲染的时候触发</li>
-<li>deactivated 当 keepalive 包含的组件销毁的时候触发</li>
-</ul>
-<p>keepalive是一个抽象的组件，缓存的组件不会被 mounted,为此提供activated和deactivated钩子函数</p>
-<h2 id="实现条件缓存：全局的include数组"><a href="#实现条件缓存：全局的include数组" class="headerlink" title="实现条件缓存：全局的include数组"></a>实现条件缓存：全局的include数组</h2><p>上面include的写法不是常用的，因为它固定了哪几个页面缓存或不缓存，假如有下面这个场景：</p>
-<ul>
-<li>现有页面：首页（A）、列表页（B）、详情页（C），一般可以从：A-&gt;B-&gt;C；</li>
-<li>B到C再返回B时，B要保持列表滚动的距离；</li>
-<li>B返回A再进入B时，B不需要保持状态，是全新的</li>
-</ul>
-<p>很明显，这个例子中，B是“条件缓存”的，C-&gt;B时保持缓存，A-&gt;B时放弃缓存。其实解决方案也不难，只需要将B动态地从include数组中增加/删除就行了。具体步骤是：</p>
-<p>1.在Vuex中定义一个全局的缓存数组，待传给include：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// global.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    namespaced: <span class="literal">true</span>,</span><br><span class="line">    state: &#123;</span><br><span class="line">        keepAliveComponents: [] <span class="comment">// 缓存数组</span></span><br><span class="line">    &#125;,</span><br><span class="line">    mutations: &#123;</span><br><span class="line">        keepAlive (state, component) &#123;</span><br><span class="line">            <span class="comment">// 注：防止重复添加（当然也可以使用Set）</span></span><br><span class="line">            !state.keepAliveComponents.includes(component) &amp;&amp; state.keepAliveComponents.push(component)</span><br><span class="line">        &#125;,</span><br><span class="line">        noKeepAlive (state, component) &#123;</span><br><span class="line">            <span class="keyword">const</span> index = state.keepAliveComponents.indexOf(component)</span><br><span class="line">            index !== <span class="number">-1</span> &amp;&amp; state.keepAliveComponents.splice(index, <span class="number">1</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>2.在父页面中定义keep-alive，并传入全局的缓存数组：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// App.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--传入include数组--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">keep-alive</span> <span class="attr">:include</span>=<span class="string">"keepAliveComponents"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    computed: &#123;</span><br><span class="line">        ...mapState(&#123;</span><br><span class="line">            keepAliveComponents: state =&gt; state.global.keepAliveComponents</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>3.缓存：在路由配置页中，约定使用meta属性keepAlive，值为true表示组件需要缓存。在全局路由钩子beforeEach中对该属性进行处理，这样一来，每次进入该组件，都进行缓存：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> Router(&#123;</span><br><span class="line">    routes: [</span><br><span class="line">        &#123;</span><br><span class="line">            path: <span class="string">'/A/B'</span>,</span><br><span class="line">            name: <span class="string">'B'</span>,</span><br><span class="line">            component: B,</span><br><span class="line">            meta: &#123;</span><br><span class="line">                title: <span class="string">'B页面'</span>,</span><br><span class="line">                keepAlive: <span class="literal">true</span> <span class="comment">// 这里指定B组件的缓存性</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">router.beforeEach(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 在路由全局钩子beforeEach中，根据keepAlive属性，统一设置页面的缓存性</span></span><br><span class="line">    <span class="comment">// 作用是每次进入该组件，就将它缓存</span></span><br><span class="line">    <span class="keyword">if</span> (to.meta.keepAlive) &#123;</span><br><span class="line">        store.commit(<span class="string">'global/keepAlive'</span>, to.name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>4.取消缓存的时机：对缓存组件使用路由的组件层钩子beforeRouteLeave。因为B-&gt;A-&gt;B时不需要缓存B，所以可以认为：当B的下一个页面不是C时取消B的缓存，那么下次进入B组件时B就是全新的：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    name: <span class="string">'B'</span>,</span><br><span class="line">    created () &#123;</span><br><span class="line">        <span class="comment">// ...设置滚动条在最顶部</span></span><br><span class="line">    &#125;,</span><br><span class="line">    beforeRouteLeave (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">        <span class="comment">// 如果下一个页面不是详情页（C），则取消列表页（B）的缓存</span></span><br><span class="line">        <span class="keyword">if</span> (to.name !== <span class="string">'C'</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.$store.commit(<span class="string">'global/noKeepAlive'</span>, <span class="keyword">from</span>.name)</span><br><span class="line">        &#125;</span><br><span class="line">        next()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>因为B的条件缓存，是B自己的职责，所以最好把该业务逻辑写在B的内部，而不是A中，这样不至于让组件之间的跳转关系变得混乱。</p>
-<p>5.一个需要注意的细节：因为keep-alive组件的include数组操作的对象是组件名、而不是路由名，因此我们定义每一个组件时，都要显式声明name属性，否则缓存不起作用。而且，一个显式的name对Vue devtools有提示作用。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/02/vue之keep-alive/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-webpack优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/31/webpack优化/">webpack优化</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/31/webpack优化/" class="archive-article-date">
-  	<time datetime="2020-03-31T09:46:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="webpack优化的最终目的"><a href="#webpack优化的最终目的" class="headerlink" title="webpack优化的最终目的"></a>webpack优化的最终目的</h2><p>快 + 小 + 按需加载 + 利用浏览器缓存</p>
-<p>一个是速度、一个是体积、一个是用到什么加载什么、公用代码可以利用浏览器缓存</p>
-<h2 id="一、-减少webpack打包的时间"><a href="#一、-减少webpack打包的时间" class="headerlink" title="一、 减少webpack打包的时间"></a>一、 减少webpack打包的时间</h2><h3 id="1-优化-Loader-配置"><a href="#1-优化-Loader-配置" class="headerlink" title="1. 优化 Loader 配置"></a>1. 优化 Loader 配置</h3><p>对于 Loader 来说，影响打包效率首当其冲必属 Babel 了。因为 Babel 会将代码转为字符串生成 AST，然后对 AST 继续进行转变最后再生成新的代码，项目越大，转换代码越多，效率就越低。当然了，我们是有办法优化的。</p>
-<p>首先我们可以优化 Loader 的文件搜索范围（Loader处理的文件路径，与不处理的文件路径指定。以及作用到什么类型的文件）</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// js 文件才使用 babel</span></span><br><span class="line">            test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">            loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">            <span class="comment">// 只在 src 文件夹下查找</span></span><br><span class="line">            include: [resolve(<span class="string">'src'</span>)],</span><br><span class="line">            <span class="comment">// 不会去查找的路径</span></span><br><span class="line">            exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">        &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>对于 Babel 来说，我们肯定是希望只作用在 JS 代码上的，然后 node_modules 中使用的代码都是编译过的，所以我们也完全没有必要再去处理一遍。</p>
-<p>当然这样做还不够，我们还可以将 Babel 编译过的文件缓存起来，下次只需要编译更改过的代码文件即可，这样可以大幅度加快打包时间</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loader: <span class="string">'babel-loader?cacheDirectory=true'</span></span><br></pre></td></tr></table></figure>
-<p>总结起来loader的优化点：</p>
-<ul>
-<li>比如babel-loader查找的路径，与不查找的路径指定</li>
-<li>缓存babel编译过的文件</li>
-</ul>
-<h3 id="2-HappyPack开启多线程打包"><a href="#2-HappyPack开启多线程打包" class="headerlink" title="2. HappyPack开启多线程打包"></a>2. HappyPack开启多线程打包</h3><p>受限于 Node 是单线程运行的，所以 Webpack 在打包的过程中也是单线程的，特别是在执行 Loader 的时候，长时间编译的任务很多，这样就会导致等待的情况。</p>
-<p>HappyPack 可以将 Loader 的同步执行转换为并行的，这样就能充分利用系统资源来加快打包效率了</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">    loaders: [</span><br><span class="line">        &#123;</span><br><span class="line">            test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">            include: [resolve(<span class="string">'src'</span>)],</span><br><span class="line">            exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">            <span class="comment">// id 后面的内容对应下面</span></span><br><span class="line">            loader: <span class="string">'happypack/loader?id=happybabel'</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line">plugins: [</span><br><span class="line">    <span class="keyword">new</span> HappyPack(&#123;</span><br><span class="line">        id: <span class="string">'happybabel'</span>,</span><br><span class="line">        loaders: [<span class="string">'babel-loader?cacheDirectory'</span>],</span><br><span class="line">        <span class="comment">// 开启 4 个线程</span></span><br><span class="line">        threads: <span class="number">4</span></span><br><span class="line">    &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>通过此插件开启多线程打包，充分利用系统资源</p>
-<h3 id="3-DllPlugin-（提前打包指定的类库）"><a href="#3-DllPlugin-（提前打包指定的类库）" class="headerlink" title="3. DllPlugin （提前打包指定的类库）"></a>3. DllPlugin （提前打包指定的类库）</h3><p>DllPlugin 可以将特定的类库提前打包然后引入。这种方式可以极大的减少打包类库的次数，只有当类库更新版本才有需要重新打包，并且也实现了将公共代码抽离成单独文件的优化方案。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单独配置在一个文件中</span></span><br><span class="line"><span class="comment">// webpack.dll.conf.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">        <span class="comment">// 想统一打包的类库</span></span><br><span class="line">        vendor: [<span class="string">'react'</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">        filename: <span class="string">'[name].dll.js'</span>,</span><br><span class="line">        library: <span class="string">'[name]-[hash]'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">            <span class="comment">// name 必须和 output.library 一致</span></span><br><span class="line">            name: <span class="string">'[name]-[hash]'</span>,</span><br><span class="line">            <span class="comment">// 该属性需要与 DllReferencePlugin 中一致</span></span><br><span class="line">            context: __dirname,</span><br><span class="line">            path: path.join(__dirname, <span class="string">'dist'</span>, <span class="string">'[name]-manifest.json'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>然后我们需要执行这个配置文件生成依赖文件，接下来我们需要使用 DllReferencePlugin 将依赖文件引入项目中</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.conf.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// ...省略其他配置</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</span><br><span class="line">            context: __dirname,</span><br><span class="line">            <span class="comment">// manifest 就是之前打包出来的 json 文件</span></span><br><span class="line">            manifest: <span class="built_in">require</span>(<span class="string">'./dist/vendor-manifest.json'</span>),</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>总结：</p>
-<ul>
-<li>将特订的类库提前打包然后引入，减少打包类库的次数，加快打包速度</li>
-<li>同时将公共代码抽离成单独的文件</li>
-</ul>
-<h3 id="4-代码并行压缩"><a href="#4-代码并行压缩" class="headerlink" title="4. 代码并行压缩"></a>4. 代码并行压缩</h3><p>在 Webpack3 中，我们一般使用 UglifyJS 来压缩代码，但是这个是单线程运行的，为了加快效率，我们可以使用 webpack-parallel-uglify-plugin 来并行运行 UglifyJS，从而提高效率。</p>
-<p>在 Webpack4 中，我们就不需要以上这些操作了，只需要将 mode 设置为 production 就可以默认开启以上功能。代码压缩也是我们必做的性能优化方案，当然我们不止可以压缩 JS 代码，还可以压缩 HTML、CSS 代码，并且在压缩 JS 代码的过程中，我们还可以通过配置实现比如删除 console.log 这类代码的功能。</p>
-<p>总结：</p>
-<ul>
-<li>webpack4 生产模式，默认开启多个子进程（线程）由之前的一个一个压缩，变为并行压缩</li>
-</ul>
-<h3 id="5-其他"><a href="#5-其他" class="headerlink" title="5. 其他"></a>5. 其他</h3><ul>
-<li>resolve.extensions：用来表明文件后缀列表，默认查找顺序是 [‘.js’, ‘.json’]，如果你的导入文件没有添加后缀就会按照这个顺序查找文件。我们应该尽可能减少后缀列表长度，然后将出现频率高的后缀排在前面</li>
-<li>resolve.alias：可以通过别名的方式来映射一个路径，能让 Webpack 更快找到路径</li>
-<li>module.noParse：如果你确定一个文件下没有其他依赖，就可以使用该属性让 Webpack 不扫描该文件，这种方式对于大型的类库很有帮助</li>
-</ul>
-<h2 id="二、减少-Webpack-打包后的文件体积"><a href="#二、减少-Webpack-打包后的文件体积" class="headerlink" title="二、减少 Webpack 打包后的文件体积"></a>二、减少 Webpack 打包后的文件体积</h2><h3 id="1-Scope-Hoisting"><a href="#1-Scope-Hoisting" class="headerlink" title="1. Scope Hoisting"></a>1. Scope Hoisting</h3><p>Scope Hoisting 会分析出模块之间的依赖关系，尽可能的把打包出来的模块合并到一个函数中去。代码体积更小，因为函数申明语句会产生大量代码，代码在运行时因为创建的函数作用域更少了，内存开销也随之变小</p>
-<p>由于scope hositing 需要分析出模块之间的依赖关系，因此源码必须使用ES6模块化语句，不然就不能生效，原因和tree shaking一样</p>
-<p>比如我们希望打包两个文件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; a &#125; <span class="keyword">from</span> <span class="string">'./test.js'</span></span><br></pre></td></tr></table></figure>
-<p>对于这种情况，我们打包出来的代码会类似这样</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    <span class="comment">/* 0 */</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, require</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">/* 1 */</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, require</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>但是如果我们使用 Scope Hoisting 的话，代码就会尽可能的合并到一个函数中去，也就变成了这样的类似代码</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    <span class="comment">/* 0 */</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, require</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>这样的打包方式生成的代码明显比之前的少多了。如果在 Webpack4 中你希望开启这个功能，只需要启用 <code>optimization.concatenateModules</code> 就可以了。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    optimization: &#123;</span><br><span class="line">        concatenateModules: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>webpack3需要使用ModuleConcatenationPlugin</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.optimize.ModuleConcatenationPlugin()</span><br></pre></td></tr></table></figure>
-<p>总之，尽可能的合并打包出来的模块到一个函数中去</p>
-<h3 id="2-Tree-Shaking-（webpack-4-生产环境-默认开启）"><a href="#2-Tree-Shaking-（webpack-4-生产环境-默认开启）" class="headerlink" title="2. Tree Shaking （webpack 4 生产环境 默认开启）"></a>2. Tree Shaking （webpack 4 生产环境 默认开启）</h3><p>tree shaking是一个术语、通常用于打包时移除js中未引用的代码(dead-code)，它依赖于ES6模块系统中的import 和 export 的<strong><em>静态结构特性</em></strong></p>
-<p>Tree Shaking 可以实现删除项目中未被引用的代码，比如</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> b = <span class="number">2</span></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; a &#125; <span class="keyword">from</span> <span class="string">'./test.js'</span></span><br></pre></td></tr></table></figure>
-<p>对于以上情况，test 文件中的变量 b 如果没有在项目中使用到的话，就不会被打包到文件中。</p>
-<p>如果使用 Webpack 4 的话，开启生产环境就会自动启动这个优化功能。</p>
-<h2 id="三、按需加载-懒加载-动态加载-异步加载"><a href="#三、按需加载-懒加载-动态加载-异步加载" class="headerlink" title="三、按需加载(懒加载) + 动态加载 + 异步加载"></a>三、按需加载(懒加载) + 动态加载 + 异步加载</h2><p>当页面中一个文件过大并且还不一定用到的时候，我们希望在使用到的时候才开始加载这个文件俗称按需加载</p>
-<p>这样可以减少页面的响应时间，提高访问速度。</p>
-<p>webpack按需加载有 <code>require.ensure</code>和 <code>import</code>两种方法。</p>
-<h3 id="require-ensure-按需异步加载"><a href="#require-ensure-按需异步加载" class="headerlink" title="require.ensure 按需异步加载"></a>require.ensure 按需异步加载</h3><p>CommonJS解决方案， webpack 特有的，已经被 import() 取代</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.ensure(</span><br><span class="line">    dependencies: <span class="built_in">String</span>[],</span><br><span class="line">    callback: <span class="function"><span class="keyword">function</span>(<span class="params">require</span>),</span></span><br><span class="line"><span class="function">    <span class="title">errorCallback</span>: <span class="title">function</span>(<span class="params">error</span>),</span></span><br><span class="line"><span class="function">    <span class="title">chunkName</span>: <span class="title">String</span></span></span><br><span class="line"><span class="function">)</span></span><br></pre></td></tr></table></figure>
-<p>给定 dependencies 参数，将其对应的文件拆分到一个单独的 bundle 中，此 bundle 会被异步加载。当使用 CommonJS 模块语法时，这是动态加载依赖的唯一方法。意味着，可以在模块执行时才运行代码，只有在满足某些条件时才加载依赖项。</p>
-<h3 id="import-动态地加载模块"><a href="#import-动态地加载模块" class="headerlink" title="import() 动态地加载模块"></a>import() 动态地加载模块</h3><p>调用 import() 之处，被作为分离的模块起点，意思是，被请求的模块和它引用的所有子模块，会分离到一个单独的 chunk 中。</p>
-<blockquote>
-<p>ES2015 loader 规范 定义了 import() 方法，可以在运行时动态地加载 ES2015 模块。</p>
-</blockquote>
-<p>eg1. 当点击按钮时 再加载lazy.js 输出里面内容</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lazy.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="string">'lazy loader'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">let</span> output = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">import</span>(<span class="string">'./lazy'</span>).then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="built_in">module</span>.default);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br><span class="line">ReactDOM.render(</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">    &lt;button onClick=&#123;output&#125;&gt;点击&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;,</span><br><span class="line">    <span class="built_in">document</span>.querySelector(<span class="string">'#root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>eg2. vue中的懒加载</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Login = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: "login" */</span><span class="string">'./login'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'/login'</span>, <span class="attr">component</span>: Login &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>ps： require.ensure 和 import() 这个特性依赖于内置的 Promise。如果想在低版本浏览器使用 require.ensure，记得使用像 es6-promise 或者 promise-polyfill 这样 polyfill 库，来预先填充(shim) Promise 环境。</p>
-<h2 id="利用浏览器缓存"><a href="#利用浏览器缓存" class="headerlink" title="利用浏览器缓存"></a>利用浏览器缓存</h2><h3 id="提取公共代码与第三方代码"><a href="#提取公共代码与第三方代码" class="headerlink" title="提取公共代码与第三方代码"></a>提取公共代码与第三方代码</h3><p>将多个入口重复加载的公共资源提取出来</p>
-<ul>
-<li>相同的资源被重复的加载，浪费用户的流量和服务器的成本；</li>
-<li>每个页面需要加载的资源太大，导致网页首屏加载缓慢，影响用户体验。如果能把公共代码抽离成单独文件进行加载能进行优化，可以减少网络传输流量，降低服务器成本</li>
-</ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">    splitChunks: &#123;</span><br><span class="line">        <span class="comment">// 默认打包node_modules到venders.js</span></span><br><span class="line">        chunks: <span class="string">'all'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 将webpack运行时生成代码打包到runtime.js</span></span><br><span class="line">    runtimeChunk: <span class="literal">true</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<p>在webpack4.0 optimization.splitChunks替代了CommonsChunkPlugin</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="优化角度"><a href="#优化角度" class="headerlink" title="优化角度"></a>优化角度</h3><ul>
-<li>打包速度</li>
-<li>产物体积</li>
-<li>按需加载、异步加载、动态加载</li>
-<li>利用浏览器缓存</li>
-<li>开发流程规范和体验</li>
-</ul>
-<h4 id="打包速度"><a href="#打包速度" class="headerlink" title="打包速度"></a>打包速度</h4><ul>
-<li>优化Loader配置 - 1）查找路径include exclude 2）缓存babel编译过的文件babel-loader?cacheDirectory=true</li>
-<li>HappyPack开启多线程打包</li>
-<li>DllPlugin提前打包指定的类库 webpack.dll.conf.js DllReferencePlugin，减少打包类库的次数，同时将公共代码抽离成单独的文件</li>
-<li>代码并行压缩 - webpack3 UglifyJS压缩混淆代码，webpack-parallel-uglify-plugin并行运行UglifyJS；Webpack4 mode = production时自动开启</li>
-<li>压缩html、css</li>
-<li>resolve.extensions [‘.js’, ‘.json’]尽可能减少后缀列表长度,出现频率高的后缀排在前面</li>
-<li>resolve.alias 别名映射路径,Webpack 不扫描该文件</li>
-<li>module.noParse</li>
-</ul>
-<h4 id="产物体积"><a href="#产物体积" class="headerlink" title="产物体积"></a>产物体积</h4><ul>
-<li>Scope Hoisting 尽可能的合并打包出来的模块到一个函数中去 optimization.concatenateModules ModuleConcatenationPlugin</li>
-<li>js/css Tree Shaking webpack 4prod js 默认开启。css 用PurifyCssPlugin</li>
-<li>文件处理 &amp; base64 &amp; css-sprites</li>
-<li>代码压缩 UglifyJS</li>
-</ul>
-<h4 id="按需加载、异步加载、动态加载"><a href="#按需加载、异步加载、动态加载" class="headerlink" title="按需加载、异步加载、动态加载"></a>按需加载、异步加载、动态加载</h4><p>require.ensure、import 路由懒加载</p>
-<h4 id="利用浏览器缓存做长缓存优化"><a href="#利用浏览器缓存做长缓存优化" class="headerlink" title="利用浏览器缓存做长缓存优化"></a>利用浏览器缓存做长缓存优化</h4><p>提取公共代码与第三方代码做长缓存优化</p>
-<h4 id="开发流程规范和体验"><a href="#开发流程规范和体验" class="headerlink" title="开发流程规范和体验"></a>开发流程规范和体验</h4><ul>
-<li>模块热更新</li>
-<li>sourceMap</li>
-<li>webpack-dev-server-proxy 接口代理</li>
-<li>ts</li>
-<li>BundleAnalyzerPlugin分析打包情况</li>
-</ul>
-<p>参考：<br><a href="https://juejin.im/post/5ac76a8f51882555677ecc06#heading-5" target="_blank" rel="noopener">https://juejin.im/post/5ac76a8f51882555677ecc06#heading-5</a></p>
-<p><a href="https://juejin.im/post/5dcc45136fb9a02b450c2818" target="_blank" rel="noopener">https://juejin.im/post/5dcc45136fb9a02b450c2818</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/tool/" class="article-tag-list-link color5">Tool</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/31/webpack优化/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-实现cacheRequest，相同资源ajax只发一次请求" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/">实现cacheRequest，相同资源ajax只发一次请求</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/" class="archive-article-date">
-  	<time datetime="2020-03-30T08:18:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>请实现一个cacheRequest方法，保证当前ajax请求相同资源时，真实网络层中，实际只发出一次请求（假设已经存在request方法用于封装ajax请求）</p>
-<p>一开始看到第一感觉是，设个Http Headercache-control，把expire调大，不就自然会找浏览器缓存拿了。但是看到后面说提供自带的request方法和只发起一次ajax。那估计是想让笔者在业务层自己用代码解决这个cache问题。</p>
-        
-          <a class="article-more-a" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1269,6 +1122,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1281,19 +1142,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1309,7 +1162,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1317,7 +1170,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1326,10 +1183,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">原型链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1381,6 +1234,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -1390,14 +1251,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">

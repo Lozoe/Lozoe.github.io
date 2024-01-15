@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="L.Zoe">
 <meta property="og:description" content="Javascript的数据结构与算法(一)">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2024-01-08T09:13:38.890Z">
+<meta property="og:updated_time" content="2024-01-11T13:06:58.626Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript的数据结构与算法(一)">
 <meta name="twitter:description" content="Javascript的数据结构与算法(一)">
@@ -222,7 +222,7 @@
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> queue = <span class="keyword">new</span> Queue();</span><br><span class="line"><span class="built_in">console</span>.log(queue.isEmpty()); <span class="comment">// true</span></span><br><span class="line">queue.enqueue(<span class="string">'A'</span>);</span><br><span class="line">queue.enqueue(<span class="string">'B'</span>);</span><br><span class="line">queue.print(); <span class="comment">// A,B</span></span><br><span class="line">queue.size(); <span class="comment">// 2</span></span><br><span class="line">queue.isEmpty(); <span class="comment">// false</span></span><br><span class="line">queue.enqueue(<span class="string">'C'</span>); </span><br><span class="line">queue.dequeue(); </span><br><span class="line">queue.print(); <span class="comment">//B C</span></span><br></pre></td></tr></table></figure>
 <h2 id="3-2-优先队列"><a href="#3-2-优先队列" class="headerlink" title="3.2 优先队列"></a>3.2 优先队列</h2><p>元素的添加和移除是基于优先级的。实现一个优先队列,有两种选项:设置优先级,然后在正确的位置添加元素;或者用入列操 作添加元素,然后按照优先级移除它们。<br>我们在这里实现的优先队列称为最小优先队列,因为优先级的值较小的元素被放置在队列最 前面(1代表更高的优先级)。最大优先队列则与之相反,把优先级的值较大的元素放置在队列最 前面。</p>
 <h3 id="3-2-1-优先队列的定义"><a href="#3-2-1-优先队列的定义" class="headerlink" title="3.2.1 优先队列的定义"></a>3.2.1 优先队列的定义</h3><p>我们在这里使用组合继承的方式继承自Queue队列。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">PriorityQueue</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  Queue.call(<span class="keyword">this</span>);</span><br><span class="line">&#125;;</span><br><span class="line">PriorityQueue.prototype = <span class="keyword">new</span> Queue();</span><br><span class="line">PriorityQueue.prototype.constructer = PriorityQueue;</span><br><span class="line">PriorityQueue.prototype.enqueue = <span class="function"><span class="keyword">function</span>(<span class="params">element, priority</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">QueueElement</span>(<span class="params">tempelement, temppriority</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.element = tempelement;</span><br><span class="line">    <span class="keyword">this</span>.priority = temppriority;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> queueElement = <span class="keyword">new</span> QueueElement(element, priority);</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.isEmpty())&#123;</span><br><span class="line">    <span class="keyword">this</span>.items.push(queueElement);</span><br><span class="line">  &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> added = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.items.length; i++)&#123;</span><br><span class="line">      <span class="keyword">if</span>(<span class="keyword">this</span>.items[i].priority &gt; queueElement.priority)&#123;</span><br><span class="line">        <span class="keyword">this</span>.items.splice(i, <span class="number">0</span>, queueElement);</span><br><span class="line">        added = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!added)&#123;</span><br><span class="line">        <span class="keyword">this</span>.items.push(queueElement);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这个方法可以用Queue的默认实现</span></span><br><span class="line">PriorityQueue.prototype.print = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> result =<span class="string">''</span>;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.items.length;i++)&#123;</span><br><span class="line">    result += <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>.items[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">PriorityQueue</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  Queue.call(<span class="keyword">this</span>);</span><br><span class="line">&#125;;</span><br><span class="line">PriorityQueue.prototype = <span class="keyword">new</span> Queue();</span><br><span class="line">PriorityQueue.prototype.constructor = PriorityQueue;</span><br><span class="line">PriorityQueue.prototype.enqueue = <span class="function"><span class="keyword">function</span>(<span class="params">element, priority</span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">QueueElement</span>(<span class="params">tempelement, temppriority</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.element = tempelement;</span><br><span class="line">    <span class="keyword">this</span>.priority = temppriority;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> queueElement = <span class="keyword">new</span> QueueElement(element, priority);</span><br><span class="line">  <span class="keyword">if</span>(<span class="keyword">this</span>.isEmpty())&#123;</span><br><span class="line">    <span class="keyword">this</span>.items.push(queueElement);</span><br><span class="line">  &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> added = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.items.length; i++)&#123;</span><br><span class="line">      <span class="keyword">if</span>(<span class="keyword">this</span>.items[i].priority &gt; queueElement.priority)&#123;</span><br><span class="line">        <span class="keyword">this</span>.items.splice(i, <span class="number">0</span>, queueElement);</span><br><span class="line">        added = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!added)&#123;</span><br><span class="line">        <span class="keyword">this</span>.items.push(queueElement);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//这个方法可以用Queue的默认实现</span></span><br><span class="line">PriorityQueue.prototype.print = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> result =<span class="string">''</span>;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.items.length;i++)&#123;</span><br><span class="line">    result += <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>.items[i]);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="3-2-1-优先队列的基本使用"><a href="#3-2-1-优先队列的基本使用" class="headerlink" title="3.2.1 优先队列的基本使用"></a>3.2.1 优先队列的基本使用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pQueue = <span class="keyword">new</span> PriorityQueue();</span><br><span class="line">pQueue.enqueue(<span class="string">"B"</span>, <span class="number">2</span>);</span><br><span class="line">pQueue.enqueue(<span class="string">"C"</span>, <span class="number">3</span>);</span><br><span class="line">pQueue.enqueue(<span class="string">"A"</span>, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">console</span>.log(pQueue.print());<span class="comment">//&#123;"element":"A","priority":1&#125;&#123;"element":"B","priority":2&#125;&#123;"element":"C","priority":3&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(pQueue.size()); <span class="comment">// 3</span></span><br><span class="line"><span class="built_in">console</span>.log(pQueue.dequeue()); <span class="comment">// &#123; element="A",  priority=1&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(pQueue.size()); <span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
 <h2 id="3-3-循环队列"><a href="#3-3-循环队列" class="headerlink" title="3.3 循环队列"></a>3.3 循环队列</h2><p>循环队列是一种线性数据结构，其操作表现基于 FIFO（先进先出）原则并且队尾被连接在队首之后以形成一个循环。它也被称为“环形缓冲器”。</p>
 <p>循环队列的一个好处是我们可以利用这个队列之前用过的空间。在一个普通队列里，一旦一个队列满了，我们就不能插入下一个元素，即使在队列前面仍有空间。但是使用循环队列，我们能使用这些空间去存储新的值。</p>
@@ -502,6 +502,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -514,19 +522,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -542,7 +542,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -550,7 +550,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -559,10 +563,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">原型链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -614,6 +614,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -623,14 +631,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">

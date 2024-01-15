@@ -166,6 +166,452 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-React中组件通信的几种方式" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/02/React中组件通信的几种方式/">React中组件通信的几种方式</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/02/React中组件通信的几种方式/" class="archive-article-date">
+  	<time datetime="2020-04-02T07:35:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在使用 React 的过程中，不可避免的需要组件间进行消息传递（通信），组件间通信大体有下面几种情况：</p>
+<ul>
+<li>父组件向子组件通信</li>
+<li>子组件向父组件通信</li>
+<li>非嵌套组件间通信</li>
+<li>跨级组件之间通信</li></ul>
+        
+          <a class="article-more-a" href="/2020/04/02/React中组件通信的几种方式/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/02/React中组件通信的几种方式/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-vue之keep-alive" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/02/vue之keep-alive/">vue之keep-alive</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/02/vue之keep-alive/" class="archive-article-date">
+  	<time datetime="2020-04-02T02:37:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="页面缓存"><a href="#页面缓存" class="headerlink" title="页面缓存"></a>页面缓存</h2><p>在Vue构建的单页面应用（SPA）中，路由模块一般使用vue-router。vue-router不保存被切换组件的状态，它进行push或者replace时，旧组件会被销毁，而新组件会被新建，走一遍完整的生命周期。</p>
+<p>但有时候，我们有一些需求，比如跳转到详情页面时，需要保持列表页的滚动条的深度，等返回的时候依然在这个位置，这样可以提高用户体验。在Vue中，对于这种“页面缓存”的需求，我们可以使用keep-alive组件来解决这个需求。</p>
+<h2 id="keep-alive是什么"><a href="#keep-alive是什么" class="headerlink" title="keep-alive是什么"></a>keep-alive是什么</h2><p>keepalive 是 Vue 内置的一个组件，可以使被包含的组件保留状态，或避免重新渲染，将组件进行持久化。也就是所谓的组件缓存</p>
+<h2 id="keep-alive使用方式"><a href="#keep-alive使用方式" class="headerlink" title="keep-alive使用方式"></a>keep-alive使用方式</h2><p>keep-alive是个抽象组件（或称为功能型组件），实际上不会被渲染在DOM树中。它的作用是在内存中缓存组件（不让组件销毁），等到下次再渲染的时候，还会保持其中的所有状态，并且会触发activated钩子函数。因为缓存的需要通常出现在页面切换时，所以常与router-view一起出现：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;keep-alive&gt;</span><br><span class="line">    &lt;router-view /&gt;</span><br><span class="line">&lt;<span class="regexp">/keep-alive&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如此一来，每一个在router-view中渲染的组件，都会被缓存起来。</p>
+<p>如果只想渲染某一些页面/组件，可以使用keep-alive组件的include/exclude属性。include属性表示要缓存的组件名（即组件定义时的name属性），接收的类型为string、RegExp或string数组；exclude属性有着相反的作用，匹配到的组件不会被缓存。exclude优先级更高。假如可能出现在同一router-view的N个页面中，我只想缓存列表页和详情页，那么可以这样写：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">keep-alive</span> <span class="attr">:include</span>=<span class="string">"['ListView', 'DetailView']"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">router-view</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>被keepalive包含的组件不会被再次初始化，也就意味着不会重走生命周期函数。但是有时候是希望我们缓存的组件可以能够再次进行渲染，这时 Vue 为我们解决了这个问题 被包含在 keep-alive 中创建的组件，会多出两个生命周期的钩子: activated 与 deactivated：</p>
+<ul>
+<li>activated 当 keepalive 包含的组件再次渲染的时候触发</li>
+<li>deactivated 当 keepalive 包含的组件销毁的时候触发</li>
+</ul>
+<p>keepalive是一个抽象的组件，缓存的组件不会被 mounted,为此提供activated和deactivated钩子函数</p>
+<h2 id="实现条件缓存：全局的include数组"><a href="#实现条件缓存：全局的include数组" class="headerlink" title="实现条件缓存：全局的include数组"></a>实现条件缓存：全局的include数组</h2><p>上面include的写法不是常用的，因为它固定了哪几个页面缓存或不缓存，假如有下面这个场景：</p>
+<ul>
+<li>现有页面：首页（A）、列表页（B）、详情页（C），一般可以从：A-&gt;B-&gt;C；</li>
+<li>B到C再返回B时，B要保持列表滚动的距离；</li>
+<li>B返回A再进入B时，B不需要保持状态，是全新的</li>
+</ul>
+<p>很明显，这个例子中，B是“条件缓存”的，C-&gt;B时保持缓存，A-&gt;B时放弃缓存。其实解决方案也不难，只需要将B动态地从include数组中增加/删除就行了。具体步骤是：</p>
+<p>1.在Vuex中定义一个全局的缓存数组，待传给include：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// global.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    namespaced: <span class="literal">true</span>,</span><br><span class="line">    state: &#123;</span><br><span class="line">        keepAliveComponents: [] <span class="comment">// 缓存数组</span></span><br><span class="line">    &#125;,</span><br><span class="line">    mutations: &#123;</span><br><span class="line">        keepAlive (state, component) &#123;</span><br><span class="line">            <span class="comment">// 注：防止重复添加（当然也可以使用Set）</span></span><br><span class="line">            !state.keepAliveComponents.includes(component) &amp;&amp; state.keepAliveComponents.push(component)</span><br><span class="line">        &#125;,</span><br><span class="line">        noKeepAlive (state, component) &#123;</span><br><span class="line">            <span class="keyword">const</span> index = state.keepAliveComponents.indexOf(component)</span><br><span class="line">            index !== <span class="number">-1</span> &amp;&amp; state.keepAliveComponents.splice(index, <span class="number">1</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.在父页面中定义keep-alive，并传入全局的缓存数组：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// App.vue</span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"app"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--传入include数组--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">keep-alive</span> <span class="attr">:include</span>=<span class="string">"keepAliveComponents"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">keep-alive</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line">export default &#123;</span><br><span class="line">    computed: &#123;</span><br><span class="line">        ...mapState(&#123;</span><br><span class="line">            keepAliveComponents: state =&gt; state.global.keepAliveComponents</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.缓存：在路由配置页中，约定使用meta属性keepAlive，值为true表示组件需要缓存。在全局路由钩子beforeEach中对该属性进行处理，这样一来，每次进入该组件，都进行缓存：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> Router(&#123;</span><br><span class="line">    routes: [</span><br><span class="line">        &#123;</span><br><span class="line">            path: <span class="string">'/A/B'</span>,</span><br><span class="line">            name: <span class="string">'B'</span>,</span><br><span class="line">            component: B,</span><br><span class="line">            meta: &#123;</span><br><span class="line">                title: <span class="string">'B页面'</span>,</span><br><span class="line">                keepAlive: <span class="literal">true</span> <span class="comment">// 这里指定B组件的缓存性</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">router.beforeEach(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 在路由全局钩子beforeEach中，根据keepAlive属性，统一设置页面的缓存性</span></span><br><span class="line">    <span class="comment">// 作用是每次进入该组件，就将它缓存</span></span><br><span class="line">    <span class="keyword">if</span> (to.meta.keepAlive) &#123;</span><br><span class="line">        store.commit(<span class="string">'global/keepAlive'</span>, to.name)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>4.取消缓存的时机：对缓存组件使用路由的组件层钩子beforeRouteLeave。因为B-&gt;A-&gt;B时不需要缓存B，所以可以认为：当B的下一个页面不是C时取消B的缓存，那么下次进入B组件时B就是全新的：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    name: <span class="string">'B'</span>,</span><br><span class="line">    created () &#123;</span><br><span class="line">        <span class="comment">// ...设置滚动条在最顶部</span></span><br><span class="line">    &#125;,</span><br><span class="line">    beforeRouteLeave (to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">        <span class="comment">// 如果下一个页面不是详情页（C），则取消列表页（B）的缓存</span></span><br><span class="line">        <span class="keyword">if</span> (to.name !== <span class="string">'C'</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.$store.commit(<span class="string">'global/noKeepAlive'</span>, <span class="keyword">from</span>.name)</span><br><span class="line">        &#125;</span><br><span class="line">        next()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为B的条件缓存，是B自己的职责，所以最好把该业务逻辑写在B的内部，而不是A中，这样不至于让组件之间的跳转关系变得混乱。</p>
+<p>5.一个需要注意的细节：因为keep-alive组件的include数组操作的对象是组件名、而不是路由名，因此我们定义每一个组件时，都要显式声明name属性，否则缓存不起作用。而且，一个显式的name对Vue devtools有提示作用。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/02/vue之keep-alive/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-webpack优化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/31/webpack优化/">webpack优化</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/31/webpack优化/" class="archive-article-date">
+  	<time datetime="2020-03-31T09:46:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-31</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="webpack优化的最终目的"><a href="#webpack优化的最终目的" class="headerlink" title="webpack优化的最终目的"></a>webpack优化的最终目的</h2><p>快 + 小 + 按需加载 + 利用浏览器缓存</p>
+<p>一个是速度、一个是体积、一个是用到什么加载什么、公用代码可以利用浏览器缓存</p>
+<h2 id="一、-减少webpack打包的时间"><a href="#一、-减少webpack打包的时间" class="headerlink" title="一、 减少webpack打包的时间"></a>一、 减少webpack打包的时间</h2><h3 id="1-优化-Loader-配置"><a href="#1-优化-Loader-配置" class="headerlink" title="1. 优化 Loader 配置"></a>1. 优化 Loader 配置</h3><p>对于 Loader 来说，影响打包效率首当其冲必属 Babel 了。因为 Babel 会将代码转为字符串生成 AST，然后对 AST 继续进行转变最后再生成新的代码，项目越大，转换代码越多，效率就越低。当然了，我们是有办法优化的。</p>
+<p>首先我们可以优化 Loader 的文件搜索范围（Loader处理的文件路径，与不处理的文件路径指定。以及作用到什么类型的文件）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// js 文件才使用 babel</span></span><br><span class="line">            test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">            loader: <span class="string">'babel-loader'</span>,</span><br><span class="line">            <span class="comment">// 只在 src 文件夹下查找</span></span><br><span class="line">            include: [resolve(<span class="string">'src'</span>)],</span><br><span class="line">            <span class="comment">// 不会去查找的路径</span></span><br><span class="line">            exclude: <span class="regexp">/node_modules/</span></span><br><span class="line">        &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于 Babel 来说，我们肯定是希望只作用在 JS 代码上的，然后 node_modules 中使用的代码都是编译过的，所以我们也完全没有必要再去处理一遍。</p>
+<p>当然这样做还不够，我们还可以将 Babel 编译过的文件缓存起来，下次只需要编译更改过的代码文件即可，这样可以大幅度加快打包时间</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loader: <span class="string">'babel-loader?cacheDirectory=true'</span></span><br></pre></td></tr></table></figure>
+<p>总结起来loader的优化点：</p>
+<ul>
+<li>比如babel-loader查找的路径，与不查找的路径指定</li>
+<li>缓存babel编译过的文件</li>
+</ul>
+<h3 id="2-HappyPack开启多线程打包"><a href="#2-HappyPack开启多线程打包" class="headerlink" title="2. HappyPack开启多线程打包"></a>2. HappyPack开启多线程打包</h3><p>受限于 Node 是单线程运行的，所以 Webpack 在打包的过程中也是单线程的，特别是在执行 Loader 的时候，长时间编译的任务很多，这样就会导致等待的情况。</p>
+<p>HappyPack 可以将 Loader 的同步执行转换为并行的，这样就能充分利用系统资源来加快打包效率了</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>: &#123;</span><br><span class="line">    loaders: [</span><br><span class="line">        &#123;</span><br><span class="line">            test: <span class="regexp">/\.js$/</span>,</span><br><span class="line">            include: [resolve(<span class="string">'src'</span>)],</span><br><span class="line">            exclude: <span class="regexp">/node_modules/</span>,</span><br><span class="line">            <span class="comment">// id 后面的内容对应下面</span></span><br><span class="line">            loader: <span class="string">'happypack/loader?id=happybabel'</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;,</span><br><span class="line">plugins: [</span><br><span class="line">    <span class="keyword">new</span> HappyPack(&#123;</span><br><span class="line">        id: <span class="string">'happybabel'</span>,</span><br><span class="line">        loaders: [<span class="string">'babel-loader?cacheDirectory'</span>],</span><br><span class="line">        <span class="comment">// 开启 4 个线程</span></span><br><span class="line">        threads: <span class="number">4</span></span><br><span class="line">    &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>通过此插件开启多线程打包，充分利用系统资源</p>
+<h3 id="3-DllPlugin-（提前打包指定的类库）"><a href="#3-DllPlugin-（提前打包指定的类库）" class="headerlink" title="3. DllPlugin （提前打包指定的类库）"></a>3. DllPlugin （提前打包指定的类库）</h3><p>DllPlugin 可以将特定的类库提前打包然后引入。这种方式可以极大的减少打包类库的次数，只有当类库更新版本才有需要重新打包，并且也实现了将公共代码抽离成单独文件的优化方案。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单独配置在一个文件中</span></span><br><span class="line"><span class="comment">// webpack.dll.conf.js</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> webpack = <span class="built_in">require</span>(<span class="string">'webpack'</span>)</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    entry: &#123;</span><br><span class="line">        <span class="comment">// 想统一打包的类库</span></span><br><span class="line">        vendor: [<span class="string">'react'</span>]</span><br><span class="line">    &#125;,</span><br><span class="line">    output: &#123;</span><br><span class="line">        path: path.join(__dirname, <span class="string">'dist'</span>),</span><br><span class="line">        filename: <span class="string">'[name].dll.js'</span>,</span><br><span class="line">        library: <span class="string">'[name]-[hash]'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DllPlugin(&#123;</span><br><span class="line">            <span class="comment">// name 必须和 output.library 一致</span></span><br><span class="line">            name: <span class="string">'[name]-[hash]'</span>,</span><br><span class="line">            <span class="comment">// 该属性需要与 DllReferencePlugin 中一致</span></span><br><span class="line">            context: __dirname,</span><br><span class="line">            path: path.join(__dirname, <span class="string">'dist'</span>, <span class="string">'[name]-manifest.json'</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后我们需要执行这个配置文件生成依赖文件，接下来我们需要使用 DllReferencePlugin 将依赖文件引入项目中</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// webpack.conf.js</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="comment">// ...省略其他配置</span></span><br><span class="line">    plugins: [</span><br><span class="line">        <span class="keyword">new</span> webpack.DllReferencePlugin(&#123;</span><br><span class="line">            context: __dirname,</span><br><span class="line">            <span class="comment">// manifest 就是之前打包出来的 json 文件</span></span><br><span class="line">            manifest: <span class="built_in">require</span>(<span class="string">'./dist/vendor-manifest.json'</span>),</span><br><span class="line">        &#125;)</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>总结：</p>
+<ul>
+<li>将特订的类库提前打包然后引入，减少打包类库的次数，加快打包速度</li>
+<li>同时将公共代码抽离成单独的文件</li>
+</ul>
+<h3 id="4-代码并行压缩"><a href="#4-代码并行压缩" class="headerlink" title="4. 代码并行压缩"></a>4. 代码并行压缩</h3><p>在 Webpack3 中，我们一般使用 UglifyJS 来压缩代码，但是这个是单线程运行的，为了加快效率，我们可以使用 webpack-parallel-uglify-plugin 来并行运行 UglifyJS，从而提高效率。</p>
+<p>在 Webpack4 中，我们就不需要以上这些操作了，只需要将 mode 设置为 production 就可以默认开启以上功能。代码压缩也是我们必做的性能优化方案，当然我们不止可以压缩 JS 代码，还可以压缩 HTML、CSS 代码，并且在压缩 JS 代码的过程中，我们还可以通过配置实现比如删除 console.log 这类代码的功能。</p>
+<p>总结：</p>
+<ul>
+<li>webpack4 生产模式，默认开启多个子进程（线程）由之前的一个一个压缩，变为并行压缩</li>
+</ul>
+<h3 id="5-其他"><a href="#5-其他" class="headerlink" title="5. 其他"></a>5. 其他</h3><ul>
+<li>resolve.extensions：用来表明文件后缀列表，默认查找顺序是 [‘.js’, ‘.json’]，如果你的导入文件没有添加后缀就会按照这个顺序查找文件。我们应该尽可能减少后缀列表长度，然后将出现频率高的后缀排在前面</li>
+<li>resolve.alias：可以通过别名的方式来映射一个路径，能让 Webpack 更快找到路径</li>
+<li>module.noParse：如果你确定一个文件下没有其他依赖，就可以使用该属性让 Webpack 不扫描该文件，这种方式对于大型的类库很有帮助</li>
+</ul>
+<h2 id="二、减少-Webpack-打包后的文件体积"><a href="#二、减少-Webpack-打包后的文件体积" class="headerlink" title="二、减少 Webpack 打包后的文件体积"></a>二、减少 Webpack 打包后的文件体积</h2><h3 id="1-Scope-Hoisting"><a href="#1-Scope-Hoisting" class="headerlink" title="1. Scope Hoisting"></a>1. Scope Hoisting</h3><p>Scope Hoisting 会分析出模块之间的依赖关系，尽可能的把打包出来的模块合并到一个函数中去。代码体积更小，因为函数申明语句会产生大量代码，代码在运行时因为创建的函数作用域更少了，内存开销也随之变小</p>
+<p>由于scope hositing 需要分析出模块之间的依赖关系，因此源码必须使用ES6模块化语句，不然就不能生效，原因和tree shaking一样</p>
+<p>比如我们希望打包两个文件</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; a &#125; <span class="keyword">from</span> <span class="string">'./test.js'</span></span><br></pre></td></tr></table></figure>
+<p>对于这种情况，我们打包出来的代码会类似这样</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    <span class="comment">/* 0 */</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, require</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">/* 1 */</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, require</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>但是如果我们使用 Scope Hoisting 的话，代码就会尽可能的合并到一个函数中去，也就变成了这样的类似代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    <span class="comment">/* 0 */</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> (<span class="params">module, exports, require</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>这样的打包方式生成的代码明显比之前的少多了。如果在 Webpack4 中你希望开启这个功能，只需要启用 <code>optimization.concatenateModules</code> 就可以了。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    optimization: &#123;</span><br><span class="line">        concatenateModules: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>webpack3需要使用ModuleConcatenationPlugin</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> webpack.optimize.ModuleConcatenationPlugin()</span><br></pre></td></tr></table></figure>
+<p>总之，尽可能的合并打包出来的模块到一个函数中去</p>
+<h3 id="2-Tree-Shaking-（webpack-4-生产环境-默认开启）"><a href="#2-Tree-Shaking-（webpack-4-生产环境-默认开启）" class="headerlink" title="2. Tree Shaking （webpack 4 生产环境 默认开启）"></a>2. Tree Shaking （webpack 4 生产环境 默认开启）</h3><p>tree shaking是一个术语、通常用于打包时移除js中未引用的代码(dead-code)，它依赖于ES6模块系统中的import 和 export 的<strong><em>静态结构特性</em></strong></p>
+<p>Tree Shaking 可以实现删除项目中未被引用的代码，比如</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> a = <span class="number">1</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> b = <span class="number">2</span></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; a &#125; <span class="keyword">from</span> <span class="string">'./test.js'</span></span><br></pre></td></tr></table></figure>
+<p>对于以上情况，test 文件中的变量 b 如果没有在项目中使用到的话，就不会被打包到文件中。</p>
+<p>如果使用 Webpack 4 的话，开启生产环境就会自动启动这个优化功能。</p>
+<h2 id="三、按需加载-懒加载-动态加载-异步加载"><a href="#三、按需加载-懒加载-动态加载-异步加载" class="headerlink" title="三、按需加载(懒加载) + 动态加载 + 异步加载"></a>三、按需加载(懒加载) + 动态加载 + 异步加载</h2><p>当页面中一个文件过大并且还不一定用到的时候，我们希望在使用到的时候才开始加载这个文件俗称按需加载</p>
+<p>这样可以减少页面的响应时间，提高访问速度。</p>
+<p>webpack按需加载有 <code>require.ensure</code>和 <code>import</code>两种方法。</p>
+<h3 id="require-ensure-按需异步加载"><a href="#require-ensure-按需异步加载" class="headerlink" title="require.ensure 按需异步加载"></a>require.ensure 按需异步加载</h3><p>CommonJS解决方案， webpack 特有的，已经被 import() 取代</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>.ensure(</span><br><span class="line">    dependencies: <span class="built_in">String</span>[],</span><br><span class="line">    callback: <span class="function"><span class="keyword">function</span>(<span class="params">require</span>),</span></span><br><span class="line"><span class="function">    <span class="title">errorCallback</span>: <span class="title">function</span>(<span class="params">error</span>),</span></span><br><span class="line"><span class="function">    <span class="title">chunkName</span>: <span class="title">String</span></span></span><br><span class="line"><span class="function">)</span></span><br></pre></td></tr></table></figure>
+<p>给定 dependencies 参数，将其对应的文件拆分到一个单独的 bundle 中，此 bundle 会被异步加载。当使用 CommonJS 模块语法时，这是动态加载依赖的唯一方法。意味着，可以在模块执行时才运行代码，只有在满足某些条件时才加载依赖项。</p>
+<h3 id="import-动态地加载模块"><a href="#import-动态地加载模块" class="headerlink" title="import() 动态地加载模块"></a>import() 动态地加载模块</h3><p>调用 import() 之处，被作为分离的模块起点，意思是，被请求的模块和它引用的所有子模块，会分离到一个单独的 chunk 中。</p>
+<blockquote>
+<p>ES2015 loader 规范 定义了 import() 方法，可以在运行时动态地加载 ES2015 模块。</p>
+</blockquote>
+<p>eg1. 当点击按钮时 再加载lazy.js 输出里面内容</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// lazy.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="string">'lazy loader'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// main.js</span></span><br><span class="line"><span class="keyword">let</span> output = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">import</span>(<span class="string">'./lazy'</span>).then(<span class="function"><span class="params">module</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="built_in">module</span>.default);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br><span class="line">ReactDOM.render(</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">    &lt;button onClick=&#123;output&#125;&gt;点击&lt;<span class="regexp">/button&gt;</span></span><br><span class="line"><span class="regexp">    &lt;/</span>div&gt;,</span><br><span class="line">    <span class="built_in">document</span>.querySelector(<span class="string">'#root'</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>eg2. vue中的懒加载</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Login = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">import</span>(<span class="comment">/* webpackChunkName: "login" */</span><span class="string">'./login'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'/login'</span>, <span class="attr">component</span>: Login &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>ps： require.ensure 和 import() 这个特性依赖于内置的 Promise。如果想在低版本浏览器使用 require.ensure，记得使用像 es6-promise 或者 promise-polyfill 这样 polyfill 库，来预先填充(shim) Promise 环境。</p>
+<h2 id="利用浏览器缓存"><a href="#利用浏览器缓存" class="headerlink" title="利用浏览器缓存"></a>利用浏览器缓存</h2><h3 id="提取公共代码与第三方代码"><a href="#提取公共代码与第三方代码" class="headerlink" title="提取公共代码与第三方代码"></a>提取公共代码与第三方代码</h3><p>将多个入口重复加载的公共资源提取出来</p>
+<ul>
+<li>相同的资源被重复的加载，浪费用户的流量和服务器的成本；</li>
+<li>每个页面需要加载的资源太大，导致网页首屏加载缓慢，影响用户体验。如果能把公共代码抽离成单独文件进行加载能进行优化，可以减少网络传输流量，降低服务器成本</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">optimization: &#123;</span><br><span class="line">    splitChunks: &#123;</span><br><span class="line">        <span class="comment">// 默认打包node_modules到venders.js</span></span><br><span class="line">        chunks: <span class="string">'all'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 将webpack运行时生成代码打包到runtime.js</span></span><br><span class="line">    runtimeChunk: <span class="literal">true</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>在webpack4.0 optimization.splitChunks替代了CommonsChunkPlugin</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="优化角度"><a href="#优化角度" class="headerlink" title="优化角度"></a>优化角度</h3><ul>
+<li>打包速度</li>
+<li>产物体积</li>
+<li>按需加载、异步加载、动态加载</li>
+<li>利用浏览器缓存</li>
+<li>开发流程规范和体验</li>
+</ul>
+<h4 id="打包速度"><a href="#打包速度" class="headerlink" title="打包速度"></a>打包速度</h4><ul>
+<li>优化Loader配置 - 1）查找路径include exclude 2）缓存babel编译过的文件babel-loader?cacheDirectory=true</li>
+<li>HappyPack开启多线程打包</li>
+<li>DllPlugin提前打包指定的类库 webpack.dll.conf.js DllReferencePlugin，减少打包类库的次数，同时将公共代码抽离成单独的文件</li>
+<li>代码并行压缩 - webpack3 UglifyJS压缩混淆代码，webpack-parallel-uglify-plugin并行运行UglifyJS；Webpack4 mode = production时自动开启</li>
+<li>压缩html、css</li>
+<li>resolve.extensions [‘.js’, ‘.json’]尽可能减少后缀列表长度,出现频率高的后缀排在前面</li>
+<li>resolve.alias 别名映射路径,Webpack 不扫描该文件</li>
+<li>module.noParse</li>
+</ul>
+<h4 id="产物体积"><a href="#产物体积" class="headerlink" title="产物体积"></a>产物体积</h4><ul>
+<li>Scope Hoisting 尽可能的合并打包出来的模块到一个函数中去 optimization.concatenateModules ModuleConcatenationPlugin</li>
+<li>js/css Tree Shaking webpack 4prod js 默认开启。css 用PurifyCssPlugin</li>
+<li>文件处理 &amp; base64 &amp; css-sprites</li>
+<li>代码压缩 UglifyJS</li>
+</ul>
+<h4 id="按需加载、异步加载、动态加载"><a href="#按需加载、异步加载、动态加载" class="headerlink" title="按需加载、异步加载、动态加载"></a>按需加载、异步加载、动态加载</h4><p>require.ensure、import 路由懒加载</p>
+<h4 id="利用浏览器缓存做长缓存优化"><a href="#利用浏览器缓存做长缓存优化" class="headerlink" title="利用浏览器缓存做长缓存优化"></a>利用浏览器缓存做长缓存优化</h4><p>提取公共代码与第三方代码做长缓存优化</p>
+<h4 id="开发流程规范和体验"><a href="#开发流程规范和体验" class="headerlink" title="开发流程规范和体验"></a>开发流程规范和体验</h4><ul>
+<li>模块热更新</li>
+<li>sourceMap</li>
+<li>webpack-dev-server-proxy 接口代理</li>
+<li>ts</li>
+<li>BundleAnalyzerPlugin分析打包情况</li>
+</ul>
+<p>参考：<br><a href="https://juejin.im/post/5ac76a8f51882555677ecc06#heading-5" target="_blank" rel="noopener">https://juejin.im/post/5ac76a8f51882555677ecc06#heading-5</a></p>
+<p><a href="https://juejin.im/post/5dcc45136fb9a02b450c2818" target="_blank" rel="noopener">https://juejin.im/post/5dcc45136fb9a02b450c2818</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/tool/" class="article-tag-list-link color5">Tool</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/31/webpack优化/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-实现cacheRequest，相同资源ajax只发一次请求" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/">实现cacheRequest，相同资源ajax只发一次请求</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/" class="archive-article-date">
+  	<time datetime="2020-03-30T08:18:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-30</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>请实现一个cacheRequest方法，保证当前ajax请求相同资源时，真实网络层中，实际只发出一次请求（假设已经存在request方法用于封装ajax请求）</p>
+<p>一开始看到第一感觉是，设个Http Headercache-control，把expire调大，不就自然会找浏览器缓存拿了。但是看到后面说提供自带的request方法和只发起一次ajax。那估计是想让笔者在业务层自己用代码解决这个cache问题。</p>
+        
+          <a class="article-more-a" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-a11y" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -752,379 +1198,6 @@
 
 
   
-    <article id="post-前后端同构" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/21/前后端同构/">前后端同构和SSR服务端渲染</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/21/前后端同构/" class="archive-article-date">
-  	<time datetime="2020-03-21T14:27:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在前端页面的渲染这块，近几年来感觉经历了从服务端渲染(多页面)=&gt;客户端渲染(SPA)=&gt;同构渲染的演变，同构渲染是15年左右React火了一段时间后提出的概念（也差不多是《三体》那个时候），原文是 Isomorphic rendering，但是很快就有人驳斥不应该用 Isomorphic 这个词，而应该用 Universal Rendering。</p>
-<p>提前列举一下术语：</p>
-<p>1、前端渲染：浏览器一侧使用js，借助模版或vue、react、angular等框架做的DOM结构生成（首屏展示出来时，必然是 render.js 通过网络请求完毕，然后加上 JavaScript 执行完成之后的。）</p>
-<p>2、后端渲染：服务器一侧，使用php、jsp、velocity、nodejs等技术实现DOM结构生成，并在HTTP请求中返回给浏览器（好处是转化 HTML 到 DOM，浏览器原生会比 JavaScript 生成 DOM 的时间短；省去了 SPA 中 JavaScript 的请求与编译执行时间）</p>
-<p>3、同构渲染：简单来说就是一份代码，服务端先通过服务端渲染(server-side rendering，下称ssr)，生成html以及初始化数据，客户端拿到html和初始化数据后，通过对html的dom进行patch和事件绑定对dom进行客户端激活(client-side hydration，下称csh)，这个整体的过程叫同构渲染。其实就是满足三个条件：1)同一份代码  2)ssr  3)csh</p>
-<p>Q. 问题来了，同构渲染和php,jsp的渲染有什么不同，同构渲染称得上ssr吗？</p>
-<p>既然同构渲染就是一份代码ssr加csh，那么ssr部分本质上跟php，jsp也是一样，也就是模版引擎出来html字符串，但是同构要求能通过一份代码实现ssr，csh，同时服务端需要提供一份初始化数据以便csh，而且传统php，jsp不关注csh过程。</p>
-<p>Q. 同构渲染能解决首屏加载和seo的问题吗？</p>
-<p>其实解决这两个问题，是ssr来解决的，csh解决的只是交互问题。既然文件已经交由服务端渲染完，展示的速度肯定是提升的(因为不需要等待客户端渲染)，同样seo蜘蛛一般是分析服务端出来的html的，那么没有ssr的spa客户端等同于无法seo(当然一些蜘蛛也会提供spa的方案)，同构包括ssr，当然可以解决seo的问题</p>
-<p>但解决归解决，不一定能很好解决。毕竟这几个其实不是同样的问题。就像我个人觉得ssr来实现seo本身就是个伪需求，同理首屏加载问题也是。</p>
-<p>seo其实还能通过预渲染或者通过ua判断让蜘蛛走headless chrome渲染来解决。另外首屏加载速度问题的解决方案就更多了。</p>
-<p>比较前后端还是属于不同环境，同构考验开发人员对大局观的考虑，约束了特定环境的一些开发灵活性，同时也影响代码解耦。ssr抛开这两点好处，甚至没有找到任何优点。所以这是当前前后端同构不温不火的重要原因</p>
-<h2 id="同构的历史背景"><a href="#同构的历史背景" class="headerlink" title="同构的历史背景"></a>同构的历史背景</h2><ul>
-<li>Web开发的历程是很有趣的，最初php、asp的年代，一切内容都是服务器渲染的；</li>
-<li>后来为了节省服务器资源，也更大限度利用客户端缓存，又出现了前后端分离的模式，从而有了专业的前端开发和后台开发。此时Web的特点是，js和html放到静态目录或者CDN，并以ajax方式获取后台的数据，在前端进行DOM组装。这种开发方式沿用至今，这是一个好的工作模式，专业的人做专业的事，确实有利于工作效率提高。引领SPA时代到来，但是JavaScirpt给我们带来的无刷新体验和组件化带来的开发效率的同时，白屏和SEO问题也随之而来。</li>
-<li>随着nodejs的流行，前端jser们又开始蠢蠢欲动，尝试吞并web接入这个后台的前沿地盘，把后台推到更后。大概2014年后，又出现了很多nodejs直出的方案，把页面数据都一次在HTML的请求中返回，无需浏览器端再发起ajax获取数据，而且服务器端把DOM结构都渲染好，拿到初始化数据给浏览器，浏览器得到html和初始数据进行patch和事件绑定对客户端激活。不得不说，这个方案带来了很多好处：既解决了白屏和 SEO 问题，又继承了SPA无刷新的用户体验和开发的组件化带来的效率。首屏速度更快，浏览器更省电。当然，随之而来的，就是更复杂的工作模式，jser需要做服务器端的逻辑，甚至一些代码需要同时用在浏览器和nodejs上。同构应运而生。</li>
-</ul>
-<p><img src="/2020/03/21/前后端同构/同构.png" alt="同构"></p>
-<p>百度搜一下前后端同构，清一色的vue、react。这些确实是同构，但我认为范围太窄，同构不是框架带来的问题，而是因为前后端独立渲染这种架构层面带来的问题</p>
-<h2 id="SSR核心原理"><a href="#SSR核心原理" class="headerlink" title="SSR核心原理"></a>SSR核心原理</h2><p>整体来说服务端渲染原理不复杂，其中最核心的内容就是同构。</p>
-<p>1)node server 接收客户端请求，得到当前的req url path<br>2)然后在已有的路由表内查找到对应的组件，拿到需要请求的数据，将数据作为 props<br>、context或者store 形式传入组件<br>3)然后基于react内置的服务端渲染api renderToString() or renderToNodeStream() 把组件渲染为 html字符串或者 stream 流, 在把最终的html进行输出前需要将数据注入到浏览器端(注水)，<br>4)server 输出(response)后浏览器端可以得到数据(脱水)，浏览器开始进行渲染和节点对比，然后执行组件的componentDidMount完成组件内事件绑定和一些交互，浏览器重用了服务端输出的 html 节点，整个流程结束。</p>
-<p><img src="/2020/03/21/前后端同构/核心原理.png" alt="核心原理"></p>
-<h2 id="同构之道"><a href="#同构之道" class="headerlink" title="同构之道"></a>同构之道</h2><p>如何从实际项目需求的角度来看，找出自己所需的同构之道</p>
-<p>同构，是为了提高用户体验的同时，提高团队的工作效率。接下来，我想根据项目的类型，说说自己的看法。</p>
-<h3 id="第一种，单页面应用"><a href="#第一种，单页面应用" class="headerlink" title="第一种，单页面应用"></a>第一种，单页面应用</h3><p>这个网站很类似一个APP，确实很有必要做成单页应用，有助于提高用户体验。<br>如果第一步选择了单页面应用，这里就衍生了另外的问题——SEO。而react等框架做了服务器渲染，最大目的其实也是解决SEO。<br>既然浏览器端选择了某个框架，例如React，而同时又考虑nodejs直出提高首屏的速度，那么就没有讨价还价的余地了，当然上react全家桶，前后端都用react。</p>
-<h3 id="第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要"><a href="#第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要" class="headerlink" title="第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要"></a>第二种，多页面纯数据展示，每一页都比较简单，没有分屏的必要</h3><p>如果项目是这样的情况，使用nodejs直出，无非就是提高打开速度。而前后端基本八竿子打不着，最多就是一些工具函数（转换一下日期格式，输入框校验）要做复用。</p>
-<p>此时，没必要大费周折去考虑什么框架，因地制宜，想想自己需要什么即可。</p>
-<p>要解决函数库的前后端复用，可以简单做commonjs/window的兼容。</p>
-<p>如果浏览器端的代码比较多，就可以考虑粒度化，使用webpack做浏览器端代码打包，同时commonjs的写法也可以复用到nodejs层。</p>
-<h3 id="第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用"><a href="#第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用" class="headerlink" title="第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用"></a>第三种，多页面而且每一页不是那么简单，首屏和次屏有一些HTML片段（模版）需要复用</h3><p>用webpack做前端打包，这样前端各种代码和后台代码都是commonjs风格，可以二合一。而且发布前打包为一个大js文件，也省去nodejs每次请求动态合并js的消耗。<br>html模版发布前先做预编译，从html+模版语法，转为纯js代码，随着webpack打包到浏览器端大js文件中。<br>后端和前端都用到的代码，基于commonjs，尽可能的抽离封装。<br>最终合并的浏览器端大js还是动态合并到首屏HTML中。</p>
-<p>引入了webpack到浏览器端，就能很好的解决了原先html模版传播的尴尬。而模块风格的统一，也有利于前后端代码更好的复用。</p>
-<p>至于最终浏览器js是否打包到首屏HTML中，还是单独的部署CDN，这个其实就不是同构的问题了。不过对于移动端而言，还是建议合并在一起。</p>
-<p>抽象一下，对于第三种项目情况，跳出我原先的项目。我认为，关键是要把前后端使用的模版统一为一个方式引入。</p>
-<h3 id="第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种"><a href="#第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种" class="headerlink" title="第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种"></a>第四种，还是多页面，浏览器端没有模版拼装的需求，第三种情况的变种</h3><p>或者说，这个不是一个单独的项目情况，只是因为用的技术方案不同。跟第三种情况一样，但次屏的渲染，我们不在浏览器端执行，而是继续交给nodejs。浏览器端通过ajax把次屏html片段拉取回来，然后直接塞到body中。而且，除此之外，浏览器端没有用户交互会导致已有的DOM发生重绘，或者极少内容重绘，不需要动用到模版。</p>
-<p>在这个情况下，浏览器端js更纯粹的只关注事件处理。</p>
-<p>我觉得这个又回到了第二种情况，只需要简单把一些库函数封装一下，做成前后端共用即可。</p>
-<p>第四种情况，因为彻底抛弃了浏览器渲染，整个情况就简单多了，不需要考虑模版和很多逻辑js的前后端复用问题。</p>
-<h2 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h2><p>上帝为了我们开了一扇窗，同时也会为我们关上一扇门。</p>
-<p>我们所知的传统型 SPA，单页面应用，贴近用户端越近，交互越复杂，它的弊端就越明显，在我们享受 JavaScirpt 给我们带来的无刷新体验和组件化带来的开发效率的同时，『白屏』这个随着 SPA 各种优点随之而来的缺点被遗忘，我们拥有菊花方案在 JavaScript 没有将 DOM 构建好之前蒙层，或者是骨架屏方案让用户提前感知页面结构，拥有白屏监控方案将真实用户数据上报改进，但并没有触碰到白屏问题的本质，那就是『DOM 的构建者是 JavaScript，而非原生的浏览器』。</p>
-<p>同构的到来既解决了白屏和 SEO 问题，又继承了SPA无刷新的用户体验和开发的组件化带来的效率。但是面临更大的挑战。</p>
-<p>参考：<br><a href="https://juejin.im/post/5c821dc45188257e1f2915b1" target="_blank" rel="noopener">https://juejin.im/post/5c821dc45188257e1f2915b1</a><br><a href="https://segmentfault.com/a/1190000016722457" target="_blank" rel="noopener">https://segmentfault.com/a/1190000016722457</a><br><a href="https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics?hl=zh-cn" target="_blank" rel="noopener">https://developers.google.com/web/fundamentals/performance/user-centric-performance-metrics?hl=zh-cn</a><br><a href="https://juejin.im/post/5d7deef6e51d453bb13b66cd#heading-5" target="_blank" rel="noopener">https://juejin.im/post/5d7deef6e51d453bb13b66cd#heading-5</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/21/前后端同构/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Node-js垃圾回收与内存管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/17/Node-js垃圾回收与内存管理/">Node.js垃圾回收与内存管理</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/17/Node-js垃圾回收与内存管理/" class="archive-article-date">
-  	<time datetime="2020-03-17T13:03:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>使用JavaScript进行前端开发时几乎完全不需要关心内存管理问题，对于前端编程来说，V8限制的内存几乎不会出现用完的情况，但是由于后端程序往往进行的操作更加复杂，并且长期运行在服务器不重启，如果不关注内存管理，导致内存泄漏，就算1GB，也会很快用尽。</p>
-<p>垃圾回收器是一把十足的双刃剑。其好处是可以大幅简化程序的内存管理代码，因为内存管理无需程序员来操作，由此也减少了（但没有根除）长时间运转的程序的内存泄漏。对于某些程序员来说，它甚至能够提升代码的性能。另一方面，选择垃圾回收器也就意味着程序当中无法完全掌控内存，而这正是移动终端开发的症结。对于JavaScript，程序中没有任何内存管理的可能——ECMAScript标准中没有暴露任何垃圾回收器的接口。网页应用既没有办法管理内存，也没办法给垃圾回收器进行提示。</p>
-<p>Node.js构建于Chrome V8引擎之上，因此本文首先讲解V8引擎的内存管理机制，了解底层原理后，再讲解Node开发中的内存管理与优化。</p>
-<p>nodeJs查看垃圾回收日志的方式主要是在启动时添加 –trace_gc 参数。</p>
-        
-          <a class="article-more-a" href="/2020/03/17/Node-js垃圾回收与内存管理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/node/" class="article-tag-list-link color5">Node</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/17/Node-js垃圾回收与内存管理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-css单位" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/17/css单位/">css单位</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/17/css单位/" class="archive-article-date">
-  	<time datetime="2020-03-17T05:38:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、px，em，rem、vw、vh、pt"><a href="#一、px，em，rem、vw、vh、pt" class="headerlink" title="一、px，em，rem、vw、vh、pt"></a>一、px，em，rem、vw、vh、pt</h2><h3 id="1-px-pixel，像素"><a href="#1-px-pixel，像素" class="headerlink" title="1.px (pixel，像素)"></a>1.px (pixel，像素)</h3><p>是一个虚拟长度单位，是计算机系统的数字化图像长度单位，如果px要换算成物理长度，需要指定精度DPI(Dots Per Inch，每英寸像素数)，在扫描打印时一般都有DPI可选。Windows系统默认是96dpi，Apple系统默认是72dpi。px 单位的值必须是整数值.</p>
-<p>与px相关的一些单位</p>
-<p>in - 表示英寸，是一个物理单位，在CSS中被直接映射成为px; 转换的方法是 1in = 96px</p>
-<p>cm - 表示厘米，在生活中常用的单位，同样被映射为 px; 转换方法为 1cm = 37.8px</p>
-<p>mm - 表示毫米，与cm类似，转换方法为 1mm = 0.1cm = 3.78px</p>
-<h3 id="2-em-相对长度单位，相对于当前对象内文本的字体尺寸"><a href="#2-em-相对长度单位，相对于当前对象内文本的字体尺寸" class="headerlink" title="2.em(相对长度单位，相对于当前对象内文本的字体尺寸)"></a>2.em(相对长度单位，相对于当前对象内文本的字体尺寸)</h3><p>是一个相对长度单位，指的是字符宽度的倍数，用法类似百分比，如：0.8em, 1.2em,2em等。通常1em=16px。</p>
-<h3 id="3-rem-root-em，根em"><a href="#3-rem-root-em，根em" class="headerlink" title="3.rem(root em，根em)"></a>3.rem(root em，根em)</h3><p>rem是一个相对单位，1rem等于html元素上字体设置的大小。我们只要设置html上font-size的大小，就可以改变rem所代表的大小。这样我们就有了一个可控的统一参考系。我们现在有两个目标：rem单位所代表的尺寸大小和屏幕宽度成正比，也就是设置html元素的font-size和屏幕宽度成正比rem单位和px单位很容易进行换算，方便我们按照标注稿写css</p>
-<h4 id="rem与em的区别"><a href="#rem与em的区别" class="headerlink" title="rem与em的区别"></a>rem与em的区别</h4><p>rem是相对于根元素（html）的字体大小</p>
-<p>em是相对于其父元素的字体大小em最多取到小数点的后三位</p>
-<h3 id="4-vw、vh"><a href="#4-vw、vh" class="headerlink" title="4.vw、vh"></a>4.vw、vh</h3><p>css3中引入了一个新的单位vw/vh，与视图窗口有关，vw表示相对于视图窗口的宽度，vh表示相对于视图窗口高度，除了vw和vh外，还有vmin和vmax两个相关的单位。</p>
-<p>各个单位具体的含义如下：单位含义vw相对于视窗的宽度，视窗宽度是100vwvh相对于视窗的高度，视窗高度是100vhvminvw和vh中的较小值vmax vw和vh中的较大值 这里我们发现视窗宽高都是100vw／100vh，那么vw或者vh，下简称vw，很类似百分比单位。</p>
-<p>vw和%的区别为：<br>%大部分相对于祖先元素，也有相对于自身的情况比如（border-radius、translate等)<br>vw/vh相对于视窗的尺寸</p>
-<h3 id="5-pt-（点）"><a href="#5-pt-（点）" class="headerlink" title="5.pt （点）"></a>5.pt （点）</h3><p>绝对长度单位，多用于字体尺寸，1px = 0.75pt</p>
-<p>in:寸</p>
-<p>cm:厘米</p>
-<p>mm:毫米</p>
-<p>q: 1/4毫米（quarter-millimeters）。绝对长度单位。</p>
-<p>pt:point，大约1/72寸</p>
-<p>pc:pica，大约6pt，1/6寸</p>
-<p>1in = 2.54cm = 25.4mm = 101.6q = 72pt = 6pc = 96px</p>
-<h3 id="6"><a href="#6" class="headerlink" title="6.%"></a>6.%</h3><p>一般宽泛的讲是相对于父元素，但是并不是十分准确。</p>
-<p>1、对于普通定位元素就是我们理解的父元素</p>
-<p>2、对于position: absolute;的元素是相对于已定位的父元素</p>
-<p>3、对于position: fixed;的元素是相对于 ViewPort（可视窗口）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/17/css单位/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-CSS之BFC、IFC、GFC和FFC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/17/CSS之BFC、IFC、GFC和FFC/">CSS之BFC、IFC、GFC和FFC</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/17/CSS之BFC、IFC、GFC和FFC/" class="archive-article-date">
-  	<time datetime="2020-03-17T05:22:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>CSS2.1中只有BFC和IFC, CSS3中才有GFC和FFC。</p>
-<h2 id="What’s-FC"><a href="#What’s-FC" class="headerlink" title="What’s FC"></a>What’s FC</h2><p>FC的全称是：Formatting Contexts，是W3C CSS2.1规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。</p>
-<h2 id="BFC"><a href="#BFC" class="headerlink" title="BFC"></a>BFC</h2><p>BFC(<code>Block Formatting Contexts</code>)块级格式化上下文。<code>Block Formatting Contexts</code>就是页面上的一个隔离的渲染区域，容器里面的子元素不会在布局上影响到外面的元素，反之也是如此。</p>
-<h3 id="如何产生BFC"><a href="#如何产生BFC" class="headerlink" title="如何产生BFC"></a>如何产生BFC</h3><p>float的值不为none。<br>overflow的值不为visible。<br>position的值不为relative和static。<br>display的值为table-cell, table-caption, inline-block中的任何一个。</p>
-<h3 id="那BFC一般有什么用呢"><a href="#那BFC一般有什么用呢" class="headerlink" title="那BFC一般有什么用呢"></a>那BFC一般有什么用呢</h3><h2 id="IFC"><a href="#IFC" class="headerlink" title="IFC"></a>IFC</h2><p>IFC(Inline Formatting Contexts)内联格式化上下文，IFC的line box（线框）高度由其包含行内元素中最高的实际高度计算而来（不受到竖直方向的padding/margin影响)<br>IFC中的line box一般左右都贴紧整个IFC，但是会因为float元素而扰乱。float元素会位于IFC与与line box之间，使得line box宽度缩短。 同个ifc下的多个line box高度会不同。 IFC中时不可能有块级元素的，当插入块级元素时（如p中插入div）会产生两个匿名块与div分隔开，即产生两个IFC，每个IFC对外表现为块级元素，与div垂直排列。</p>
-<h3 id="那么IFC一般有什么用呢"><a href="#那么IFC一般有什么用呢" class="headerlink" title="那么IFC一般有什么用呢"></a>那么IFC一般有什么用呢</h3><p>水平居中：当一个块要在环境中水平居中时，设置其为<code>inline-block</code>则会在外层产生IFC，通过<code>text-align</code>则可以使其水平居中。<br>垂直居中：创建一个IFC，用其中一个元素撑开父元素的高度，然后设置其<code>vertical-align: middle</code>，其他行内元素则可以在此父元素下垂直居中。</p>
-<h2 id="GFC"><a href="#GFC" class="headerlink" title="GFC"></a>GFC</h2><p>GFC(GridLayout Formatting Contexts)网格布局格式化上下文，当为一个元素设置display值为grid的时候，此元素将会获得一个独立的渲染区域，我们可以通过在网格容器（grid container）上定义网格定义行（grid definition rows）和网格定义列（grid definition columns）属性各在网格项目（grid item）上定义网格行（grid row）和网格列（grid columns）为每一个网格项目（grid item）定义位置和空间。</p>
-<h3 id="GFC作用"><a href="#GFC作用" class="headerlink" title="GFC作用"></a>GFC作用</h3><p>和table又有什么区别呢？首先同样是一个二维的表格，但GridLayout会有更加丰富的属性来控制行列，控制对齐以及更为精细的渲染语义和控制。</p>
-<h2 id="FFC"><a href="#FFC" class="headerlink" title="FFC"></a>FFC</h2><p>FFC(Flex Formatting Contexts)自适应格式化上下文，display值为flex或者inline-flex的元素将会生成自适应容器（flex container），可惜这个牛逼的属性只有谷歌和火狐支持，不过在移动端也足够了，至少safari和chrome还是OK的，毕竟这俩在移动端才是王道。</p>
-<p>Flex Box 由伸缩容器和伸缩项目组成。通过设置元素的 display 属性为 flex 或 inline-flex 可以得到一个伸缩容器。设置为 flex 的容器被渲染为一个块级元素，而设置为 inline-flex 的容器则渲染为一个行内元素。<br>伸缩容器中的每一个子元素都是一个伸缩项目。伸缩项目可以是任意数量的。伸缩容器外和伸缩项目内的一切元素都不受影响。简单地说，Flexbox 定义了伸缩容器内伸缩项目该如何布局</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">BFC</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/css/" class="article-tag-list-link color4">CSS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/17/CSS之BFC、IFC、GFC和FFC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1234,6 +1307,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1246,19 +1327,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1274,7 +1347,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1282,7 +1355,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1291,10 +1368,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">原型链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1346,6 +1419,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -1355,14 +1436,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">
