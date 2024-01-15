@@ -166,19 +166,19 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-中间件源码实现过程分析对比" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-Koa中间件原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2019/05/29/中间件源码实现过程分析对比/">中间件源码实现过程分析对比</a>
+      <a class="article-title" href="/2019/05/29/Koa中间件原理/">Koa中间件原理</a>
     </h1>
   
 
         
-        <a href="/2019/05/29/中间件源码实现过程分析对比/" class="archive-article-date">
+        <a href="/2019/05/29/Koa中间件原理/" class="archive-article-date">
   	<time datetime="2019-05-29T11:20:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-05-29</time>
 </a>
         
@@ -186,16 +186,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>作为一枚前端开发，经常会接触到中间件，今天咱们就来分析分析，中间件是怎么转起来的。</p>
-<p>我们经常接触的中间件其实主要就是express、koa和redux，前面两个是服务端的中间件。</p>
-<p>要实现一套middleware,分为三步：</p>
-<ol>
-<li>搜集middleware</li>
-<li>组合middleware</li>
-<li>调用执行</li>
-</ol>
+        <p>Koa是用Node.js实现的服务框架。在Koa中middleware的使用场景是在请求到来和发送响应之间（也就是在处理HTTP从流入到流出应用这一过程），对代码按照功能进行插件化管理，其重要性不言而喻。</p>
+<p>熟悉redux的同学都知道，redux的中间件是采用函数式编程的compose方式对middleware进行组合。而Koa的中间件其实和redux大同小异。</p>
+<p>Koa的中间件设计机制可谓风骚无比，本篇笔记，就来彻底搞清楚中间件到底怎么玩起来的<br></p>
         
-          <a class="article-more-a" href="/2019/05/29/中间件源码实现过程分析对比/#more">more >></a>
+          <a class="article-more-a" href="/2019/05/29/Koa中间件原理/#more">more >></a>
         
       
 
@@ -223,7 +218,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2019/05/29/中间件源码实现过程分析对比/">展开全文 >></a>
+          <a class="article-more-a" href="/2019/05/29/Koa中间件原理/">展开全文 >></a>
         </p>
       
 
@@ -1105,14 +1100,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1125,11 +1112,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1145,7 +1140,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1153,7 +1148,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1161,7 +1156,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1173,15 +1168,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1201,6 +1196,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
               </li>
              
@@ -1213,15 +1212,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1237,7 +1228,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
             
             <div class="clearfix"></div>
