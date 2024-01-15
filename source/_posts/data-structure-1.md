@@ -230,7 +230,7 @@ reduce方法接收一个函数作为参数,这个函数有四个参数:previousV
       Queue.call(this);
     };
     PriorityQueue.prototype = new Queue();
-    PriorityQueue.prototype.constructer = PriorityQueue;
+    PriorityQueue.prototype.constructor = PriorityQueue;
     PriorityQueue.prototype.enqueue = function(element, priority) {
       function QueueElement(tempelement, temppriority){
         this.element = tempelement;
