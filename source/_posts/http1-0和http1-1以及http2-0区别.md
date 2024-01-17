@@ -35,3 +35,22 @@ tags:
 3）header压缩: http1.x中的header需要携带大量信息.而且每次都要重复发送.http2.0使用encode来减少传输的header大小.而且客户端和服务端可以各自缓存(cache)一份header filed表,避免了header的重复传输,还可以减少传输的大小.
 
 4）服务端推送(server push): 可以通过解析html中的依赖,只能的返回所需的其他文件(css或者js等),而不用再发起一次请求.
+
+## http vs https
+
+- http：超文本传输协议（HyperText Transfer Protocol）是用于从服务器传输超文本到本地浏览器的传输协议。可以使浏览器更加高效。以明文发送信息，若黑客截取了浏览器和服务器之间的传输报文，就可以直接获得其中的信息。
+- https: 超文本传输安全协议(Hypertext Transfer Protocol Secure) 是一种通过计算机网络进行安全通信的传输协议。
+- https经由http进行通信，但利用SSL/TLS来加密数据包。
+- https开发的主要目的，是提供对网站服务器的身份认证， 保护交换数据的隐私与完整性。
+
+简而言之: https是在http上建立ssl加密层，并对传输数据进行加密，是http协议的安全版。
+
+![https_vs_http](https_vs_http.png)
+
+简言之区别如下：
+- http 是明文传输，HTTPS 通过 SSL\TLS 进行了加密
+- http 的端口号是 80，HTTPS 是 443
+- https 需要到 CA 申请证书，一般免费证书很少，需要交费
+- http 的连接简单，无状态；https 协议是由http+SSL/TLS 协议构建的可进行加密传输、身份认证的网络协议，比 http 协议安全。
+
+

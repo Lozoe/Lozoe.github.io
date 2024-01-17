@@ -199,7 +199,7 @@ global.gc();
 console.log(usageSize()); // ≈ 3.2M
 ```
 
-同样，创建完 weakmap.js 之后，在命令行输入 node --expose-gc weakmap.js 命令执行 weakmap.js 中的代码。通过对比 map.js 和 weakmap.js 的输出结果，我们可知 weakmap.js 中定义的 arr 被清除后，其占用的堆内存被垃圾回收器成功回收了。
+同样，创建完 weakmap.js 之后，在命令行输入 `node --expose-gc weakmap.js` 命令执行 weakmap.js 中的代码。通过对比 map.js 和 weakmap.js 的输出结果，我们可知 weakmap.js 中定义的 arr 被清除后，其占用的堆内存被垃圾回收器成功回收了。
 
 下面我们来大致分析一下出现上述区别的主要原因：
 
