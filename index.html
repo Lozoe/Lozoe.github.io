@@ -166,6 +166,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-vite打包" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/16/vite打包/">vite打包</a>
+    </h1>
+  
+
+        
+        <a href="/2024/01/16/vite打包/" class="archive-article-date">
+  	<time datetime="2024-01-16T11:13:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="https://cn.vitejs.dev/" alt="vite 的文档"> 可以简单理解为前端工程的构建工具，vite 对自己的定义为下一代的前端工具链。</p>
+<p><img src="https://cn.vitejs.dev/guide/why.html" alt="为什么选择vite"></p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>首先为什么需要打包工具？<br> a. 随着es 、ts、css 预编译语言，以及vue、react 类的前端框架的快速发展，前端需要在构建阶段加入相应的编译过程才能转化为浏览器可识别的语言。<br> b. 同时在浏览器支持 ES 模块之前，JavaScript 并没有提供原生机制让开发者以模块化的方式进行开发。js模块化，社区多种解决方案，一直到 es6 推出 es module 规范。<pre><code>基于各种模块化解决方案，对应产生了各种工具，如 browserify，babel，webpack 等
+</code></pre> c. 在开发过程中对于开发效率的问题，冷启动，热更新，以及生产环境的包体压缩，代码混淆等</li>
+<li>vite 为什么会出现？<br> a. 基于 bundle 理念的打包构建工具，对日益复杂的大型前端应用主要问题有<pre><code>i. 服务启动慢 分钟级别
+ii. HMR 热更新慢： 即使有 webpack 的热更新加成，项目热更新也在 8~10s
+</code></pre> b. 浏览器原生支持 es 模块, node 支持 esm</li>
+</ol>
+<h2 id="vite介绍学习"><a href="#vite介绍学习" class="headerlink" title="vite介绍学习"></a>vite介绍学习</h2><ul>
+<li>快 ！！启动快，热更新快 </li>
+</ul>
+<p>基于 nobundle 理念，利用浏览器原生 ES 模块的支持，实现开发阶段的 Dev Server，进行模块的按需加载，而不是先整体打包再进行加载。</p>
+<blockquote>
+<p>利用浏览器原生 es 模块的支持，按需加载，在构建时只需处理模块的编译而无须打包，把模块间的相互依赖关系完全交给浏览器来处理。<br>        ■ 浏览器会加载入口模块，分析依赖后，再通过网络请求加载被依赖的模块。<br>优势：<br>        ■ 初次构建启动快： 无包构建流程中，模块依赖分析与编译都是在浏览器渲染页面时异步处理的<br>        ■ 按需编译：在浏览器渲染时，根据入口模块分析加载所需模块，编译过程按需处理，因此相比之下处理内容更少，速度也会更快。<br>        ■ 增量构建速度快：rebuild 过程中，只需处理编译单个模块。</p>
+</blockquote>
+<ul>
+<li>Opinionated——配置简单，对于ts 、jsx、css 等支持开箱即用，免去了当 webpack 配置工程师</li>
+<li>强大插件机制，以及易于扩展的 api，开发者可以自由定制构建过程，在构建流程的生命周期中，做更多的事情。同时插件兼容rollup，插件生态越来越丰富</li>
+</ul>
+<h2 id="vite-实现"><a href="#vite-实现" class="headerlink" title="vite 实现"></a>vite 实现</h2><h3 id="Concept"><a href="#Concept" class="headerlink" title="Concept"></a>Concept</h3><p>基于依赖分析的打包工具，打包工具可以基于依赖分析实现 treeshking、code splitting 等优化，可以配合 runtime 代码实现 lazy load等。如 Webpack，就是通过抓取-编译-构建整个应用的代码，生成一份编译后能良好兼容各个浏览器的的生产环境代码。在开发环境流程也基本相同，需要先将整个应用构建打包后，再把打包后的代码交给dev server。</p>
+<p><img src="/2024/01/16/vite打包/webpack-dev-server.png" alt="webpack-dev-server"></p>
+<p>Vite直接将源码交给浏览器，实现dev server秒开，浏览器显示页面需要相关模块时，再向dev server发起请求，服务器简单处理后，将该模块返回给浏览器，实现真正意义的按需加载</p>
+<p><img src="/2024/01/16/vite打包/vite-dev-server.png" alt="vite-dev-server"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2024/01/16/vite打包/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-react面试题系列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1098,98 +1184,6 @@ switch (type) {
 
 
   
-    <article id="post-Vue3.0源码分析之响应式原理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/07/Vue3.0源码分析之响应式原理/">Vue3.0源码分析之响应式原理</a>
-    </h1>
-  
-
-        
-        <a href="/2021/03/07/Vue3.0源码分析之响应式原理/" class="archive-article-date">
-  	<time datetime="2021-03-07T14:35:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Vue 最独特的特性之一，是其非侵入性的响应式系统。数据模型仅仅是普通的 JavaScript 对象。而当你修改它们时，视图会进行更新。这使得状态管理非常简单直接，不过理解其工作原理同样重要，这样你可以避开一些常见的问题。</p>
-<h2 id="什么是响应式"><a href="#什么是响应式" class="headerlink" title="什么是响应式"></a>什么是响应式</h2><p>数据发生变化后，会重新对页面渲染，这就是Vue响应式，那么这一切是怎么做到的呢？<br></p>
-        
-          <a class="article-more-a" href="/2021/03/07/Vue3.0源码分析之响应式原理/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">vue</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">响应式原理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/07/Vue3.0源码分析之响应式原理/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1299,18 +1293,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">async</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1320,6 +1302,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">async</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">defer</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1347,11 +1341,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1359,7 +1353,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">

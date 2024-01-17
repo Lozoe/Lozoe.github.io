@@ -16,10 +16,12 @@
 <meta property="og:site_name" content="L.Zoe">
 <meta property="og:description" content="http1.0与http1.1的区别1)缓存处理，在http1.0 Expires,Last-Modified/If-Modified-Since，HTTP1.1增加Cache-Control、Etag、If-None-Match等更多可供选择的缓存头来控制缓存策略。 2)带宽优化及网络连接的使用，http1.0存在一些浪费带宽的现象，例如客户端只是需要某个对象的一部分，而服务器却将整个对象送过来">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2024-01-08T09:13:38.900Z">
+<meta property="og:image" content="http://yoursite.com/2020/03/11/http1-0和http1-1以及http2-0区别/https_vs_http.png">
+<meta property="og:updated_time" content="2024-01-17T09:03:17.036Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="http1.0和http1.1以及http2.0区别">
 <meta name="twitter:description" content="http1.0与http1.1的区别1)缓存处理，在http1.0 Expires,Last-Modified/If-Modified-Since，HTTP1.1增加Cache-Control、Etag、If-None-Match等更多可供选择的缓存头来控制缓存策略。 2)带宽优化及网络连接的使用，http1.0存在一些浪费带宽的现象，例如客户端只是需要某个对象的一部分，而服务器却将整个对象送过来">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/11/http1-0和http1-1以及http2-0区别/https_vs_http.png">
   
     <link rel="alternative" href="/atom.xml" title="L.Zoe" type="application/atom+xml">
   
@@ -203,6 +205,21 @@
 <p>2）多路复用(Mutiplexing) : 一个连接上可以有多个request,且可以随机的混在一起,每个不同的request都有对应的id,服务端可以通过request_id来辨别,大大加快了传输速率</p>
 <p>3）header压缩: http1.x中的header需要携带大量信息.而且每次都要重复发送.http2.0使用encode来减少传输的header大小.而且客户端和服务端可以各自缓存(cache)一份header filed表,避免了header的重复传输,还可以减少传输的大小.</p>
 <p>4）服务端推送(server push): 可以通过解析html中的依赖,只能的返回所需的其他文件(css或者js等),而不用再发起一次请求.</p>
+<h2 id="http-vs-https"><a href="#http-vs-https" class="headerlink" title="http vs https"></a>http vs https</h2><ul>
+<li>http：超文本传输协议（HyperText Transfer Protocol）是用于从服务器传输超文本到本地浏览器的传输协议。可以使浏览器更加高效。以明文发送信息，若黑客截取了浏览器和服务器之间的传输报文，就可以直接获得其中的信息。</li>
+<li>https: 超文本传输安全协议(Hypertext Transfer Protocol Secure) 是一种通过计算机网络进行安全通信的传输协议。</li>
+<li>https经由http进行通信，但利用SSL/TLS来加密数据包。</li>
+<li>https开发的主要目的，是提供对网站服务器的身份认证， 保护交换数据的隐私与完整性。</li>
+</ul>
+<p>简而言之: https是在http上建立ssl加密层，并对传输数据进行加密，是http协议的安全版。</p>
+<p><img src="https_vs_http.png" alt="https_vs_http"></p>
+<p>简言之区别如下：</p>
+<ul>
+<li>http 是明文传输，HTTPS 通过 SSL\TLS 进行了加密</li>
+<li>http 的端口号是 80，HTTPS 是 443</li>
+<li>https 需要到 CA 申请证书，一般免费证书很少，需要交费</li>
+<li>http 的连接简单，无状态；https 协议是由http+SSL/TLS 协议构建的可进行加密传输、身份认证的网络协议，比 http 协议安全。</li>
+</ul>
 
       
 
@@ -345,7 +362,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#http1-0与http1-1的区别"><span class="toc-number">1.</span> <span class="toc-text">http1.0与http1.1的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http2-0和http1-x的区别"><span class="toc-number">2.</span> <span class="toc-text">http2.0和http1.x的区别</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#http1-0与http1-1的区别"><span class="toc-number">1.</span> <span class="toc-text">http1.0与http1.1的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http2-0和http1-x的区别"><span class="toc-number">2.</span> <span class="toc-text">http2.0和http1.x的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http-vs-https"><span class="toc-number">3.</span> <span class="toc-text">http vs https</span></a></li></ol>
                     </div>
                 </span>
             </div>
@@ -469,18 +486,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">async</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -490,6 +495,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">async</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">defer</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -517,11 +534,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -529,7 +546,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">

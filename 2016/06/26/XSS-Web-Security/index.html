@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="L.Zoe">
 <meta property="og:description" content="什么是XSS简介跨站脚本攻击(Cross Site Scripting)，为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，故将跨站脚本攻击缩写为XSS。恶意攻击者通常往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中Web里面的Script代码会被执行，从而达到恶意攻击用户的目的, 还有另外一种产常见的就是CSRF(Cross-site re">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2024-01-08T09:13:38.872Z">
+<meta property="og:updated_time" content="2024-01-16T11:14:06.413Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Web Security">
 <meta name="twitter:description" content="什么是XSS简介跨站脚本攻击(Cross Site Scripting)，为不和层叠样式表(Cascading Style Sheets, CSS)的缩写混淆，故将跨站脚本攻击缩写为XSS。恶意攻击者通常往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中Web里面的Script代码会被执行，从而达到恶意攻击用户的目的, 还有另外一种产常见的就是CSRF(Cross-site re">
@@ -217,11 +217,11 @@
 </ul>
 <h4 id="HTML-CSRF"><a href="#HTML-CSRF" class="headerlink" title="HTML CSRF"></a>HTML CSRF</h4><p>通过html标签进行发起CSRF请求的，可以发起Get请求的标签</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">href</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">frame</span> <span class="attr">src</span>=<span class="string">""</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">""</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="xml"><span class="tag">&lt;<span class="name">video</span> <span class="attr">src</span>=<span class="string">""</span>&gt;</span></span></span><br><span class="line"><span class="javascript">background: url(<span class="string">""</span>);</span></span><br></pre></td></tr></table></figure>
-<p>POST攻击： form表单构造</p>
+<p>POST攻击： form表单构造<br>攻击者在自己的网站上创建一个包含恶意操作的表单，并诱使用户访问该网站。当用户在认证过的网站上登录后，攻击者的网站会自动提交表单，触发用户在认证网站上的操作。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">"javascript:document.forms[0].submit()"</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!-- &lt;iframe src="http://lz.qunar.com/xxx" frameborder="0"&gt;&lt;/iframe&gt; --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"http://lz.qunar.com/xxx"</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"param1"</span> <span class="attr">value</span>=<span class="string">"123123123"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"param2"</span> <span class="attr">value</span>=<span class="string">"123"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="JSON-HiJacking"><a href="#JSON-HiJacking" class="headerlink" title="JSON HiJacking"></a>JSON HiJacking</h4><p>构造自定义的回调函数</p>
+<h4 id="JSON-HiJacking"><a href="#JSON-HiJacking" class="headerlink" title="JSON HiJacking"></a>JSON HiJacking</h4><p>利用浏览器的同源策略漏洞来获取跨域请求的响应数据(利用浏览器对 JSONP（JSON with Padding）的支持。攻击者在自己的网站上构造一个请求，利用 JSONP 跨域的特性，将请求发送到目标网站。然后，攻击者通过一个特殊的响应来获取目标网站返回的数据) 构造自定义的回调函数</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">  <span class="function"><span class="keyword">function</span> <span class="title">hijack</span>(<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">console</span>.log(data);</span></span><br><span class="line"><span class="undefined">  &#125;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://www.a.com/json?callback=hijack"</span>&gt;</span><span class="undefined"></span></span><br></pre></td></tr></table></figure>
-<h4 id="Flash-CSRF"><a href="#Flash-CSRF" class="headerlink" title="Flash CSRF"></a>Flash CSRF</h4><p>通过flash来实现跨域请求</p>
+<h4 id="Flash-CSRF"><a href="#Flash-CSRF" class="headerlink" title="Flash CSRF"></a>Flash CSRF</h4><p>通过flash来实现跨域请求  攻击者在自己的网站上创建一个包含恶意操作的表单，并诱使用户访问该网站。当用户在认证过的网站上登录后，攻击者的网站会自动提交表单，触发用户在认证网站上的操作。</p>
 <p>import flash.net.URLRequest</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> url = <span class="keyword">new</span> URLRequest(<span class="string">"http://a.com/json?callback=hijack"</span>);</span><br><span class="line">  url.method = <span class="string">"GET"</span>;</span><br><span class="line">  sendToUrl(url);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="CSRF-的防御方法"><a href="#CSRF-的防御方法" class="headerlink" title="CSRF 的防御方法"></a>CSRF 的防御方法</h3><ul>
@@ -515,18 +515,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">async</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -536,6 +524,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">async</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">defer</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -563,11 +563,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -575,7 +575,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">

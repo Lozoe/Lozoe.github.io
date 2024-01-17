@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://yoursite.com/2021/11/14/WeakMap/概要.png">
 <meta property="og:image" content="http://yoursite.com/2021/11/14/WeakMap/gc-cycle.jpeg">
 <meta property="og:image" content="http://yoursite.com/2021/11/14/WeakMap/gc_mark_sweep.gif">
-<meta property="og:updated_time" content="2024-01-15T12:09:50.975Z">
+<meta property="og:updated_time" content="2024-01-15T12:25:06.484Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="了不起的WeakMap">
 <meta name="twitter:description" content="ES2015（ES6）中新增了几种数据类型，包括Map WeakMap Set WeakSet等。其中Map可以与我们熟悉的对象Object进行对照，他们的功能都是提供一个键值对集合，主要的区别在于Object的key只能是字符串，而Map的key可以是任意类型。 今天要讨论的主角是WeakMap。 WeakMap 对象是键/值对的集合，且其中的键是弱引用的。其键只能是对象，而值则可以是任意的。W">
@@ -242,7 +242,7 @@
 <h4 id="map-js"><a href="#map-js" class="headerlink" title="map.js"></a>map.js</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//map.js</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">usageSize</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> used = process.memoryUsage().heapUsed;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Math</span>.round((used / <span class="number">1024</span> / <span class="number">1024</span>) * <span class="number">100</span>) / <span class="number">100</span> + <span class="string">"M"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">global.gc();</span><br><span class="line"><span class="built_in">console</span>.log(usageSize()); <span class="comment">// ≈ 3.19M</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line"></span><br><span class="line">map.set(arr, <span class="number">1</span>);</span><br><span class="line">global.gc();</span><br><span class="line"><span class="built_in">console</span>.log(usageSize()); <span class="comment">// ≈ 83.19M</span></span><br><span class="line"></span><br><span class="line">arr = <span class="literal">null</span>;</span><br><span class="line">global.gc();</span><br><span class="line"><span class="built_in">console</span>.log(usageSize()); <span class="comment">// ≈ 83.2M</span></span><br></pre></td></tr></table></figure>
 <p>创建完 <code>map.js</code> 之后，在命令行输入 <code>node --expose-gc map.js</code> 命令执行 <code>map.js</code> 中的代码，其中 <code>--expose-gc</code> 参数表示允许手动执行垃圾回收机制。</p>
 <h4 id="weakmap-js"><a href="#weakmap-js" class="headerlink" title="weakmap.js"></a>weakmap.js</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">usageSize</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> used = process.memoryUsage().heapUsed;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Math</span>.round((used / <span class="number">1024</span> / <span class="number">1024</span>) * <span class="number">100</span>) / <span class="number">100</span> + <span class="string">"M"</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">global.gc();</span><br><span class="line"><span class="built_in">console</span>.log(usageSize()); <span class="comment">// ≈ 3.19M</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arr = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">10</span> * <span class="number">1024</span> * <span class="number">1024</span>);</span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">WeakMap</span>();</span><br><span class="line"></span><br><span class="line">map.set(arr, <span class="number">1</span>);</span><br><span class="line">global.gc();</span><br><span class="line"><span class="built_in">console</span>.log(usageSize()); <span class="comment">// ≈ 83.2M</span></span><br><span class="line"></span><br><span class="line">arr = <span class="literal">null</span>;</span><br><span class="line">global.gc();</span><br><span class="line"><span class="built_in">console</span>.log(usageSize()); <span class="comment">// ≈ 3.2M</span></span><br></pre></td></tr></table></figure>
-<p>同样，创建完 weakmap.js 之后，在命令行输入 node –expose-gc weakmap.js 命令执行 weakmap.js 中的代码。通过对比 map.js 和 weakmap.js 的输出结果，我们可知 weakmap.js 中定义的 arr 被清除后，其占用的堆内存被垃圾回收器成功回收了。</p>
+<p>同样，创建完 weakmap.js 之后，在命令行输入 <code>node --expose-gc weakmap.js</code> 命令执行 weakmap.js 中的代码。通过对比 map.js 和 weakmap.js 的输出结果，我们可知 weakmap.js 中定义的 arr 被清除后，其占用的堆内存被垃圾回收器成功回收了。</p>
 <p>下面我们来大致分析一下出现上述区别的主要原因：</p>
 <p>对于 map.js 来说，由于在 arr 和 Map 中都保留了数组的强引用，所以在 Map 中简单的清除 arr 变量内存并没有得到释放，因为 Map 还存在引用计数。而在 WeakMap 中，它的键是弱引用，不计入引用计数中，所以当 arr 被清除之后，数组会因为引用计数为 0 而被垃圾回收清除。</p>
 <p>了解完上述内容之后，下面我们来正式介绍 WeakMap。</p>
@@ -521,18 +521,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">async</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -542,6 +530,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">async</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">defer</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -569,11 +569,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -581,7 +581,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
