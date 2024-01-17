@@ -166,6 +166,125 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-react-redux源码分析" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/24/react-redux源码分析/">react-redux源码分析</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/24/react-redux源码分析/" class="archive-article-date">
+  	<time datetime="2020-03-24T13:57:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-24</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>redux作为大型应用的状态管理工具，如果想配合react使用，需要借助react-redux。<br>redux主要完成两件事情：</p>
+<ul>
+<li>负责应用的状态管理，保证单向数据流</li>
+<li>当应用状态发生变化，触发监听器。</li>
+</ul>
+<p>那么，如果想要将react和redux搭配使用，就需要react组件可以根据redux中所存储的状态（store）更新view。<br>并且可以改变store。其实react-redux主要就是完成了这两件事情。</p>
+<p>第一，通过将store传入root组件的context，使子节点可以获取到state。<br>第二，通过store.subscribe订阅store的变化，更新组件。</p>
+<p>另外还有对于性能的优化，减少不必要的渲染。</p>
+<h2 id="react-redux使用"><a href="#react-redux使用" class="headerlink" title="react-redux使用"></a>react-redux使用</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</span><br><span class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span>;</span><br><span class="line"><span class="keyword">import</span> PropTypes <span class="keyword">from</span> <span class="string">'prop-types'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; createStore &#125; <span class="keyword">from</span> <span class="string">'redux'</span>;</span><br><span class="line"><span class="keyword">import</span> &#123; Provider, connect &#125; <span class="keyword">from</span> <span class="string">'react-redux'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> reducer = <span class="function">(<span class="params">state, action</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (action.type === <span class="string">'add'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            ...state,</span><br><span class="line">            count: state.count + <span class="number">1</span>,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> state;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> store = createStore(reducer, &#123; <span class="attr">count</span>: <span class="number">1</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (&#123;</span><br><span class="line">        count: state.count,</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function"><span class="params">dispatch</span> =&gt;</span> (&#123;</span><br><span class="line">    add: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123; <span class="attr">type</span>: <span class="string">'add'</span> &#125;),</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mergeProps = <span class="function">(<span class="params">state, props</span>) =&gt;</span>(&#123;</span><br><span class="line">    countStr: <span class="string">`计数: <span class="subst">$&#123;state.count&#125;</span>`</span>,</span><br><span class="line">    ...props,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> options = &#123;</span><br><span class="line">    pure: <span class="literal">true</span>,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;div&gt;</span><br><span class="line">                &lt;p&gt;&#123;<span class="keyword">this</span>.props.countStr&#125;&lt;<span class="regexp">/p&gt;</span></span><br><span class="line"><span class="regexp">                &lt;button onClick=&#123;this.props.add&#125;&gt;点击+1&lt;/</span>button&gt;</span><br><span class="line">            &lt;<span class="regexp">/div&gt;</span></span><br><span class="line"><span class="regexp">        )</span></span><br><span class="line"><span class="regexp">    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">/</span><span class="regexp">/ @connect</span></span><br><span class="line"><span class="regexp">const AppContainer = connect(</span></span><br><span class="line"><span class="regexp">    mapStateToProps,</span></span><br><span class="line"><span class="regexp">    mapDispatchToProps,</span></span><br><span class="line"><span class="regexp">    mergeProps,</span></span><br><span class="line"><span class="regexp">    options,</span></span><br><span class="line"><span class="regexp">)(App);</span></span><br><span class="line"><span class="regexp"></span></span><br><span class="line"><span class="regexp">ReactDOM.render(</span></span><br><span class="line"><span class="regexp">    &lt;Provider store=&#123;store&#125;&gt;</span></span><br><span class="line"><span class="regexp">        &lt;AppContainer /</span>&gt;</span><br><span class="line">    &lt;<span class="regexp">/Provider&gt;,</span></span><br><span class="line"><span class="regexp">    document.getElementById('root')</span></span><br><span class="line"><span class="regexp">);</span></span><br></pre></td></tr></table></figure>
+<p>Provider： 接收从redux而来的store，以供子组件使用。<br>connect： 高阶组件，当组件需要获取或者想要改变store的时候使用。可以接受四个参数：</p>
+<pre><code>- mapStateToProps：取store数据，传递给组件。
+- mapDispatchToProps：改变store数据。
+- mergeProps：可以在其中对 mapStateToProps， mapDispatchToProps的结果进一步处理
+- options：一些配置项，例如 pure.当设置为true时，会避免不必要的渲染
+</code></pre><h2 id="React-Redux的源码目录结构"><a href="#React-Redux的源码目录结构" class="headerlink" title="React-Redux的源码目录结构"></a>React-Redux的源码目录结构</h2><p>├── components<br>│   ├── Provider.js<br>│   └── connectAdvanced.js<br>├── connect<br>│   ├── connect.js<br>│   ├── mapDispatchToProps.js<br>│   ├── mapStateToProps.js<br>│   ├── mergeProps.js<br>│   ├── selectorFactory.js<br>│   ├── verifySubselectors.js<br>│   └── wrapMapToProps.js<br>├── index.js<br>└── utils<br>├── PropTypes.js<br>├── Subscription.js<br>├── shallowEqual.js<br>├── verifyPlainObject.js<br>├── warning.js<br>└── wrapActionCreators.js</p>
+<h2 id="源码解读"><a href="#源码解读" class="headerlink" title="源码解读"></a>源码解读</h2><p>基于react-redux 5.0.6</p>
+<h3 id="入口"><a href="#入口" class="headerlink" title="入口"></a>入口</h3><p>首先来看一下index.js:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Provider, &#123; createProvider &#125; <span class="keyword">from</span> <span class="string">'./components/Provider'</span></span><br><span class="line"><span class="keyword">import</span> connectAdvanced <span class="keyword">from</span> <span class="string">'./components/connectAdvanced'</span></span><br><span class="line"><span class="keyword">import</span> connect <span class="keyword">from</span> <span class="string">'./connect/connect'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> &#123; Provider, createProvider, connectAdvanced, connect &#125;</span><br></pre></td></tr></table></figure>
+<p>对外提供的API有四个:Provider、createProvider,connectAdvanced,connect</p>
+<h3 id="Provider部分"><a href="#Provider部分" class="headerlink" title="Provider部分"></a>Provider部分</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Provider</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</span><br><span class="line">    getChildContext() &#123;</span><br><span class="line">        <span class="keyword">return</span> &#123; [storeKey]: <span class="keyword">this</span>[storeKey], [subscriptionKey]: <span class="literal">null</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constructor</span>(props, context) &#123;</span><br><span class="line">        <span class="keyword">super</span>(props, context)</span><br><span class="line">        <span class="keyword">this</span>[storeKey] = props.store;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> Children.only(<span class="keyword">this</span>.props.children)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Provider组件写了3个方法，getChildContext、constructor、render。目的是使用context向下传递store。将store注入整个React应用的某个入口组件，通常是应用的顶层组件。</p>
+<p>constructor是构造方法，this.store = props.store中的this表示当前的组件。在构造函数定义this.store的作用是为了能够在getChildContext方法中读取到store。</p>
+<p>getChildContext方法，翻译过来就是上下文。作用是返回store。</p>
+<p>render渲染，返回一个react子元素。Children.only是react提供的方法，this.props.children表示的是只有一个root的元素。</p>
+<h3 id="Connect部分"><a href="#Connect部分" class="headerlink" title="Connect部分"></a>Connect部分</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createConnect</span>(<span class="params">&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">    connectHOC = connectAdvanced,</span></span></span><br><span class="line"><span class="function"><span class="params">    mapStateToPropsFactories = defaultMapStateToPropsFactories,</span></span></span><br><span class="line"><span class="function"><span class="params">    mapDispatchToPropsFactories = defaultMapDispatchToPropsFactories,</span></span></span><br><span class="line"><span class="function"><span class="params">    mergePropsFactories = defaultMergePropsFactories,</span></span></span><br><span class="line"><span class="function"><span class="params">    selectorFactory = defaultSelectorFactory</span></span></span><br><span class="line"><span class="function"><span class="params">&#125; = &#123;&#125;</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">        mapStateToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">        mapDispatchToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">        mergeProps,</span></span></span><br><span class="line"><span class="function"><span class="params">        &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            pure = true,</span></span></span><br><span class="line"><span class="function"><span class="params">            areStatesEqual = strictEqual,</span></span></span><br><span class="line"><span class="function"><span class="params">            areOwnPropsEqual = shallowEqual,</span></span></span><br><span class="line"><span class="function"><span class="params">            areStatePropsEqual = shallowEqual,</span></span></span><br><span class="line"><span class="function"><span class="params">            areMergedPropsEqual = shallowEqual,</span></span></span><br><span class="line"><span class="function"><span class="params">            ...extraOptions</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125; = &#123;&#125;</span></span></span><br><span class="line"><span class="function"><span class="params">    </span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 封装了传入的mapStateToProps等函数，这里可以先理解为 initMapStateToProps = () =&gt; mapStateToProps 这种形式</span></span><br><span class="line">        <span class="keyword">const</span> initMapStateToProps = match(mapStateToProps, mapStateToPropsFactories, <span class="string">'mapStateToProps'</span>)</span><br><span class="line">        <span class="keyword">const</span> initMapDispatchToProps = match(mapDispatchToProps, mapDispatchToPropsFactories, <span class="string">'mapDispatchToProps'</span>)</span><br><span class="line">        <span class="keyword">const</span> initMergeProps = match(mergeProps, mergePropsFactories, <span class="string">'mergeProps'</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 选择器（selector）的作用就是计算mapStateToProps，mapDispatchToProps, ownProps（来自父组件的props）的结果，</span></span><br><span class="line">        <span class="comment">// 并将结果传给子组件props。这就是为什么你在mapStateToProps等三个函数中写的结果，子组件可以通过this.props拿到。</span></span><br><span class="line">        <span class="comment">// 选择器工厂函数（selectorFactory）作用就是创建selector</span></span><br><span class="line">        <span class="keyword">return</span> connectHOC(selectorFactory, &#123;</span><br><span class="line">            <span class="comment">// used in error messages</span></span><br><span class="line">            methodName: <span class="string">'connect'</span>,</span><br><span class="line"></span><br><span class="line">            <span class="comment">// used to compute Connect's displayName from the wrapped component's displayName.</span></span><br><span class="line">            getDisplayName: <span class="function"><span class="params">name</span> =&gt;</span> <span class="string">`Connect(<span class="subst">$&#123;name&#125;</span>)`</span>,</span><br><span class="line"></span><br><span class="line">            <span class="comment">// if mapStateToProps is falsy, the Connect component doesn't subscribe to store state changes</span></span><br><span class="line">            shouldHandleStateChanges: <span class="built_in">Boolean</span>(mapStateToProps),</span><br><span class="line"></span><br><span class="line">            <span class="comment">// passed through to selectorFactory</span></span><br><span class="line">            initMapStateToProps,</span><br><span class="line">            initMapDispatchToProps,</span><br><span class="line">            initMergeProps,</span><br><span class="line">            pure,</span><br><span class="line">            areStatesEqual,</span><br><span class="line">            areOwnPropsEqual,</span><br><span class="line">            areStatePropsEqual,</span><br><span class="line">            areMergedPropsEqual,</span><br><span class="line"></span><br><span class="line">            <span class="comment">// any extra options args can override defaults of connect or connectAdvanced</span></span><br><span class="line">            ...extraOptions</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> createConnect()</span><br></pre></td></tr></table></figure>
+<p>connect是对connectHOC(connectAdvanced)的封装，connectAdvanced使用了defaultSelectorFactory，来创建selector。<br>react-redux默认的selectorFactory中包含了很多性能优化的部分</p>
+<h4 id="connectHOC-connectAdvanced"><a href="#connectHOC-connectAdvanced" class="headerlink" title="connectHOC(connectAdvanced)"></a>connectHOC(connectAdvanced)</h4><p>connectAdvanced位于src / components / connectAdvanced.js，说明作者把它看做更接近于组件相关，它是Connect的基础。</p>
+<p>connectAdvanced的签名如下</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(selectorFactory, options) =&gt; <span class="function"><span class="params">WrappedComponent</span> =&gt;</span> HoistedComponent</span><br></pre></td></tr></table></figure>
+<p>用语言描述就是，connectAdvanced这个方法接受一个selectorFactory方法和一个配置对象，返回一个HOC方法，这个方法接收一个组件参数，并定义了一个叫Connect的组件，然后通过hoist-non-react-statics这个库，把WrappedComponent里面的非React的静态属性方法复制给Connect组件并返回。</p>
+<h4 id="selectorFactory部分"><a href="#selectorFactory部分" class="headerlink" title="selectorFactory部分"></a>selectorFactory部分</h4><p>在解读selectorFactory代码之前，先说一下options.pure的作用。在开头的例子有一个配置项pure。作用是减少运算优化性能。当设置为false时，react-redux将不会优化，store.subscirbe事件触发，组件就会渲染，即使是没有用到的state更新，也会这样，举个例子</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 大家都知道reducer的写法</span></span><br><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">    ...state,</span><br><span class="line">    count: state.count + <span class="number">1</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 必须返回一个新对象，那么如果我只是修改原来state比如</span></span><br><span class="line">state.count += <span class="number">1</span>;</span><br><span class="line"><span class="keyword">return</span> state;</span><br><span class="line"><span class="comment">// 你会发现组件将不会渲染，其实store里的值是发生变化的。</span></span><br><span class="line"><span class="comment">// 这时如果你非想这么写， 然后又想重新渲染怎么办？</span></span><br><span class="line"><span class="comment">// 就是将pure设置为false，这样组件就会完全实时更新。</span></span><br></pre></td></tr></table></figure>
+<p>看下selectorFactory.js finalPropsSelectorFactory作为最终导出的代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">finalPropsSelectorFactory</span>(<span class="params">dispatch, &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">    initMapStateToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    initMapDispatchToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    initMergeProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    ...options</span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> mapStateToProps = initMapStateToProps(dispatch, options)</span><br><span class="line">    <span class="keyword">const</span> mapDispatchToProps = initMapDispatchToProps(dispatch, options)</span><br><span class="line">    <span class="keyword">const</span> mergeProps = initMergeProps(dispatch, options)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">        verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, options.displayName)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> selectorFactory = options.pure</span><br><span class="line">        ? pureFinalPropsSelectorFactory</span><br><span class="line">        : impureFinalPropsSelectorFactory</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> selectorFactory(</span><br><span class="line">        mapStateToProps,</span><br><span class="line">        mapDispatchToProps,</span><br><span class="line">        mergeProps,</span><br><span class="line">        dispatch,</span><br><span class="line">        options</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里很好理解，是对selectorFactory的封装，根据options.pure的值，选取不同的SelectorFactory;</p>
+<h5 id="impureFinalPropsSelectorFactory"><a href="#impureFinalPropsSelectorFactory" class="headerlink" title="impureFinalPropsSelectorFactory"></a>impureFinalPropsSelectorFactory</h5><p>先来看看简单的impureFinalPropsSelectorFactory，无脑计算返回新值。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">impureFinalPropsSelectorFactory</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    mapStateToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    mapDispatchToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    mergeProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    dispatch</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">impureFinalPropsSelector</span>(<span class="params">state, ownProps</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mergeProps(</span><br><span class="line">            mapStateToProps(state, ownProps),</span><br><span class="line">            mapDispatchToProps(dispatch, ownProps),</span><br><span class="line">            ownProps</span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="pureFinalPropsSelectorFactory"><a href="#pureFinalPropsSelectorFactory" class="headerlink" title="pureFinalPropsSelectorFactory"></a>pureFinalPropsSelectorFactory</h5><p>在需要的时候才执行mapStateToProps，mapDispatchToProps，mergeProps</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">pureFinalPropsSelectorFactory</span>(<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    mapStateToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    mapDispatchToProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    mergeProps,</span></span></span><br><span class="line"><span class="function"><span class="params">    dispatch,</span></span></span><br><span class="line"><span class="function"><span class="params">    &#123; areStatesEqual, areOwnPropsEqual, areStatePropsEqual &#125;</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> hasRunAtLeastOnce = <span class="literal">false</span></span><br><span class="line">    <span class="keyword">let</span> state</span><br><span class="line">    <span class="keyword">let</span> ownProps</span><br><span class="line">    <span class="keyword">let</span> stateProps</span><br><span class="line">    <span class="keyword">let</span> dispatchProps</span><br><span class="line">    <span class="keyword">let</span> mergedProps</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">handleFirstCall</span>(<span class="params">firstState, firstOwnProps</span>) </span>&#123;</span><br><span class="line">        state = firstState</span><br><span class="line">        ownProps = firstOwnProps</span><br><span class="line">        stateProps = mapStateToProps(state, ownProps)</span><br><span class="line">        dispatchProps = mapDispatchToProps(dispatch, ownProps)</span><br><span class="line">        mergedProps = mergeProps(stateProps, dispatchProps, ownProps)</span><br><span class="line">        hasRunAtLeastOnce = <span class="literal">true</span></span><br><span class="line">        <span class="keyword">return</span> mergedProps</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">handleNewPropsAndNewState</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        stateProps = mapStateToProps(state, ownProps)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mapDispatchToProps.dependsOnOwnProps)</span><br><span class="line">            dispatchProps = mapDispatchToProps(dispatch, ownProps)</span><br><span class="line"></span><br><span class="line">        mergedProps = mergeProps(stateProps, dispatchProps, ownProps)</span><br><span class="line">        <span class="keyword">return</span> mergedProps</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">handleNewProps</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (mapStateToProps.dependsOnOwnProps)</span><br><span class="line">            stateProps = mapStateToProps(state, ownProps)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mapDispatchToProps.dependsOnOwnProps)</span><br><span class="line">            dispatchProps = mapDispatchToProps(dispatch, ownProps)</span><br><span class="line"></span><br><span class="line">        mergedProps = mergeProps(stateProps, dispatchProps, ownProps)</span><br><span class="line">        <span class="keyword">return</span> mergedProps</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">handleNewState</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> nextStateProps = mapStateToProps(state, ownProps)</span><br><span class="line">        <span class="keyword">const</span> statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps)</span><br><span class="line">        stateProps = nextStateProps</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (statePropsChanged)</span><br><span class="line">            mergedProps = mergeProps(stateProps, dispatchProps, ownProps)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> mergedProps</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">handleSubsequentCalls</span>(<span class="params">nextState, nextOwnProps</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> propsChanged = !areOwnPropsEqual(nextOwnProps, ownProps)</span><br><span class="line">        <span class="keyword">const</span> stateChanged = !areStatesEqual(nextState, state)</span><br><span class="line">        state = nextState</span><br><span class="line">        ownProps = nextOwnProps</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (propsChanged &amp;&amp; stateChanged) <span class="keyword">return</span> handleNewPropsAndNewState()</span><br><span class="line">        <span class="keyword">if</span> (propsChanged) <span class="keyword">return</span> handleNewProps()</span><br><span class="line">        <span class="keyword">if</span> (stateChanged) <span class="keyword">return</span> handleNewState()</span><br><span class="line">        <span class="keyword">return</span> mergedProps</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">pureFinalPropsSelector</span>(<span class="params">nextState, nextOwnProps</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hasRunAtLeastOnce</span><br><span class="line">            ? handleSubsequentCalls(nextState, nextOwnProps)</span><br><span class="line">            : handleFirstCall(nextState, nextOwnProps)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>分两种情况：</p>
+<ul>
+<li>当第一次运行时，执行 handleFirstCall，将三个map函数运行一遍，并将结果缓存下来</li>
+<li>之后运行 handleSubsequentCalls，在其中将新的值和缓存的值做比较，如果变化，将重新求值并返回，如果没变化，返回缓存的旧值。</li>
+</ul>
+<p>其中 mapFunction.dependsOnOwnProps 代表你传入的mapStateToProps是否使用了ownProps。<br>如果没有使用，那么props的变化将不会影响结果，换句话说对应的mapFunction将不会执行。<br>判断方法也很简单，就是获取function形参长度，如何获得呢？</p>
+<p><a href="https://juejin.im/post/5b8b5a60e51d4538c411ff12" target="_blank" rel="noopener">https://juejin.im/post/5b8b5a60e51d4538c411ff12</a><br><a href="https://github.com/reduxjs/react-redux/blob/v5.0.6/src/components/Provider.js" target="_blank" rel="noopener">https://github.com/reduxjs/react-redux/blob/v5.0.6/src/components/Provider.js</a><br><a href="https://juejin.im/post/59eb25e651882549fc512bb7" target="_blank" rel="noopener">https://juejin.im/post/59eb25e651882549fc512bb7</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/24/react-redux源码分析/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-React和Vue区别对比" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -676,6 +795,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
@@ -997,82 +1127,6 @@
 
 
   
-    <article id="post-CSRF" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/05/CSRF/">CSRF</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/05/CSRF/" class="archive-article-date">
-  	<time datetime="2020-03-05T03:50:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="CSRF基本概念"><a href="#CSRF基本概念" class="headerlink" title="CSRF基本概念"></a>CSRF基本概念</h2><p>CSRF，通常称为跨站请求伪造，英文名Cross-site request forgery</p>
-        
-          <a class="article-more-a" href="/2020/03/05/CSRF/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/safe/" class="article-tag-list-link color3">安全</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/05/CSRF/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
@@ -1194,10 +1248,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
@@ -1207,6 +1257,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1222,7 +1276,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1234,11 +1288,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1250,15 +1308,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">

@@ -166,6 +166,113 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-http和https" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/17/http和https/">http和https</a>
+    </h1>
+  
+
+        
+        <a href="/2024/01/17/http和https/" class="archive-article-date">
+  	<time datetime="2024-01-17T09:24:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="1、http和https区别"><a href="#1、http和https区别" class="headerlink" title="1、http和https区别"></a>1、http和https区别</h4><ul>
+<li>http：超文本传输协议（HyperText Transfer Protocol）是用于从服务器传输超文本到本地浏览器的传输协议。可以使浏览器更加高效。以明文发送信息，若黑客截取了浏览器和服务器之间的传输报文，就可以直接获得其中的信息。</li>
+<li>https: 超文本传输安全协议(Hypertext Transfer Protocol Secure) 是一种通过计算机网络进行安全通信的传输协议。</li>
+</ul>
+<p>https经由http进行通信，但利用SSL/TLS来加密数据包。<br>https开发的主要目的，是提供对网站服务器的身份认证，保护交换数据的隐私与完整性。<br>简而言之: https是在http上建立ssl加密层，并对传输数据进行加密，是http协议的安全版。</p>
+<p>简言之区别如下：</p>
+<ul>
+<li>http 是明文传输，HTTPS 通过 SSL\TLS 进行了加密</li>
+<li>http 的端口号是 80，HTTPS 是 443</li>
+<li>https 需要到 CA 申请证书，一般免费证书很少，需要交费</li>
+<li>http 的连接简单，无状态；https 协议是由http+SSL/TLS 协议构建的可进行加密传输、身份认证的网络协议，比 http 协议安全</li>
+</ul>
+<h4 id="2、https证书签名，证书分发以及证书验证的整个过程"><a href="#2、https证书签名，证书分发以及证书验证的整个过程" class="headerlink" title="2、https证书签名，证书分发以及证书验证的整个过程"></a>2、https证书签名，证书分发以及证书验证的整个过程</h4><p>1）服务端人员使用RSA算法生成一个公钥和一个私钥。服务端在将公钥进行分发证书之前需要向CA机构申请给将要分发的公钥进行数字签名。</p>
+<p>2）生成数字签名公钥证书：对于CA机构来说，其也有两个密钥，CA私钥和CA公钥。CA机构将服务端的Public Key作为输入参数将其转换为一个特有的Hash值。然后使用CA私钥将这个Hash值进行加密处理，并与服务端的Public Key绑定在一起，生成数字签名证书。其实数字签名证书的本质就是服务端的公钥+CA私钥加密的Hash值。(CA私钥负责签名，CA公钥负责验证)</p>
+<p>3）服务器获取到这个已经含有数字签名并带有公钥的证书，将该证书发送给客户端。当客户端收到该公钥数字证书后，会验证其有效性。大部分客户端都会预装CA机构的公钥，也就是CA公钥。客户端使用CA公钥对数字证书上的签名进行验证，这个验证的过程就是使用CA公钥对CA私钥加密的内容进行解密，将解密后的内容与服务端的Public Key所生成的Hash值进行匹配，如果匹配成功，则说明该证书就是相应的服务端发过来的。否则就是非法证书。</p>
+<p>4）验证完服务端公钥的合法性后，就可以使用该公钥进行加密通信了。</p>
+<p><img src="/2024/01/17/http和https/证书验证.png" alt="证书验证"></p>
+<h4 id="3、描述https通信过程"><a href="#3、描述https通信过程" class="headerlink" title="3、描述https通信过程"></a>3、描述https通信过程</h4><p>SSL的加密过程是RSA与AES混合进行的。简单概括一下，就是通过RSA加密方式来交换AES加解密的密钥，然后使用AES加密的方式来传输报文。大体可以分为四步：</p>
+<p>1）客户端发起第一次握手，目的是从服务端获取数字签名证书，服务端在发送数字签名证书之前要先确认客户端的SSL版本、加密算法等信息</p>
+<p>2）接着进行第二次握手。客户端收到证书后发起第二次握手，目的是将AES加解密使用的Key (Pre-master secret)发送给服务端（公钥进行加密的AES_KEY）。服务端收到后用私钥进行解密得出AES_KEY。这样客户端和服务端经过二次握手后都持有了AES加解密的KEY</p>
+<p>3）当Client与Server端都持有AES_KEY后，就可以对HTTP报文进行加解密了</p>
+<p>4）最后就是断开连接了</p>
+<p><img src="https.png" alt="https加解密"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/network/" class="article-tag-list-link color3">Network</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2024/01/17/http和https/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-vite打包" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1116,74 +1223,6 @@ switch (type) {
 
 
   
-    <article id="post-Intersection-Observer" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/06/28/Intersection-Observer/">Intersection Observer</a>
-    </h1>
-  
-
-        
-        <a href="/2021/06/28/Intersection-Observer/" class="archive-article-date">
-  	<time datetime="2021-06-28T06:41:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-06-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>IntersectionObserver接口 (从属于Intersection Observer API) 提供了一种异步观察目标元素与其祖先元素或顶级文档视窗(viewport)交叉状态的方法。祖先元素与视窗(viewport)被称为根(root)。（简言之，提供给web开发者，一种异步查询元素相对于其他元素或窗口位置的能力。它常用于追踪一个元素在窗口的可视问题。）</p>
-<p>当一个IntersectionObserver对象被创建时，其被配置为监听根中一段给定比例的可见区域。一旦IntersectionObserver被创建，则无法更改其配置，所以一个给定的观察者对象只能用来监听可见区域的特定变化值；然而，你可以在同一个观察者对象中配置监听多个目标元素。</p>
-<p>在 Intersection Observer 出来之前，传统位置计算的方式，依赖于对DOM状态的轮询计算，然而这种方式会在主线程里密集执行从而造成页面性能问题，getBoundingClientRect()的频繁调用也可能引发浏览器的样式重计算和布局。如果是在iframe里，因为同源策略，我们不能直接访问元素，也就很难用传统方式去处理iframe里的元素。</p>
-<p>Intersection Observer 的设计，就是为了更方便的处理元素的可视问题。使用 Intersection Observer 我们可以很容易的监控元素进入和离开可视窗口，实现节点的预加载和延迟加载。Intersection Observer 并不是基于像素变化的实时计算，它的反馈会有一定的延时，这种异步的方式减少了对DOM和style查询的昂贵计算和持续轮询，相比传统方式降低了CPU、GPU的消耗。</p>
-        
-          <a class="article-more-a" href="/2021/06/28/Intersection-Observer/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2021/06/28/Intersection-Observer/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1305,10 +1344,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
@@ -1318,6 +1353,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1333,7 +1372,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1345,11 +1384,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1361,15 +1404,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
