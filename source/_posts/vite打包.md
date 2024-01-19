@@ -94,10 +94,13 @@ vite 是基于 no-bundle 的构建工具，在开发时按需编译而无需打�
 
 ![speed](speed.png)
 
+
 #### HMR 热更新
 Vite 的 HMR API 基于[esm-hmr](https://github.com/FredKSchott/esm-hmr/tree/master) 规范来实现，在客户端与服务端建立了一个 websocket 连接，当代码被修改时，服务端发送消息通知客户端去请求修改模块的代码，完成热更新。
 
-![流程](流程.png)
+<!-- ![流程](流程.png) -->
+<img src=流程.png width=100  />
+
 
 ● server：服务端做的就是监听代码文件的改变，在合适的时机向客户端发送 websocket 信息通知客户端去请求新的模块代码。
 ● client：Vite 中客户端的 websocket 相关代码在处理 html 中时被写入代码中。
