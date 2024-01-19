@@ -13,13 +13,113 @@ vue-router是Vue.js官方的路由插件，它和vue.js是深度集成的，适�
 
 ## vue-router实现原理
 
+### vue插件的注册原理
+
+#### Vue.use原理
+
+实际上该方法执行 就是调用了plugin的install方法 并传入arguments参数(参数默认添加了当前的this) 
+
+`src/core/global-api\use.ts`定了initUse方法,在 index.js中 调用initUse
+```js
+import type { GlobalAPI } from 'types/global-api'
+import { toArray, isFunction } from '../util/index'
+export function initUse(Vue: GlobalAPI) {
+  Vue.use = function (plugin: Function | any) {
+    const installedPlugins =
+      this._installedPlugins || (this._installedPlugins = [])
+    if (installedPlugins.indexOf(plugin) > -1) {
+      return this
+    }
+    // additional parameters
+    const args = toArray(arguments, 1)
+    args.unshift(this)
+    if (isFunction(plugin.install)) {
+      plugin.install.apply(plugin, args)
+    } else if (isFunction(plugin)) {
+      plugin.apply(null, args)
+    }
+    installedPlugins.push(plugin)
+    return this
+  }
+}
+```
+#### Vue-router install干了啥 （路由注册实现流程）
+
+代码详见: https://github.dev/vuejs/vue-router
+
+- 一、通过Vue.mixin混入beforeCreate destroyed钩子 
+beforeCreate中 1. 跟路由赋值 2. 调用init方法 3. defineReactive调用 响应式 4. 调用parentNode registerRouteInstance
+destroyed中 调用parentNode registerRouteInstance 重置
+- 二、通过Object.defineProperty在Vue.prototype 1. 定义$router(传入new Vue的router实例) 2. 定义$route 是实例的history.current
+- 三、注册RouterView RouterLink组件 
+
+### VueRouter对象
+
+#### 属性和方法
+src/index.js
+```js
+// 属性
+app: any
+apps: Array<any>
+ready: boolean
+readyCbs: Array<Function>
+options: RouterOptions
+mode: string
+history: HashHistory | HTML5History | AbstractHistory
+matcher: Matcher
+fallback: boolean
+beforeHooks: Array<?NavigationGuard>
+resolveHooks: Array<?NavigationGuard>
+afterHooks: Array<?AfterNavigationHook>
+// 方法
+init match
+```
+
+#### 初始化逻辑
+路由初始化的时机是在组件的初始化阶段，执行到beforeCreate钩子函数的时候 会执行router.init方法。然后又执行history.transitionTo的方法做路由的过渡
+
+
+#### matcher - createMatcher过程
+
+createMatcher --> createRouteMap: 遍历routes执行addRouteRecord (传入 pathList pathMap nameMap route)
+
+#### matcher - match函数的实现
+```js
+function match (
+    raw: RawLocation,
+    currentRoute?: Route,
+    redirectedFrom?: Location
+): Route
+```
+最终调用_createRoute方法 结合location和Record 返回新的route
+
 SPA(single page application):单一页面应用程序，只有一个完整的页面；它在加载页面时，不会加载整个页面，而是只更新某个指定的容器中内容。单页面应用(SPA)的核心之一是: 更新视图而不重新请求页面;vue-router在实现单页面前端路由时，提供了两种方式：**Hash模式和History模式**；根据mode参数来决定采用哪一种方式。
 
-### 1、Hash模式
+### 路径切换
+
+#### 完整的导航解析流程
+- 导航被触发。
+- 在失活的组件里调用 beforeRouteLeave 守卫。
+- 调用全局的 beforeEach 守卫。
+- 在重用的组件里调用 beforeRouteUpdate 守卫(2.2+)。
+- 在路由配置里调用 beforeEnter。
+- 解析异步路由组件。
+- 在被激活的组件里调用 beforeRouteEnter。
+- 调用全局的 beforeResolve 守卫(2.5+)。
+- 导航被确认。
+- 调用全局的 afterEach 钩子。
+- 触发 DOM 更新。
+- 调用 beforeRouteEnter 守卫中传给 next 的回调函数，创建好的组件实例会作为回调函数的参数传入。
+
+#### 导航守卫
+
+resolveQueue
+
+#### 1、Hash模式
 
 vue-router 默认 hash 模式 —— 使用 URL 的 hash 来模拟一个完整的 URL，于是当 URL 改变时，页面不会重新加载。hash（#）是URL 的锚点，代表的是网页中的一个位置，单单改变#后的部分，浏览器只会滚动到相应位置，不会重新加载网页，也就是说hash 出现在 URL 中，但不会被包含在 http 请求中，对后端完全没有影响，因此改变 hash 不会重新加载页面；同时每一次改变#后的部分，都会在浏览器的访问历史中增加一个记录，使用”后退”按钮，就可以回到上一个位置；所以说**Hash模式通过锚点值的改变，根据不同的值，渲染指定DOM位置的不同数据**。hash 模式的原理是 onhashchange 事件(监测hash值变化)，可以在 window 对象上监听这个事件。
 
-### 2、History模式
+#### 2、History模式
 
 由于hash模式会在url中自带#，如果不想要很丑的 hash，我们可以用路由的 history 模式，只需要在配置路由规则时，加入"mode: 'history'",这种模式充分利用了html5 history interface 中新增的 pushState() 和 replaceState() 方法。这两个方法应用于浏览器记录栈，在当前已有的 back、forward、go 基础之上，它们提供了对历史记录修改的功能。只是当它们执行修改时，虽然改变了当前的 URL ，但浏览器不会立即向后端发送请求。
 
@@ -477,3 +577,4 @@ router.afterEach((route, redirect) => {
 参考：
 https://router.vuejs.org/zh/
 https://www.jianshu.com/p/96cfc1b9ff21
+https://ustbhuangyi.github.io/vue-analysis/v2/prepare/
