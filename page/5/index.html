@@ -305,6 +305,98 @@
 
 
   
+    <article id="post-vuex数据流向" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/02/vuex数据流向/">vuex数据流向</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/02/vuex数据流向/" class="archive-article-date">
+  	<time datetime="2020-03-02T09:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="vuex基础"><a href="#vuex基础" class="headerlink" title="vuex基础"></a>vuex基础</h2><p><a href="https://vuex.vuejs.org/zh-cn" target="_blank" rel="noopener">https://vuex.vuejs.org/zh-cn</a></p>
+<p>多组件共享状态， 之前操作方式，由父组件传递到各个子组件。 当路由等加入后，会变得复杂。 引入viewx 解决共享问题。</p>
+<p>原vue结构图</p>
+<p><img src="/2020/03/02/vuex数据流向/vue结构图.png" alt="vue结构图" width="487" height="329" align="bottom"></p>
+<p>vuex结构图</p>
+<p><img src="/2020/03/02/vuex数据流向/vuex结构图.png" alt="vuex结构图"></p>
+<p>Vuex对象结构 （state，mutations，getters，actions）</p>
+<ul>
+<li><p>state 对象数据</p>
+</li>
+<li><p>mutations 操作变更state数据</p>
+</li>
+<li><p>getters 计算state</p>
+</li>
+<li><p>actions  触发mutations</p>
+</li>
+</ul>
+<p><img src="/2020/03/02/vuex数据流向/vuex解析图优化.png" alt="vuex解析图优化"></p>
+<p>参考：<br><a href="https://www.cnblogs.com/reeber/p/10628935.html" target="_blank" rel="noopener">https://www.cnblogs.com/reeber/p/10628935.html</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/02/vuex数据流向/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-redux" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -432,98 +524,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/03/02/redux/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vuex数据流向" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/vuex数据流向/">vuex数据流向</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/02/vuex数据流向/" class="archive-article-date">
-  	<time datetime="2020-03-02T09:31:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="vuex基础"><a href="#vuex基础" class="headerlink" title="vuex基础"></a>vuex基础</h2><p><a href="https://vuex.vuejs.org/zh-cn" target="_blank" rel="noopener">https://vuex.vuejs.org/zh-cn</a></p>
-<p>多组件共享状态， 之前操作方式，由父组件传递到各个子组件。 当路由等加入后，会变得复杂。 引入viewx 解决共享问题。</p>
-<p>原vue结构图</p>
-<p><img src="/2020/03/02/vuex数据流向/vue结构图.png" alt="vue结构图" width="487" height="329" align="bottom"></p>
-<p>vuex结构图</p>
-<p><img src="/2020/03/02/vuex数据流向/vuex结构图.png" alt="vuex结构图"></p>
-<p>Vuex对象结构 （state，mutations，getters，actions）</p>
-<ul>
-<li><p>state 对象数据</p>
-</li>
-<li><p>mutations 操作变更state数据</p>
-</li>
-<li><p>getters 计算state</p>
-</li>
-<li><p>actions  触发mutations</p>
-</li>
-</ul>
-<p><img src="/2020/03/02/vuex数据流向/vuex解析图优化.png" alt="vuex解析图优化"></p>
-<p>参考：<br><a href="https://www.cnblogs.com/reeber/p/10628935.html" target="_blank" rel="noopener">https://www.cnblogs.com/reeber/p/10628935.html</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/02/vuex数据流向/">展开全文 >></a>
         </p>
       
 
@@ -1171,6 +1171,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">async</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">defer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1187,22 +1199,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">async</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">http协议</a>
               </li>
              
@@ -1215,11 +1211,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1227,7 +1219,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1243,15 +1243,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
