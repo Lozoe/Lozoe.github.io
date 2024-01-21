@@ -166,6 +166,71 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-rollup" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/07/01/rollup/">rollup</a>
+    </h1>
+  
+
+        
+        <a href="/2021/07/01/rollup/" class="archive-article-date">
+  	<time datetime="2021-07-01T08:33:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-07-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Rollup 是一个 JavaScript 模块打包器，可以将小块代码编译成大块复杂的代码，例如 library 或应用程序。Rollup 对代码模块使用新的标准化格式，这些标准都包含在 JavaScript 的 ES6 版本中，而不是以前的特殊解决方案，如 CommonJS 和 AMD。ES6 模块可以使你自由、无缝地使用你最喜爱的 library 中那些最有用独立函数，而你的项目不必携带其他未使用的代码。ES6 模块最终还是要由浏览器原生实现，但当前 Rollup 可以使你提前体验。</p>
+        
+          <a class="article-more-a" href="/2021/07/01/rollup/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/07/01/rollup/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Intersection-Observer" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -894,102 +959,9 @@
 
 
   
-    <article id="post-click-tap-touch事件的表现和区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/06/click-tap-touch事件的表现和区别/">click/tap/touch事件的表现和区别</a>
-    </h1>
-  
-
-        
-        <a href="/2020/04/06/click-tap-touch事件的表现和区别/" class="archive-article-date">
-  	<time datetime="2020-04-06T03:10:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="click"><a href="#click" class="headerlink" title="click"></a>click</h2><p>click是手指触碰屏幕和离开屏幕的偏移量很小情况下并在短时间内执行而发生的事件，用于移动端会有200到300毫秒的延时</p>
-<p>要模拟click事件，touchstart、touchmove、touchend必须结合使用，通过touchstart、touchend纪录时间、手指移动的偏移量，符合click标准则触发click事件。而现有的解决方案FastClick就是这么做的。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    newFastClick(<span class="built_in">document</span>.body);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>移动端的click300ms延迟现象：移动端的click事件300ms延迟是因为浏览器为了判断当前事件是否双击（double click）而在触发touchend事件后等待用户约300ms（双击事件可以缩放视图内容），若用户没有再次点击则默认触发click事件。</p>
-<p>用户点击触发事件的过程：touchstart －&gt; touchmove(没有移动则不触发) －&gt; touchend －&gt;(300ms后) click</p>
-<p>事件对象及兼容</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">事件对象：e = e || <span class="built_in">window</span>.event;</span><br><span class="line">事件冒泡： e.stopPropagation() || e.cancelBubble = <span class="literal">true</span></span><br><span class="line">事件源：e.target || e.srcElement</span><br><span class="line">阻止默认事件：e.preventDefault() || e.returnValue = <span class="literal">false</span>;</span><br><span class="line">鼠标位置：</span><br><span class="line"><span class="keyword">if</span>(e.pageX) &#123;</span><br><span class="line">    xPos = evt.pageX;</span><br><span class="line">    yPos = evt.pageY;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// ie6到8不兼容</span></span><br><span class="line">    xPos = e.clientX +（<span class="built_in">document</span>.documentElement.scrollLeft || <span class="built_in">document</span>.body.scrollLeft;</span><br><span class="line">    yPos = e.clientY +（<span class="built_in">document</span>.documentElement.scrollTop || <span class="built_in">document</span>.body.scrollTop;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="touch-类事件"><a href="#touch-类事件" class="headerlink" title="touch 类事件"></a>touch 类事件</h2><p>属于原生移动端事件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">touchstart: 当手指触摸到屏幕会触发；</span><br><span class="line">touchmove: 当手指在屏幕上移动时，会触发；</span><br><span class="line">touchend: 当手指离开屏幕时，会触发；</span><br><span class="line">touchcancel: 是在拖动中断时候触发。</span><br></pre></td></tr></table></figure>
-<p>Touch对象代表一个触点，可以通过event.touches[0]获取，每个触点包含位置，大小，形状，压力大小，和目标 element属性。</p>
-<p>事件对象及兼容</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">touches：表示当前跟踪的触摸操作的touch对象的数组。</span><br><span class="line">targetTouches：特定于事件目标的Touch对象的数组。</span><br><span class="line">changeTouches：表示自上次触摸以来发生了什么改变的Touch对象的数组。</span><br><span class="line"></span><br><span class="line">每个touch事件包含下面的属性：</span><br><span class="line"></span><br><span class="line">clientX：触摸目标在视口中的x坐标。</span><br><span class="line">clientY：触摸目标在视口中的y坐标。</span><br><span class="line">identifier：标识触摸的唯一ID。</span><br><span class="line">pageX：触摸目标在页面中的x坐标。</span><br><span class="line">pageY：触摸目标在页面中的y坐标。</span><br><span class="line">screenX：触摸目标在屏幕中的x坐标。</span><br><span class="line">screenY：触摸目标在屏幕中的y坐标。</span><br><span class="line">target：触摸的DOM节点目标。</span><br></pre></td></tr></table></figure>
-<p>关于touch的滑动事件</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">ele.addEventListener(<span class="string">'touchstart'</span>, start, <span class="literal">false</span>);</span><br><span class="line">ele.addEventListener(<span class="string">'touchmove'</span>, move, <span class="literal">false</span>);</span><br><span class="line">ele.addEventListener(<span class="string">'touchend'</span>, end, <span class="literal">false</span>);</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.startX = e.touches[<span class="number">0</span>].pageX</span><br><span class="line">    <span class="keyword">this</span>.startY = e.touches[<span class="number">0</span>].pageY;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">move</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.moveEndX = e.changedTouches[<span class="number">0</span>].pageX;</span><br><span class="line">    <span class="keyword">this</span>.moveEndY = e.changedTouches[<span class="number">0</span>].pageY;</span><br><span class="line">    <span class="keyword">this</span>.X = <span class="keyword">this</span>.moveEndX - <span class="keyword">this</span>.startX;</span><br><span class="line">    <span class="keyword">this</span>.Y = <span class="keyword">this</span>.moveEndY - <span class="keyword">this</span>.startY;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">Math</span>.abs(<span class="keyword">this</span>.X) &gt; <span class="built_in">Math</span>.abs(<span class="keyword">this</span>.Y)&amp;&amp;<span class="built_in">Math</span>.abs(<span class="keyword">this</span>.X)&gt;<span class="number">30</span>&amp;&amp; <span class="keyword">this</span>.X &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//向右滑</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'right'</span>);</span><br><span class="line">    &#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">Math</span>.abs(<span class="keyword">this</span>.X) &gt; <span class="built_in">Math</span>.abs(<span class="keyword">this</span>.Y)&amp;&amp;<span class="built_in">Math</span>.abs(<span class="keyword">this</span>.X)&gt;<span class="number">30</span>&amp;&amp; <span class="keyword">this</span>.X &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//向左滑</span></span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'left'</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">end</span>(<span class="params">e</span>)</span>&#123;</span><br><span class="line">    ele.removeEventListener(<span class="string">'touchmove'</span>, start, <span class="literal">false</span>);</span><br><span class="line">    ele.removeEventListener(<span class="string">'touchend'</span>, move, <span class="literal">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="tap"><a href="#tap" class="headerlink" title="tap"></a>tap</h2><p>属于第三方事件，需要引入第三方库，比如zepto.js</p>
-<p>常用的方法有tap，singleTap, doubleTap, longTap分别代表点击、单次点击、双次点击、长按。</p>
-<p>tap封装了touchstart、touchmove、touchend三个事件的处理（touchstart之后如果有产生touchmove则取消此次tap事件的产生）click则只是单纯的绑定了浏览器的click事件。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bug: tap点透事件。(点击会触发非当前层的点击事件，这就是点透)</span><br><span class="line">原因: tap事件是通过监听绑定<span class="built_in">document</span>上的touch事件来模拟的，并且tap事件是冒泡到<span class="built_in">document</span>上才触发的。</span><br><span class="line">解决: 为元素绑定touchend事件，并在内部加上e.preventDefault();</span><br></pre></td></tr></table></figure>
-<p>参考：</p>
-<p><a href="https://zhuanlan.zhihu.com/p/26351643" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/26351643</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/04/06/click-tap-touch事件的表现和区别/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
     </nav>
   
 
@@ -1108,7 +1080,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1120,7 +1092,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1140,15 +1112,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1192,7 +1168,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">重排</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">重绘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1212,27 +1196,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">重排</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">重绘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
             
             <div class="clearfix"></div>

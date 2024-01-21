@@ -30,7 +30,7 @@
 <meta property="og:image" content="http://yoursite.com/2024/01/16/vite打包/product.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/16/vite打包/speed.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/16/vite打包/流程.png">
-<meta property="og:updated_time" content="2024-01-19T09:51:18.162Z">
+<meta property="og:updated_time" content="2024-01-19T09:59:57.234Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vite打包">
 <meta name="twitter:description" content="vite 的文档 可以简单理解为前端工程的构建工具，vite 对自己的定义为下一代的前端工具链。 为什么选择vite 前言 首先为什么需要打包工具？ a. 随着es 、ts、css 预编译语言，以及vue、react 类的前端框架的快速发展，前端需要在构建阶段加入相应的编译过程才能转化为浏览器可识别的语言。 b. 同时在浏览器支持 ES 模块之前，JavaScript 并没有提供原生机制让开发者以">
@@ -248,7 +248,8 @@ ii. HMR 热更新慢： 即使有 webpack 的热更新加成，项目热更新�
 <p>vite 是基于 no-bundle 的构建工具，在开发时按需编译而无需打包，但只针对于我们的业务代码，对于第三方依赖，vite 采用 esbuild 将依赖项转换为 ES 模块，这也是 vite 项目启动快的一个重要原因。</p>
 <p><img src="/2024/01/16/vite打包/speed.png" alt="speed"></p>
 <h4 id="HMR-热更新"><a href="#HMR-热更新" class="headerlink" title="HMR 热更新"></a>HMR 热更新</h4><p>Vite 的 HMR API 基于<a href="https://github.com/FredKSchott/esm-hmr/tree/master" target="_blank" rel="noopener">esm-hmr</a> 规范来实现，在客户端与服务端建立了一个 websocket 连接，当代码被修改时，服务端发送消息通知客户端去请求修改模块的代码，完成热更新。</p>
-<p><img src="/2024/01/16/vite打包/流程.png" alt="流程"></p>
+<!-- ![流程](流程.png) -->
+<p><img src="/2024/01/16/vite打包/流程.png" width="100"></p>
 <p>● server：服务端做的就是监听代码文件的改变，在合适的时机向客户端发送 websocket 信息通知客户端去请求新的模块代码。<br>● client：Vite 中客户端的 websocket 相关代码在处理 html 中时被写入代码中。</p>
 <p>Vite 会接受到来自client 的消息。通过不同的消息触发一些事件。做到浏览器端的即时热模块更换。包括 connect、vue-reload、vue-rerender 等事件，分别触发组件vue 的重新加载，render等。</p>
 <h4 id="rollup"><a href="#rollup" class="headerlink" title="rollup"></a>rollup</h4><ul>
@@ -536,7 +537,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -548,7 +549,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -568,15 +569,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -620,7 +625,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">重排</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">重绘</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -640,27 +653,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">重排</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">重绘</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
             
             <div class="clearfix"></div>
