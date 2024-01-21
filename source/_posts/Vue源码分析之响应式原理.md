@@ -110,7 +110,7 @@ Vue 通过 Object.defineProperty来将对象的key转换成 getter/setter的形�
 2）也可以给这个对象重新赋值，比如 data.location={...data.location,a:1}
 
 - Object.defineProperty 不能监听数组的变化，需要进行数组方法的重写，具体代码如下：
-
+<img src="array.png" alt="array" width="500">
 ```js
 let methods = ['pop', 'shift', 'unshift', 'sort', 'reverse', 'splice', 'push']
 
@@ -349,6 +349,7 @@ function Vue (options) {
 ```
 
 当 render function 被渲染的时候,读取所需对象的值，会触发 reactiveGetter 函数把当前的 Watcher 对象（存放在 Dep.target 中）收集到 Dep 类中去。之后如果修改对象的值，则会触发 reactiveSetter 方法，通知 Dep 类调用 notify 来触发所有 Watcher 对象的 update 方法更新对应视图。
+![宏观图](宏观图.png)
 
 ## 写在最后
 
