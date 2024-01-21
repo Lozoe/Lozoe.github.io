@@ -16,13 +16,15 @@
 <meta property="og:site_name" content="L.Zoe">
 <meta property="og:description" content="前言Vue 最独特的特性之一，是其非侵入性的响应式系统。数据模型仅仅是普通的 JavaScript 对象。而当你修改它们时，视图会进行更新。这使得状态管理非常简单直接，不过理解其工作原理同样重要，这样你可以避开一些常见的问题。 什么是响应式数据发生变化后，会重新对页面渲染，这就是Vue响应式，那么这一切是怎么做到的呢？">
 <meta property="og:locale" content="default">
+<meta property="og:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/array.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/Dep与Watcher的关系.png">
+<meta property="og:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/宏观图.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/vue双向绑定原理.png">
-<meta property="og:updated_time" content="2024-01-21T06:24:42.993Z">
+<meta property="og:updated_time" content="2024-01-21T07:59:21.706Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue源码分析之响应式原理">
 <meta name="twitter:description" content="前言Vue 最独特的特性之一，是其非侵入性的响应式系统。数据模型仅仅是普通的 JavaScript 对象。而当你修改它们时，视图会进行更新。这使得状态管理非常简单直接，不过理解其工作原理同样重要，这样你可以避开一些常见的问题。 什么是响应式数据发生变化后，会重新对页面渲染，这就是Vue响应式，那么这一切是怎么做到的呢？">
-<meta name="twitter:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/Dep与Watcher的关系.png">
+<meta name="twitter:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/array.png">
   
     <link rel="alternative" href="/atom.xml" title="L.Zoe" type="application/atom+xml">
   
@@ -209,9 +211,9 @@
 <p>1）可以使用 Vue.set(location,a,1) 方法向嵌套对象添加响应式属性;</p>
 <p>2）也可以给这个对象重新赋值，比如 data.location={…data.location,a:1}</p>
 <ul>
-<li>Object.defineProperty 不能监听数组的变化，需要进行数组方法的重写，具体代码如下：</li>
+<li>Object.defineProperty 不能监听数组的变化，需要进行数组方法的重写，具体代码如下：<br><img src="/2019/07/22/Vue源码分析之响应式原理/array.png" alt="array" width="500"><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> methods = [<span class="string">'pop'</span>, <span class="string">'shift'</span>, <span class="string">'unshift'</span>, <span class="string">'sort'</span>, <span class="string">'reverse'</span>, <span class="string">'splice'</span>, <span class="string">'push'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 先获取到原来的原型上的方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arrayProto = <span class="built_in">Array</span>.prototype</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个自己的原型 并且重写methods这些方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> proto = <span class="built_in">Object</span>.create(arrayProto)</span><br><span class="line"></span><br><span class="line">methods.forEach(<span class="function"><span class="params">method</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">  proto[method] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// AOP</span></span><br><span class="line"></span><br><span class="line">    arrayProto[method].call(<span class="keyword">this</span>, ...arguments)</span><br><span class="line"></span><br><span class="line">    render()</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> methods = [<span class="string">'pop'</span>, <span class="string">'shift'</span>, <span class="string">'unshift'</span>, <span class="string">'sort'</span>, <span class="string">'reverse'</span>, <span class="string">'splice'</span>, <span class="string">'push'</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">// 先获取到原来的原型上的方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> arrayProto = <span class="built_in">Array</span>.prototype</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建一个自己的原型 并且重写methods这些方法</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> proto = <span class="built_in">Object</span>.create(arrayProto)</span><br><span class="line"></span><br><span class="line">methods.forEach(<span class="function"><span class="params">method</span> =&gt;</span> &#123;</span><br><span class="line"></span><br><span class="line">  proto[method] = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// AOP</span></span><br><span class="line"></span><br><span class="line">    arrayProto[method].call(<span class="keyword">this</span>, ...arguments)</span><br><span class="line"></span><br><span class="line">    render()</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>这种方法将数组的常用方法进行重写，进而覆盖掉原生的数组方法，重写之后的数组方法需要能够被拦截。但有些数组操作Vue时拦截不到的，当然也就没办法响应，比如：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">obj.length-- </span><br><span class="line"><span class="comment">// 不支持数组的长度变化</span></span><br><span class="line"></span><br><span class="line">obj[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line"><span class="comment">// 修改数组中第一个元素，也无法侦测数组的变化</span></span><br></pre></td></tr></table></figure>
 <h3 id="方法2-Proxy"><a href="#方法2-Proxy" class="headerlink" title="方法2.Proxy"></a>方法2.Proxy</h3><p>Proxy 是 JavaScript 2015 的一个新特性。 Proxy 的代理是针对整个对象的，而不是对象的某个属性，因此不同于 Object.defineProperty 的必须遍历对象每个属性， Proxy 只需要做一层代理就可以监听同级结构下的所有属性变化，当然对于深层结构，递归还是需要进行的。此外 Proxy支持代理数组的变化。</p>
@@ -239,7 +241,7 @@
 <p>具体来说，当外界通过Watcher读取数据时，便会触发getter从而将Watcher添加到依赖中，哪个Watcher触发了getter，就把哪个Watcher收集到Dep中。当数据发生变化时，会循环依赖列表，把所有的Watcher都通知一遍。</p>
 <p>最后我们对 defineReactive 函数进行改造，在自定义函数中添加依赖收集和派发更新相关的代码,实现了一个简易的数据响应式。</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Observer</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.data = data;</span><br><span class="line">    <span class="keyword">this</span>.walk(data);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Observer.prototype = &#123;</span><br><span class="line">    walk: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">        <span class="built_in">Object</span>.keys(data).forEach(<span class="function"><span class="keyword">function</span> (<span class="params">key</span>) </span>&#123;</span><br><span class="line">            self.defineReactive(data, key, data[key]);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">    defineReactive: <span class="function"><span class="keyword">function</span> (<span class="params">data, key, val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> dep = <span class="keyword">new</span> Dep();</span><br><span class="line">        <span class="comment">// 递归子属性</span></span><br><span class="line">        <span class="keyword">var</span> childObj = observe(val);</span><br><span class="line">        <span class="built_in">Object</span>.defineProperty(data, key, &#123;</span><br><span class="line">            <span class="comment">// 可枚举（可以遍历）</span></span><br><span class="line">            enumerable: <span class="literal">true</span>,</span><br><span class="line">            <span class="comment">// 可配置（比如可以删除）</span></span><br><span class="line">            configurable: <span class="literal">true</span>,</span><br><span class="line">            get: <span class="function"><span class="keyword">function</span> <span class="title">getter</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="comment">// 将 Watcher 添加到订阅</span></span><br><span class="line">                <span class="keyword">if</span> (Dep.target) &#123;</span><br><span class="line">                    dep.addSub(Dep.target); <span class="comment">// 新增</span></span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> val;</span><br><span class="line">            &#125;,</span><br><span class="line">            set: <span class="function"><span class="keyword">function</span> <span class="title">setter</span> (<span class="params">newVal</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (newVal === val) &#123;</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                val = newVal;</span><br><span class="line">                <span class="comment">// 执行 watcher 的 update 方法</span></span><br><span class="line">                dep.notify();</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">observe</span> (<span class="params">value, vm</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 判断类型</span></span><br><span class="line">    <span class="keyword">if</span> (!value || <span class="keyword">typeof</span> value !== <span class="string">'object'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Observer(value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Vue</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 此处省去其他代码</span></span><br><span class="line">    <span class="comment">// xxxxxx</span></span><br><span class="line">    </span><br><span class="line">    observe(<span class="keyword">this</span>.data); </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当 render function 被渲染的时候,读取所需对象的值，会触发 reactiveGetter 函数把当前的 Watcher 对象（存放在 Dep.target 中）收集到 Dep 类中去。之后如果修改对象的值，则会触发 reactiveSetter 方法，通知 Dep 类调用 notify 来触发所有 Watcher 对象的 update 方法更新对应视图。</p>
+<p>当 render function 被渲染的时候,读取所需对象的值，会触发 reactiveGetter 函数把当前的 Watcher 对象（存放在 Dep.target 中）收集到 Dep 类中去。之后如果修改对象的值，则会触发 reactiveSetter 方法，通知 Dep 类调用 notify 来触发所有 Watcher 对象的 update 方法更新对应视图。<br><img src="/2019/07/22/Vue源码分析之响应式原理/宏观图.png" alt="宏观图"></p>
 <h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>最后我们依照下图（参考《深入浅出vue.js》），再来回顾下整个过程：</p>
 <p><img src="/2019/07/22/Vue源码分析之响应式原理/vue双向绑定原理.png" alt="vue双向绑定原理"></p>
 <ol>
@@ -533,15 +535,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -561,10 +563,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">http协议</a>
               </li>
              
@@ -577,7 +575,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -589,15 +595,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">react</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">原型链</a>
               </li>
              
               <li class="article-tag-list-item">
