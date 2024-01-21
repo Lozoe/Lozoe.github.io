@@ -349,13 +349,14 @@ function Vue (options) {
 ```
 
 当 render function 被渲染的时候,读取所需对象的值，会触发 reactiveGetter 函数把当前的 Watcher 对象（存放在 Dep.target 中）收集到 Dep 类中去。之后如果修改对象的值，则会触发 reactiveSetter 方法，通知 Dep 类调用 notify 来触发所有 Watcher 对象的 update 方法更新对应视图。
-![宏观图](宏观图.png)
+<img src="宏观图.png" alt="宏观图" width="500">
 
 ## 写在最后
 
 最后我们依照下图（参考《深入浅出vue.js》），再来回顾下整个过程：
 
-![vue双向绑定原理](vue双向绑定原理.png)
+<img src="vue双向绑定原理.png" alt="vue双向绑定原理" width="500">
+
 
 1. 在 newVue() 后， Vue 会调用 _init 函数进行初始化，也就是init 过程，在 这个过程Data通过Observer转换成了getter/setter的形式，来对数据追踪变化，当被设置的对象被读取的时候会执行 getter 函数，而在当被赋值的时候会执行 setter函数。
 2. 当render function 执行的时候，因为会读取所需对象的值，所以会触发getter函数从而将Watcher添加到依赖中进行依赖收集。
