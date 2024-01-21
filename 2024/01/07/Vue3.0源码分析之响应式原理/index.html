@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/2024/01/07/Vue3.0源码分析之响应式原理/demo.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/07/Vue3.0源码分析之响应式原理/原理.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/07/Vue3.0源码分析之响应式原理/dep.png">
-<meta property="og:updated_time" content="2024-01-21T07:39:01.563Z">
+<meta property="og:updated_time" content="2024-01-21T07:41:58.491Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue3.0源码分析之响应式原理">
 <meta name="twitter:description" content="Vue 3.0 的响应式Vue 3.0 的响应式系统是独立的模块，可以完全脱离 Vue 使用，可以直接在 vue-next packages/reactivity 模块下调试。">
@@ -219,7 +219,7 @@
 <p>弄明白依赖收集表 targetMap 是非常重要的，因为这是整个响应式系统核心中的核心。</p>
 <p>响应阶段</p>
 <p>回顾上一章节的例子，我们得到了一个 { count: 0, age: 18 } 的 Proxy，并构造了三个 effect。在控制台上看看效果：<br><img src="/2024/01/07/Vue3.0源码分析之响应式原理/demo.png" alt="demo" width="200"></p>
-<p>效果符合预期，那么它是怎么实现的呢？首先来看看这个阶段的原理图：<br><img src="/2024/01/07/Vue3.0源码分析之响应式原理/原理.png" alt="原理" width="200"></p>
+<p>效果符合预期，那么它是怎么实现的呢？首先来看看这个阶段的原理图：<br><img src="/2024/01/07/Vue3.0源码分析之响应式原理/原理.png" alt="原理" width="500"></p>
 <p>当修改对象的某个属性值的时候，会触发对应的 setter。</p>
 <p>setter 里面的 trigger() 函数会从依赖收集表里找到当前属性对应的各个 dep，然后把它们推入到 effects 和 computedEffects（计算属性） 队列中，最后通过 scheduleRun() 挨个执行里面的 effect。</p>
 <p>由于已经建立了依赖收集表，所以要找到属性所对应的 dep 也就轻而易举了，可以看看具体的代码实现：</p>
@@ -544,6 +544,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">async</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">defer</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -556,19 +568,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">async</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">defer</a>
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -584,7 +588,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -592,19 +596,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -612,11 +604,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">reduce</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">reduce</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -625,6 +621,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
