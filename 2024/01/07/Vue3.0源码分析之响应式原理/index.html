@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/2024/01/07/Vue3.0源码分析之响应式原理/demo.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/07/Vue3.0源码分析之响应式原理/原理.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/07/Vue3.0源码分析之响应式原理/dep.png">
-<meta property="og:updated_time" content="2024-01-21T07:41:58.491Z">
+<meta property="og:updated_time" content="2024-01-21T08:20:37.734Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue3.0源码分析之响应式原理">
 <meta name="twitter:description" content="Vue 3.0 的响应式Vue 3.0 的响应式系统是独立的模块，可以完全脱离 Vue 使用，可以直接在 vue-next packages/reactivity 模块下调试。">
@@ -263,6 +263,8 @@
 <p><a href="https://juejin.cn/post/6972350540210503693" target="_blank" rel="noopener">https://juejin.cn/post/6972350540210503693</a><br><a href="https://jishuin.proginn.com/p/763bfbd385e2" target="_blank" rel="noopener">https://jishuin.proginn.com/p/763bfbd385e2</a></p>
 <p>Vue2.0： <a href="https://juejin.cn/post/6857669921166491662" target="_blank" rel="noopener">https://juejin.cn/post/6857669921166491662</a><br>Composition Api vs Options API: <a href="https://blog.csdn.net/liuliuliuliumin123/article/details/113825310" target="_blank" rel="noopener">https://blog.csdn.net/liuliuliuliumin123/article/details/113825310</a><br>compoted: <a href="https://www.cnblogs.com/xiaoheibanfe/p/14131508.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiaoheibanfe/p/14131508.html</a><br>computed: <a href="https://juejin.cn/post/6979055167228346376" target="_blank" rel="noopener">https://juejin.cn/post/6979055167228346376</a></p>
 <p>vue3 更新机制的理解：<a href="https://juejin.cn/post/6912419591847313422" target="_blank" rel="noopener">https://juejin.cn/post/6912419591847313422</a></p>
+<p>effect: <a href="https://juejin.cn/post/6897109326108819464" target="_blank" rel="noopener">https://juejin.cn/post/6897109326108819464</a></p>
+<p>《深入浅出vue.js》<br>《剖析 Vue.js 内部运行机制》<br>Reflect: <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect</a><br>Symbol: <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol</a></p>
 
       
 
@@ -544,6 +546,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -556,7 +562,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -565,10 +571,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -616,15 +618,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">

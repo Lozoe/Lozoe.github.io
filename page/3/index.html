@@ -166,6 +166,97 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Vue源码解析之sfc" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/04/08/Vue源码解析之sfc/">Vue源码解析值sfc</a>
+    </h1>
+  
+
+        
+        <a href="/2020/04/08/Vue源码解析之sfc/" class="archive-article-date">
+  	<time datetime="2020-04-08T06:17:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-04-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在vue项目中，.vue 文件称为 SFC(Single File Components)，在vue的源码中，有一个sfc模块专门负责.vue单文件组件的解析</p>
+<p>vue 会先对 .vue 文件进行解析，分成 template、script、styles、customBlocks 四个部分，称为 descriptor。之后，再对这四个部分分别进行编译最终得到可以在浏览器中执行的 .js 文件。</p>
+<p>SFCDescriptor，是表示 .vue 各个代码块的对象，为以下数据格式：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// an object format describing a single-file component.</span></span><br><span class="line">declare type SFCDescriptor = &#123;</span><br><span class="line">    template: ?SFCBlock;</span><br><span class="line">    script: ?SFCBlock;</span><br><span class="line">    styles: <span class="built_in">Array</span>&lt;SFCBlock&gt;;</span><br><span class="line">    customBlocks: <span class="built_in">Array</span>&lt;SFCBlock&gt;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>vue 提供了一个 <a href="https://github.com/vuejs/vue/tree/dev/packages/vue-template-compiler#compilerparsecomponentfile-options" target="_blank" rel="noopener">compiler.parseComponent(file, [options])</a>方法，来将 .vue 文件解析成一个 SFCDescriptor。</p>
+<h2 id="1-文件入口"><a href="#1-文件入口" class="headerlink" title="1. 文件入口"></a>1. 文件入口</h2><p>解析 sfc 文件的源码入口在 src/sfc/parser.js 中，编译后的产出在 /packages/vue-template-compiler 和 /packages/vue-server-renderer 下的 build.js 中。</p>
+<p>build.js 文件中直接 export 出了parseComponent方法。</p>
+<h2 id="2-parseComponent方法"><a href="#2-parseComponent方法" class="headerlink" title="2. parseComponent方法"></a>2. parseComponent方法</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Parse a single-file component (*.vue) file into an SFC Descriptor Object.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">parseComponent</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    content: string,</span></span></span><br><span class="line"><span class="function"><span class="params">    options?: Object = &#123;&#125;</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">SFCDescriptor</span> </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> sfc: SFCDescriptor = &#123;</span><br><span class="line">        template: <span class="literal">null</span>,</span><br><span class="line">        script: <span class="literal">null</span>,</span><br><span class="line">        styles: [],</span><br><span class="line">        customBlocks: []</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> depth = <span class="number">0</span></span><br><span class="line">    <span class="keyword">let</span> currentBlock: ?SFCBlock = <span class="literal">null</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">start</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">        tag: string,</span></span></span><br><span class="line"><span class="function"><span class="params">        attrs: Array&lt;Attribute&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">        unary: boolean,</span></span></span><br><span class="line"><span class="function"><span class="params">        start: number,</span></span></span><br><span class="line"><span class="function"><span class="params">        end: number</span></span></span><br><span class="line"><span class="function"><span class="params">    </span>) </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">checkAttrs</span> (<span class="params">block: SFCBlock, attrs: Array&lt;Attribute&gt;</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; attrs.length; i++) &#123;</span><br><span class="line">            <span class="keyword">const</span> attr = attrs[i]</span><br><span class="line">            <span class="keyword">if</span> (attr.name === <span class="string">'lang'</span>) &#123;</span><br><span class="line">                block.lang = attr.value</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (attr.name === <span class="string">'scoped'</span>) &#123;</span><br><span class="line">                block.scoped = <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (attr.name === <span class="string">'module'</span>) &#123;</span><br><span class="line">                block.module = attr.value || <span class="literal">true</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (attr.name === <span class="string">'src'</span>) &#123;</span><br><span class="line">                block.src = attr.value</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">end</span> (<span class="params">tag: string, start: number, end: number</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">padContent</span> (<span class="params">block: SFCBlock, pad: true | <span class="string">"line"</span> | <span class="string">"space"</span></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (pad === <span class="string">'space'</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> content.slice(<span class="number">0</span>, block.start).replace(replaceRE, <span class="string">' '</span>)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> offset = content.slice(<span class="number">0</span>, block.start).split(splitRE).length</span><br><span class="line">            <span class="keyword">const</span> padChar = block.type === <span class="string">'script'</span> &amp;&amp; !block.lang</span><br><span class="line">                ? <span class="string">'//\n'</span></span><br><span class="line">                : <span class="string">'\n'</span></span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">Array</span>(offset).join(padChar)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    parseHTML(content, &#123;</span><br><span class="line">        start,</span><br><span class="line">        end</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sfc</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上代码中，parseComponent方法中主要定义了start和end两个函数，之后调用了parseHTML方法来对 .vue 文件内容践行编译。start和end两个函数作为参数传给了parseHTML</p>
+<h2 id="3-parseHTML方法"><a href="#3-parseHTML方法" class="headerlink" title="3. parseHTML方法"></a>3. parseHTML方法</h2><p>parseHTML是一个html-parser，分解分析 .vue 的关键,parseHTML的代码细节较多，遍历解析查找文件中的各个标签，解析到每个起始标签时，调用 option 中的 start 方法进行处理；解析到每个结束标签时，调用 option 中的 end 方法进行处理。（即parseComponent中定义的 start 和 end）</p>
+<p>由于我们这里只是想要找到第一层标签，也就是 template、script这些。因此可以在parseComponent中维护一个 depth 变量，在start中将depth++，在end中depth–。那么，每个depth === 1的标签就是我们需要获取的信息，包含 template、script、style 以及一些自定义标签。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">parseHTML</span> (<span class="params">html, options</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> stack = []</span><br><span class="line">    <span class="keyword">const</span> expectHTML = options.expectHTML</span><br><span class="line">    <span class="keyword">const</span> isUnaryTag = options.isUnaryTag || no</span><br><span class="line">    <span class="keyword">const</span> canBeLeftOpenTag = options.canBeLeftOpenTag || no</span><br><span class="line">    <span class="keyword">let</span> index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">let</span> last, lastTag</span><br><span class="line">    <span class="keyword">while</span> (html) &#123;</span><br><span class="line">        last = html</span><br><span class="line">        <span class="keyword">if</span> (!lastTag || !isPlainTextElement(lastTag)) &#123;</span><br><span class="line">            <span class="comment">// 这里分离了template</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 这里分离了style/script</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 略</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 前进n个字符</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">advance</span> (<span class="params">n</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 解析 openTag 比如 &lt;template&gt;</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">parseStartTag</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理 openTag</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">handleStartTag</span> (<span class="params">match</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">        <span class="keyword">if</span> (options.start) &#123;</span><br><span class="line">            options.start(tagName, attrs, unary, match.start, match.end)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 处理 closeTag</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">parseEndTag</span> (<span class="params">tagName, start, end</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 略</span></span><br><span class="line">        <span class="keyword">if</span> (options.start) &#123;</span><br><span class="line">        options.start(tagName, [], <span class="literal">false</span>, start, end)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (options.end) &#123;</span><br><span class="line">        options.end(tagName, start, end)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1）一个 while 循环<br>在 while 循环中，存在两个大的分支，一个用来分析 template ，一个是用来分析 script 和 style。</p>
+<p>2）函数 advance<br>向前跳过文本</p>
+<p>3）函数 parseStartTag<br>判断当前的 node 是不是 openTag</p>
+<p>4）函数 handleStartTag<br>处理 openTag, 这里就用到了之前提到的 start() 函数</p>
+<p>5）函数 parseEndTag<br>判断当前的 node 是不是 closeTag，同时这里也用到了 end() 函数</p>
+<p>通过以上各个函数的组合，在while循环中就将 sfc 分割成了三个不同的部分</p>
+<h2 id="4-start"><a href="#4-start" class="headerlink" title="4. start"></a>4. start</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">start</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    tag: string,</span></span></span><br><span class="line"><span class="function"><span class="params">    attrs: Array&lt;Attribute&gt;,</span></span></span><br><span class="line"><span class="function"><span class="params">    unary: boolean,</span></span></span><br><span class="line"><span class="function"><span class="params">    start: number,</span></span></span><br><span class="line"><span class="function"><span class="params">    end: number</span></span></span><br><span class="line"><span class="function"><span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (depth === <span class="number">0</span>) &#123;</span><br><span class="line">        currentBlock = &#123;</span><br><span class="line">            type: tag,</span><br><span class="line">            content: <span class="string">''</span>,</span><br><span class="line">            start: end,</span><br><span class="line">            attrs: attrs.reduce(<span class="function">(<span class="params">cumulated, &#123; name, value &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">                cumulated[name] = value || <span class="literal">true</span></span><br><span class="line">                <span class="keyword">return</span> cumulated</span><br><span class="line">            &#125;, &#123;&#125;)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (isSpecialTag(tag)) &#123;</span><br><span class="line">            checkAttrs(currentBlock, attrs)</span><br><span class="line">            <span class="keyword">if</span> (tag === <span class="string">'style'</span>) &#123;</span><br><span class="line">                sfc.styles.push(currentBlock)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                sfc[tag] = currentBlock</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">// custom blocks</span></span><br><span class="line">            sfc.customBlocks.push(currentBlock)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!unary) &#123;</span><br><span class="line">        depth++</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>1）记录下 currentBlock。每个 currentBlock 包含以下内容</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">declare type SFCBlock = &#123;</span><br><span class="line">    type: string;</span><br><span class="line">    content: string;</span><br><span class="line">    start?: number;</span><br><span class="line">    end?: number;</span><br><span class="line">    lang?: string;</span><br><span class="line">    src?: string;</span><br><span class="line">    scoped?: boolean;</span><br><span class="line">    <span class="built_in">module</span>?: string | boolean;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>2）根据 tag 名称，将 currentBlock 对象保存在在返回结果对象中。</p>
+<p>返回结果对象定义为 sfc，如果tag不是 script,style,template 中的任一个，就放在 sfc.customBlocks 中。如果是style，就放在 sfc.styles 中。script 和 template 则直接放在 sfc.script 和 sfc.template 下。</p>
+<h2 id="5-end"><a href="#5-end" class="headerlink" title="5. end"></a>5. end</h2><p>每当遇到一个结束标签时，执行end函数。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">end</span> (<span class="params">tag: string, start: number, end: number</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (depth === <span class="number">1</span> &amp;&amp; currentBlock) &#123;</span><br><span class="line">        currentBlock.end = start</span><br><span class="line">        <span class="keyword">let</span> text = deindent(content.slice(currentBlock.start, currentBlock.end))</span><br><span class="line">        <span class="comment">// pad content so that linters and pre-processors can output correct</span></span><br><span class="line">        <span class="comment">// line numbers in errors and warnings</span></span><br><span class="line">        <span class="keyword">if</span> (currentBlock.type !== <span class="string">'template'</span> &amp;&amp; options.pad) &#123;</span><br><span class="line">            text = padContent(currentBlock, options.pad) + text</span><br><span class="line">        &#125;</span><br><span class="line">        currentBlock.content = text</span><br><span class="line">        currentBlock = <span class="literal">null</span></span><br><span class="line">    &#125;</span><br><span class="line">    depth--</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果当前是第一层标签(depth === 1)，并且 currentBlock 变量存在，那么取出这部分text，放在 currentBlock.content 中。</p>
+<p>在将 .vue 整个遍历一遍后，得到的 sfc 对象即为我们需要的 SFCDescriptor。</p>
+<h2 id="6-生成-js"><a href="#6-生成-js" class="headerlink" title="6. 生成 .js"></a>6. 生成 .js</h2><p>compiler.parseComponent(file, [options])得到的只是一个组件的 SFCDescriptor，最终编译成.js 文件是交给 vue-loader 等库来做的。</p>
+<p><a href="https://github.com/vuejs/vue/blob/dev/packages/vue-template-compiler/index.js" target="_blank" rel="noopener">https://github.com/vuejs/vue/blob/dev/packages/vue-template-compiler/index.js</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/04/08/Vue源码解析之sfc/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-click-tap-touch事件的表现和区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1126,84 +1217,6 @@
 
 
   
-    <article id="post-react-router的使用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/28/react-router的使用/">react-router的使用</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/28/react-router的使用/" class="archive-article-date">
-  	<time datetime="2020-03-28T04:41:19.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-28</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>路由库React-Router是由官方维护的，当我们使用react时事实上也是唯一可选的路由库。它通过管理 URL，实现组件的切换和状态的变化，开发复杂的应用几乎肯定会用到。</p>
-<h2 id="一、基本用法"><a href="#一、基本用法" class="headerlink" title="一、基本用法"></a>一、基本用法</h2><p>React Router 安装命令如下。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -S react-router</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/03/28/react-router的使用/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/28/react-router的使用/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1313,6 +1326,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1325,7 +1342,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1334,10 +1351,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1385,15 +1398,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">

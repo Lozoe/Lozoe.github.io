@@ -166,6 +166,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-css实现自适应正方形" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/07/26/css实现自适应正方形/">css实现自适应正方形</a>
+    </h1>
+  
+
+        
+        <a href="/2019/07/26/css实现自适应正方形/" class="archive-article-date">
+  	<time datetime="2019-07-26T06:07:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-07-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在处理移动端页面时，我们有时会需要将 banner 图做成与屏幕等宽的正方形以获得最佳的体验效果，那么应该怎么使用纯 CSS 制作出能够自适应大小的正方形呢？</p>
+<h2 id="方案一：-CSS3-vw-单位"><a href="#方案一：-CSS3-vw-单位" class="headerlink" title="方案一： CSS3 vw 单位"></a>方案一： CSS3 vw 单位</h2><p>CSS3 中新增了一组相对于可视区域百分比的长度单位 vw, vh, vmin, vmax。其中 vw 是相对于视口宽度百分比的单位，1vw = 1% viewport width， vh 是相对于视口高度百分比的单位，1vh = 1% viewport height；vmin 是相对当前视口宽高中 较小 的一个的百分比单位，同理 vmax 是相对当前视口宽高中 较大 的一个的百分比单位。该单位浏览器兼容性如下：<br></p>
+        
+          <a class="article-more-a" href="/2019/07/26/css实现自适应正方形/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/css/" class="article-tag-list-link color4">CSS</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/07/26/css实现自适应正方形/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-TypeScript获取input的value值" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -905,84 +982,6 @@
 
 
   
-    <article id="post-js精度问题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/06/25/js精度问题/">js精度问题</a>
-    </h1>
-  
-
-        
-        <a href="/2019/06/25/js精度问题/" class="archive-article-date">
-  	<time datetime="2019-06-25T09:04:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="JavaScript-为什么不能处理小数运算"><a href="#JavaScript-为什么不能处理小数运算" class="headerlink" title="JavaScript 为什么不能处理小数运算"></a>JavaScript 为什么不能处理小数运算</h2><p>先看看下面的程序：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">  sum += <span class="number">0.1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(sum);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0.1</span> + <span class="number">0.2</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="number">0.2</span> + <span class="number">0.3</span>);</span><br></pre></td></tr></table></figure>
-<p>上面的程序会输出1、0.3、0.5吗？<br></p>
-        
-          <a class="article-more-a" href="/2019/06/25/js精度问题/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/06/25/js精度问题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/7/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/9/">Next &raquo;</a>
@@ -1092,6 +1091,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1104,7 +1107,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1113,10 +1116,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1164,15 +1163,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
