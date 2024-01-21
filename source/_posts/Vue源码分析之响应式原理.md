@@ -360,6 +360,35 @@ function Vue (options) {
 2. 当render function 执行的时候，因为会读取所需对象的值，所以会触发getter函数从而将Watcher添加到依赖中进行依赖收集。
 3. 在修改对象的值的时候，会触发对应的 setter， setter通知之前依赖收集得到的 Dep 中的每一个 Watcher，告诉它们自己的值改变了，需要重新渲染视图。这时候这些 Watcher就会开始调用 update 来更新视图。
 
+### vue2 有哪些问题
+
+1、新增属性、删除属性界面不会更新
+2、直接通过下标修改数组，界面不会更新
+```js
+// 元数据
+let person = {
+	name: 'lilei',
+  age: 18
+}
+// 模拟vue2中响应式实现
+let p = {}; // 代理数据
+Object.defineProperty(
+	p,
+  'name',
+  {
+    // 拦截读操作（查）
+  	get() {
+      return person.name;
+    },
+    // 拦截写操作（改）
+    set(newValue) {
+      console.log('读取name,在这里去更新页面')
+      person.age = newValue; 
+    },
+  }
+)
+```
+
 源码分析：
 
 https://lozoe.github.io/vue-analysis/
