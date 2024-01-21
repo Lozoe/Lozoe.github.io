@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://yoursite.com/2024/01/21/观察者模式vs发布订阅的区别/observer.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/21/观察者模式vs发布订阅的区别/sub.png">
 <meta property="og:image" content="http://yoursite.com/2024/01/21/观察者模式vs发布订阅的区别/升级.png">
-<meta property="og:updated_time" content="2024-01-21T05:54:22.523Z">
+<meta property="og:updated_time" content="2024-01-21T06:07:23.964Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="观察者模式vs发布订阅的区别">
 <meta name="twitter:description" content="一、定性区别首先，观察者是经典软件设计模式中的一种，但发布订阅只是软件架构中的一种消息范式。所以不要再被“观察者模式和发布订阅模式xxx”这样的问题误导。 二、组成区别其次，就是实现二者所需的角色数量有着明显的区别。观察者模式本身只需要2个角色便可成型，即观察者和被观察者，其中被观察者是重点。而发布订阅需要至少3个角色来组成，包括发布者、订阅者和发布订阅中心，其中发布订阅中心是重点。    观察者">
@@ -209,10 +209,11 @@
 </tr>
 </tbody>
 </table>
+<a id="more"></a>
 <h2 id="三、各自实现"><a href="#三、各自实现" class="headerlink" title="三、各自实现"></a>三、各自实现</h2><p>1、观察者模式实现</p>
 <p>观察者模式一般至少有一个可被观察的对象 Subject ，可以有多个观察者去观察这个对象。二者的关系是通过被观察者主动建立的，被观察者至少要有三个方法——添加观察者、移除观察者、通知观察者。</p>
 <p>当被观察者将某个观察者添加到自己的观察者列表后，观察者与被观察者的关联就建立起来了。此后只要被观察者在某种时机触发通知观察者方法时，观察者即可接收到来自被观察者的消息。</p>
-<p><img src="/2024/01/21/观察者模式vs发布订阅的区别/observer.png" alt="观察者模式">{width=300px}</p>
+<p><img src="/2024/01/21/观察者模式vs发布订阅的区别/observer.png" alt="观察者模式" width="500"></p>
 <p>上图重点表示出了被观察者通知观察者的动作，省略了观察者是如何被添加到被观察者的列表内以及接收到被观察者后是具体如何拿到通知消息的。接下来我们使用 JavaScript 来实现一版，以具体展示这部分细节。</p>
 <h3 id="1）被观察者对象"><a href="#1）被观察者对象" class="headerlink" title="1）被观察者对象"></a>1）被观察者对象</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subject</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.observerList = [];</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addObserver(observer) &#123;</span><br><span class="line">    <span class="keyword">this</span>.observerList.push(observer);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  removeObserver(observer) &#123;</span><br><span class="line">    <span class="keyword">const</span> index = <span class="keyword">this</span>.observerList.findIndex(<span class="function"><span class="params">o</span> =&gt;</span> o.name === observer.name);</span><br><span class="line">    <span class="keyword">this</span>.observerList.splice(index, <span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  notifyObservers(message) &#123;</span><br><span class="line">    <span class="keyword">const</span> observers = <span class="keyword">this</span>.observerList;</span><br><span class="line">    observers.forEach(<span class="function"><span class="params">observer</span> =&gt;</span> observer.notified(message));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="2）观察者"><a href="#2）观察者" class="headerlink" title="2）观察者"></a>2）观察者</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name, subject) &#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">if</span> (subject) &#123;</span><br><span class="line">      subject.addObserver(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notified(message) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>.name, <span class="string">'got message'</span>, message);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -221,7 +222,7 @@
 <p>观察者主动申请加入被观察者的列表<br>被观察者主动将观察者加入列表</p>
 <p>前者会在观察者对象创建之初显式声明要被加入到被观察者的通知列表内，后者则是在观察者创建实例后由被观察者主动将其添加进列表。</p>
 <h2 id="2、发布订阅"><a href="#2、发布订阅" class="headerlink" title="2、发布订阅"></a>2、发布订阅</h2><p>与观察者模式相比，发布订阅核心基于一个中心来建立整个体系。其中发布者和订阅者不直接进行通信，而是发布者将要发布的消息交由中心管理，订阅者也是根据自己的情况，按需订阅中心中的消息。</p>
-<p><img src="/2024/01/21/观察者模式vs发布订阅的区别/sub.png" alt="发布订阅"></p>
+<p><img src="/2024/01/21/观察者模式vs发布订阅的区别/sub.png" alt="发布订阅" width="500"></p>
 <p>让我们来想象一下邮件系统，你可以作为订阅者订阅某个网站的通知，邮件系统在其中充当发布订阅中心的角色，而发布者则是你订阅的网站。<br>整个链路是从你的订阅开始，虽然在你订阅之前，别人可能已经订阅过某些网站并不断接收来自网站更新所发出的消息。你的订阅动作是在某个你想订阅的网站填入自己的邮箱，如果这一步以邮件系统为中心，那么则是在的邮箱内记录这个网站信息，后续当网站有内容更新时，邮件系统会及时接收到并向你发送邮件，以达到通知你这个订阅者的目的。</p>
 <h3 id="1）降级为观察者模式"><a href="#1）降级为观察者模式" class="headerlink" title="1）降级为观察者模式"></a>1）降级为观察者模式</h3><p>这里说的是以邮件系统为中心，假如以网站为中心，那么你对于网站就相当于一个观察者，你希望观察网站的一举一动，即网站内容的更新。那么订阅动作本身便成了你让网站将你的邮箱加入网站维护的观察者列表。这样当网站有内容更新后，便会通知所有观察者，也就是订阅者，这时发布订阅模型则退化成了观察者模式。</p>
 <h3 id="2）升级为发布订阅"><a href="#2）升级为发布订阅" class="headerlink" title="2）升级为发布订阅"></a>2）升级为发布订阅</h3><p>可以看出，此时网站和用户间其实是有耦合的，也就是网站除了要维护自身功能外，还需要维护订阅者列表，并且在内容更新后完成通知工作。这样在用户和网站之间有一部分关系是维护在网站内部的。如果网站想把这部分任务抽离出来，自然便恢复至发布订阅模型，即建立单独的消息中心来管理发布者和订阅者之间的关系以及接收变化和通知消息的工作。<br>经过这样的对比，我们可以知道为什么要区分观察者模式和发布订阅，以及它们之间的差别。</p>
@@ -231,7 +232,7 @@
 <p>但区别在于<code>观察者模式中的被观察者需要在每次自身改变后都绑定式地触发对观察者的通知</code>，因为这是观察者模式这一模式所要实现的核心，也就是类似事件处理系统的机制，被观察者有义务针对自身的变化给出响应式的反馈到观察者们，这就是为什么说观察者模式是松耦合的，因为被观察者的功能不纯粹，要包含一部分观察者和自身关系的逻辑。</p>
 <p>而发布订阅与之的区别在于，因为<code>发布者把消息通知的权限交由发布订阅中心管理，发布者只需关心自身的发布逻辑，而不会直接和其所发布内容的订阅者直接通信。订阅者也如此，其只关心向发布订阅中心注册自己想要接收通知的栏目，并实现自己在接收到通知后的逻辑，而无需关心消息来自何方，发布者是谁。因此发布者和订阅者由于发布订阅中心的出现而完全解耦</code>。</p>
 <p>由于发布订阅中心这一中间层的出现，对于生产方和消费方的通信管理变得<code>更加的可管理和可拓展</code>。比如这样同样可以实现通过观察者模式实现的事件机制，即消息中心在接收到新的消息发布后即时通知到该类目下的所有订阅者，只不过此时的<code>发布者与消息中心的关系为一对一，并且消息中心与订阅者为一对多，消息中心只相当于发布者的一层代理</code>。</p>
-<p><img src="/2024/01/21/观察者模式vs发布订阅的区别/升级.png" alt="升级"></p>
+<p><img src="/2024/01/21/观察者模式vs发布订阅的区别/升级.png" alt="升级" width="500"></p>
 <h3 id="4）发布订阅实现"><a href="#4）发布订阅实现" class="headerlink" title="4）发布订阅实现"></a>4）发布订阅实现</h3><p>发布订阅中心<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PubSub</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.messages = &#123;&#125;;</span><br><span class="line">    <span class="keyword">this</span>.listeners = &#123;&#125;;</span><br><span class="line">  &#125;</span><br><span class="line">  publish(type, content) &#123;</span><br><span class="line">    <span class="keyword">const</span> existContent = <span class="keyword">this</span>.messages[type];</span><br><span class="line">    <span class="keyword">if</span> (!existContent) &#123;</span><br><span class="line">      <span class="keyword">this</span>.messages[type] = [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.messages[type].push(content);</span><br><span class="line">  &#125;</span><br><span class="line">  subscribe(type, cb) &#123;</span><br><span class="line">    <span class="keyword">const</span> existListener = <span class="keyword">this</span>.listeners[type];</span><br><span class="line">    <span class="keyword">if</span> (!existListener) &#123;</span><br><span class="line">      <span class="keyword">this</span>.listeners[type] = [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.listeners[type].push(cb);</span><br><span class="line">  &#125;</span><br><span class="line">  notify(type) &#123;</span><br><span class="line">    <span class="keyword">const</span> messages = <span class="keyword">this</span>.messages[type];</span><br><span class="line">    <span class="keyword">const</span> subscribers = <span class="keyword">this</span>.listeners[type] || [];</span><br><span class="line">    subscribers.forEach(<span class="function">(<span class="params">cb, index</span>) =&gt;</span> cb(messages[index]));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>发布者<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Publisher</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name, context) &#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.context = context;</span><br><span class="line">  &#125;</span><br><span class="line">  publish(type, content) &#123;</span><br><span class="line">    <span class="keyword">this</span>.context.publish(type, content);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>订阅者<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Subscriber</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(name, context) &#123;</span><br><span class="line">    <span class="keyword">this</span>.name = name;</span><br><span class="line">    <span class="keyword">this</span>.context = context;</span><br><span class="line">  &#125;</span><br><span class="line">  subscribe(type, cb) &#123;</span><br><span class="line">    <span class="keyword">this</span>.context.subscribe(type, cb);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -549,11 +550,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -569,15 +570,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">

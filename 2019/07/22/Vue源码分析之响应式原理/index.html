@@ -18,7 +18,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/Dep与Watcher的关系.png">
 <meta property="og:image" content="http://yoursite.com/2019/07/22/Vue源码分析之响应式原理/vue双向绑定原理.png">
-<meta property="og:updated_time" content="2024-01-08T09:13:38.863Z">
+<meta property="og:updated_time" content="2024-01-21T06:24:42.993Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Vue源码分析之响应式原理">
 <meta name="twitter:description" content="前言Vue 最独特的特性之一，是其非侵入性的响应式系统。数据模型仅仅是普通的 JavaScript 对象。而当你修改它们时，视图会进行更新。这使得状态管理非常简单直接，不过理解其工作原理同样重要，这样你可以避开一些常见的问题。 什么是响应式数据发生变化后，会重新对页面渲染，这就是Vue响应式，那么这一切是怎么做到的呢？">
@@ -247,6 +247,7 @@
 <li>当render function 执行的时候，因为会读取所需对象的值，所以会触发getter函数从而将Watcher添加到依赖中进行依赖收集。</li>
 <li>在修改对象的值的时候，会触发对应的 setter， setter通知之前依赖收集得到的 Dep 中的每一个 Watcher，告诉它们自己的值改变了，需要重新渲染视图。这时候这些 Watcher就会开始调用 update 来更新视图。</li>
 </ol>
+<h3 id="vue2-有哪些问题"><a href="#vue2-有哪些问题" class="headerlink" title="vue2 有哪些问题"></a>vue2 有哪些问题</h3><p>1、新增属性、删除属性界面不会更新<br>2、直接通过下标修改数组，界面不会更新<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 元数据</span></span><br><span class="line"><span class="keyword">let</span> person = &#123;</span><br><span class="line">	name: <span class="string">'lilei'</span>,</span><br><span class="line">  age: <span class="number">18</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 模拟vue2中响应式实现</span></span><br><span class="line"><span class="keyword">let</span> p = &#123;&#125;; <span class="comment">// 代理数据</span></span><br><span class="line"><span class="built_in">Object</span>.defineProperty(</span><br><span class="line">	p,</span><br><span class="line">  <span class="string">'name'</span>,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 拦截读操作（查）</span></span><br><span class="line">  	get() &#123;</span><br><span class="line">      <span class="keyword">return</span> person.name;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 拦截写操作（改）</span></span><br><span class="line">    set(newValue) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'读取name,在这里去更新页面'</span>)</span><br><span class="line">      person.age = newValue; </span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
 <p>源码分析：</p>
 <p><a href="https://lozoe.github.io/vue-analysis/" target="_blank" rel="noopener">https://lozoe.github.io/vue-analysis/</a></p>
 <p>参考：</p>
@@ -408,7 +409,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是响应式"><span class="toc-number">2.</span> <span class="toc-text">什么是响应式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何侦测数据的变化"><span class="toc-number">3.</span> <span class="toc-text">如何侦测数据的变化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法1-Object-defineProperty"><span class="toc-number">3.1.</span> <span class="toc-text">方法1.Object.defineProperty</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法2-Proxy"><span class="toc-number">3.2.</span> <span class="toc-text">方法2.Proxy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要收集依赖"><span class="toc-number">4.</span> <span class="toc-text">为什么要收集依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#订阅者-Dep"><span class="toc-number">5.</span> <span class="toc-text">订阅者 Dep</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-为什么引入-Dep"><span class="toc-number">5.1.</span> <span class="toc-text">1.为什么引入 Dep</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Dep的简单实现"><span class="toc-number">5.2.</span> <span class="toc-text">2. Dep的简单实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#观察者-Watcher"><span class="toc-number">6.</span> <span class="toc-text">观察者 Watcher</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-为什么引入Watcher"><span class="toc-number">6.1.</span> <span class="toc-text">1.为什么引入Watcher</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Watcher的简单实现"><span class="toc-number">6.2.</span> <span class="toc-text">2.Watcher的简单实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#收集依赖"><span class="toc-number">6.2.1.</span> <span class="toc-text">收集依赖</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">7.</span> <span class="toc-text">写在最后</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是响应式"><span class="toc-number">2.</span> <span class="toc-text">什么是响应式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何侦测数据的变化"><span class="toc-number">3.</span> <span class="toc-text">如何侦测数据的变化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#方法1-Object-defineProperty"><span class="toc-number">3.1.</span> <span class="toc-text">方法1.Object.defineProperty</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#方法2-Proxy"><span class="toc-number">3.2.</span> <span class="toc-text">方法2.Proxy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要收集依赖"><span class="toc-number">4.</span> <span class="toc-text">为什么要收集依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#订阅者-Dep"><span class="toc-number">5.</span> <span class="toc-text">订阅者 Dep</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-为什么引入-Dep"><span class="toc-number">5.1.</span> <span class="toc-text">1.为什么引入 Dep</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Dep的简单实现"><span class="toc-number">5.2.</span> <span class="toc-text">2. Dep的简单实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#观察者-Watcher"><span class="toc-number">6.</span> <span class="toc-text">观察者 Watcher</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-为什么引入Watcher"><span class="toc-number">6.1.</span> <span class="toc-text">1.为什么引入Watcher</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Watcher的简单实现"><span class="toc-number">6.2.</span> <span class="toc-text">2.Watcher的简单实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#收集依赖"><span class="toc-number">6.2.1.</span> <span class="toc-text">收集依赖</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#写在最后"><span class="toc-number">7.</span> <span class="toc-text">写在最后</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vue2-有哪些问题"><span class="toc-number">7.1.</span> <span class="toc-text">vue2 有哪些问题</span></a></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -584,11 +585,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -604,15 +605,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
