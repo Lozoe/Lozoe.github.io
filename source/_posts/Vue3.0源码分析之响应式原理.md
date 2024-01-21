@@ -379,7 +379,7 @@ export function track(target, operationType, key) {
 <img src="demo.png" alt="demo" width="200">
 
 效果符合预期，那么它是怎么实现的呢？首先来看看这个阶段的原理图：
-<img src="原理.png" alt="原理" width="200">
+<img src="原理.png" alt="原理" width="500">
 
 当修改对象的某个属性值的时候，会触发对应的 setter。
 
