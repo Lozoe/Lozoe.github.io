@@ -912,3 +912,10 @@ compoted: https://www.cnblogs.com/xiaoheibanfe/p/14131508.html
 computed: https://juejin.cn/post/6979055167228346376
 
 vue3 更新机制的理解：https://juejin.cn/post/6912419591847313422
+
+effect: https://juejin.cn/post/6897109326108819464
+
+《深入浅出vue.js》
+《剖析 Vue.js 内部运行机制》
+Reflect: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Reflect
+Symbol: https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol
