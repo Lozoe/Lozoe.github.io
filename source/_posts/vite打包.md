@@ -42,15 +42,15 @@ tags:
 
 基于依赖分析的打包工具，打包工具可以基于依赖分析实现 treeshking、code splitting 等优化，可以配合 runtime 代码实现 lazy load等。如 Webpack，就是通过抓取-编译-构建整个应用的代码，生成一份编译后能良好兼容各个浏览器的的生产环境代码。在开发环境流程也基本相同，需要先将整个应用构建打包后，再把打包后的代码交给dev server。
 
-![webpack-dev-server](webpack-dev-server.png)
+<img src="webpack-dev-server.png" alt="webpack-dev-server" width="500">
 
 Vite直接将源码交给浏览器，实现dev server秒开，浏览器显示页面需要相关模块时，再向dev server发起请求，服务器简单处理后，将该模块返回给浏览器，实现真正意义的按需加载
 
-![vite-dev-server](vite-dev-server.png)
+<img src="vite-dev-server.png" alt="vite-dev-server" width="500">
 
 ### Poc
 
-![yyx](yyx.png)
+<img src="yyx.png" alt="yyx" width="500">
 vite最开始来自己于 evan you 的一个 idea，而在这之前，他就已经有类似的想法，即[vue-dev-server](https://github.com/vuejs/vue-dev-server)
 
 > 想象一下，你可以在浏览器中本地导入 Vue 单文件组件......无需构建步骤。
@@ -61,20 +61,20 @@ vite最开始来自己于 evan you 的一个 idea，而在这之前，他就已�
 	○ 文件内 npm 包的导入.js（仅包名称）会被动态重写以指向本地安装的文件。目前仅vue支持特殊情况。其他包可能需要进行转换才能作为本地浏览器目标 ES 模块公开。
 
 demo 版的 vite 分别实现了以下功能
-![0](0.png)
+<img src="0.png" alt="0" width="500">
 - 将当前项目目录作为静态文件服务器的根目录
-![1](1.png)
+<img src="1.png" alt="1" width="500">
 - 拦截部分文件请求
-![2](2.png)
+<img src="2.png" alt="2" width="500">
 - 处理代码中import node_modules中的模块
-![3](3.png)
+<img src="3.png" alt="3" width="500">
 - 处理vue单文件组件(SFC)的编译
-![4](4.png)
+<img src="4.png" alt="4" width="500">
 采用@vue/compiler-sfc 来解析单文件组件，将组件解析分 template、script、style 三部分
 - 通过WebSocket实现HMR
-![5](5.png)
-![5_2](5_2.png)
-![6](6.png)
+<img src="5.png" alt="5" width="500">
+<img src="5_2.png" alt="5_2" width="500">
+<img src="6.png" alt="6" width="500">
 
 ### Product
 
