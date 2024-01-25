@@ -1,6 +1,7 @@
 ---
 title: Promise对象池
 date: 2024-01-25 22:37:30
+categories: [JavaScript]
 tags:
 ---
 
