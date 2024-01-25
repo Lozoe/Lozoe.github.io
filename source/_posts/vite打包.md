@@ -120,3 +120,47 @@ Vite 会接受到来自client 的消息。通过不同的消息触发一些事�
 1. vite的核心正是依靠浏览器对ES Module规范的实现， 借助esm +  nobundle 所以构建快
 2. 建立 在 esbuild   + rollup  两大基础上
 3. 重点概念，依赖预构建，HMR 热更新
+
+### 插件
+通常的惯例是创建一个 Vite/Rollup 插件作为一个返回实际插件对象的工厂函数。该函数可以接受允许用户自定义插件行为的选项。
+```js
+const fileRegex = /\.(my-file-ext)$/
+
+export default function myPlugin() {
+  return {
+    name: 'transform-file',
+
+    transform(src, id) {
+      if (fileRegex.test(id)) {
+        return {
+          code: compileFileToJS(src),
+          map: null // 如果可行将提供 source map
+        }
+      }
+    },
+  }
+}
+```
+Vite插件是一个拥有名称、创建钩子(build hook)或生成钩子(output generate hook)的对象。如果含有配置功能 ，形式为一个接受插件选项，返回插件对象的函数。在开发中，Vite 开发服务器会创建一个插件容器来调用 Rollup 构建钩子，与 Rollup 如出一辙。同时 vite 提供了自己的独有的五个钩子函数，服务于特定的 vite 目标，这些钩子会被 rollup 忽略。
+
+ |  配置  |  说明  |  与 rollup 共享 |
+| --- | --- | --- |
+| name | 插件名称 | 是 |
+| config | 解析 vite 配置前调用，可以自定义配置，最后会与 vite 基础配置合并 | 否 |
+| configResolved | 解析 Vite 配置后调用。可以读取 vite 的配置，进行一些操作 | 否 |
+| configureServer|用来获取 Vite Dev Server 实例，添加中间件，配置开发服务器 | 否 | 
+| transformIndexHtml | 转换 index.html | 否 | 
+| handleHotUpdate | 执行自定义更新处理 | 否 | 
+| options  | 收集 rollup 配置前，vite 服务启动时调用，可以和 rollup 配置进行合并 | 是 | 
+| buildStart  | rollup 构建中，vite 服务启动时调用，在这个函数中可以访问 rollup 的配置 | 是  | 
+| resolveId  | 解析模块时调用，可以返回一个特殊的 resolveId 来指定某个 import 语句加载特定的模块  | 是  | 
+| load  | 解析模块时调用，可以返回代码块来指定某个 import 语句加载特定的模块  | 是  | 
+| transform  | 解析模块时调用，将源代码进行转换，输出转换后的结果，类似于 webpack 的 loader  | 是 | 
+| buildEnd  | vite 本地服务关闭前，rollup 输出文件到目录前调用  |    | 
+| closeBundle  | vite 本地服务关闭前，rollup 输出文件到目录前调用	 |    | 
+
+
+vite 开发时
+● 服务器启动阶段: options和buildStart钩子会在服务启动时被调用。
+● 请求响应阶段: 当浏览器发起请求时，Vite 内部依次调用resolveId、load和transform钩子。
+● 服务器关闭阶段: Vite 会依次执行buildEnd和closeBundle钩子。
