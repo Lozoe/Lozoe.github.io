@@ -166,6 +166,92 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Vue之vuex在ts中的应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/05/21/Vue之vuex在ts中的应用/">Vue之vuex在ts中的应用</a>
+    </h1>
+  
+
+        
+        <a href="/2020/05/21/Vue之vuex在ts中的应用/" class="archive-article-date">
+  	<time datetime="2020-05-21T07:22:01.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-05-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前在使用 Vuex 的时候，主要是依赖 state、getters、mutations 以及 actions，并且可以将它们模块化</p>
+<h2 id="state-状态"><a href="#state-状态" class="headerlink" title="state 状态"></a>state 状态</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Module, VuexModule &#125; <span class="keyword">from</span> <span class="string">'vuex-module-decorators'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> Vehicle <span class="keyword">extends</span> VuexModule &#123;</span><br><span class="line">    wheels = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 来替代之前的</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    state: &#123;</span><br><span class="line">        wheels: <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Getter-与-class-style-中的-computed-类似，也是借助-getters-来实现的"><a href="#Getter-与-class-style-中的-computed-类似，也是借助-getters-来实现的" class="headerlink" title="Getter 与 class-style 中的 computed 类似，也是借助 getters 来实现的"></a>Getter 与 class-style 中的 computed 类似，也是借助 getters 来实现的</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Module, VuexModule &#125; <span class="keyword">from</span> <span class="string">'vuex-module-decorators'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> Vehicle <span class="keyword">extends</span> VuexModule &#123;</span><br><span class="line">    wheels = <span class="number">2</span></span><br><span class="line">    <span class="keyword">get</span> axles() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.wheels / <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 来代替之前的</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    state: &#123;</span><br><span class="line">        wheels: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    getters: &#123;</span><br><span class="line">        axles: <span class="function">(<span class="params">state</span>) =&gt;</span> state.wheels / <span class="number">2</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Mutation-用来修改-state，与-Vuex-in-js-一样，只能用来实现同步操作"><a href="#Mutation-用来修改-state，与-Vuex-in-js-一样，只能用来实现同步操作" class="headerlink" title="Mutation 用来修改 state，与 Vuex in js 一样，只能用来实现同步操作"></a>Mutation 用来修改 state，与 Vuex in js 一样，只能用来实现同步操作</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Module, VuexModule, Mutation &#125; <span class="keyword">from</span> <span class="string">'vuex-module-decorators'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> Vehicle <span class="keyword">extends</span> VuexModule &#123;</span><br><span class="line">    wheels = <span class="number">2</span></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Mutation</span></span><br><span class="line">    puncture(n: <span class="built_in">number</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.wheels = <span class="keyword">this</span>.wheels - n</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 来替代之前的</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    state: &#123;</span><br><span class="line">        wheels: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    mutations: &#123;</span><br><span class="line">        puncture: <span class="function">(<span class="params">state, payload</span>) =&gt;</span> &#123;</span><br><span class="line">            state.wheels = state.wheels - payload</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="actions-用来实现异步操作"><a href="#actions-用来实现异步操作" class="headerlink" title="actions 用来实现异步操作"></a>actions 用来实现异步操作</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// import &#123; Module, VuexModule, Mutation &#125; from 'vuex-module-decorators'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// @Module</span></span><br><span class="line"><span class="comment">// export default class Vehicle extends VuexModule &#123;</span></span><br><span class="line"><span class="comment">//     wheels = 2</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//     @Mutation</span></span><br><span class="line"><span class="comment">//     addWheel(payload: number) &#123;</span></span><br><span class="line"><span class="comment">//         this.wheels = this.wheels + payload</span></span><br><span class="line"><span class="comment">//     &#125;    </span></span><br><span class="line"><span class="comment">// &#125;</span></span><br><span class="line"><span class="keyword">const</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    state: &#123;</span><br><span class="line">        wheels: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    mutations: &#123;</span><br><span class="line">        addWheel: <span class="function">(<span class="params">state, payload</span>) =&gt;</span> &#123;</span><br><span class="line">            state.wheels = state.wheels + payload</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    actions: &#123;</span><br><span class="line">        fetchNewWheels: <span class="keyword">async</span> (context, payload) =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> wheels = <span class="keyword">await</span> request.get(payload)</span><br><span class="line">            context.commit(<span class="string">'addWheel'</span>, wheels)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 来替代之前的</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> request = <span class="built_in">require</span>(<span class="string">'request'</span>)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">    state: &#123;</span><br><span class="line">        wheels: <span class="number">2</span></span><br><span class="line">    &#125;,</span><br><span class="line">    mutations: &#123;</span><br><span class="line">        addWheel: <span class="function">(<span class="params">state, payload</span>) =&gt;</span> &#123;</span><br><span class="line">            state.wheels = state.wheels + payload</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    actions: &#123;</span><br><span class="line">        fetchNewWheels: <span class="keyword">async</span> (context, payload) =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> wheels = <span class="keyword">await</span> request.get(payload)</span><br><span class="line">            context.commit(<span class="string">'addWheel'</span>, wheels)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上，我们简单实现了一个 Vuex 的 module，那么如何使用呢？将上述代码梳理一下，并配置到 Vuex 中，具体</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; Module, VuexModule &#125; <span class="keyword">from</span> <span class="string">'vuex-module-decorators'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Module</span>(&#123; name: <span class="string">'Vehicle'</span>,  namespaced: <span class="literal">true</span>, stateFactory: <span class="literal">true</span> &#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">class</span> Vehicle <span class="keyword">extends</span> VuexModule &#123;</span><br><span class="line">    <span class="keyword">public</span> wheels = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">get</span> axles() &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.wheels / <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Mutation</span></span><br><span class="line">    <span class="keyword">public</span> puncture(n: <span class="built_in">number</span>): <span class="built_in">void</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.wheels = <span class="keyword">this</span>.wheels - n;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请注意 Module 的配置，我们需要将需要 namespaced: true，并且为该空间命名，并且引入到项目中</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> Vuex <span class="keyword">from</span> <span class="string">'vuex'</span></span><br><span class="line"><span class="keyword">import</span> Vehicle <span class="keyword">from</span> <span class="string">'./Vehicle'</span></span><br><span class="line"></span><br><span class="line">Vue.use(Vuex)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="keyword">new</span> Vuex.Store(&#123;</span><br><span class="line">    modules: &#123;</span><br><span class="line">        Vehicle,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>之后就是使用 vuex-class，来获取该命名空间下的状态以及方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import &#123; Component, Vue &#125; from &apos;vue-property-decorator&apos;;</span><br><span class="line">import &#123;</span><br><span class="line">    Getter,</span><br><span class="line">    Mutation,</span><br><span class="line">    namespace,</span><br><span class="line">&#125; from &apos;vuex-class&apos;;</span><br><span class="line"></span><br><span class="line">const Vehicle = namespace(&apos;Vehicle&apos;);</span><br><span class="line"></span><br><span class="line">@Component</span><br><span class="line">export default class HelloWorld extends Vue &#123;</span><br><span class="line">	// 引入 Vechicle 下的 Getters</span><br><span class="line">    @Vehicle.Getter(&apos;axles&apos;) public axles: number | undefined;</span><br><span class="line">    // 引入 Vechicle 下的 puncture</span><br><span class="line">    @Vehicle.Mutation(&apos;puncture&apos;)</span><br><span class="line">    public mutationPuncture!: (n: number) =&gt; void;</span><br><span class="line"></span><br><span class="line">    private message: string = &apos;world&apos;;</span><br><span class="line"></span><br><span class="line">    public render() &#123;</span><br><span class="line">        const &#123; message, axles, mutationPuncture &#125;: HelloWorld = this;</span><br><span class="line"></span><br><span class="line">        return (</span><br><span class="line">            &lt;div onClick=&#123; () =&gt; mutationPuncture(1) &#125;&gt;</span><br><span class="line">                &lt;h5 ref=&apos;quickEntry&apos;&gt;Hello &#123;message&#125; &#123; axles &#125;&lt;/h5&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>利用 namespace 可以很方便的获取到 Vuex 的 Vehicle 模块，再配合 Getter、Mutation 就可以完成引入</p>
+<p>总体来说整个体验的过程很像之前写 Mobx &amp; React in Typescript 的感觉，很相像。在实际项目中使用的话，会有 ts 带来的一些便利，但是也感觉总有些牵强，其他后续 3.0，看看能否与 ts 产生奇妙的化学反应吧。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/05/21/Vue之vuex在ts中的应用/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Vue之vue-property-decorator" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1074,160 +1160,6 @@
 
 
   
-    <article id="post-a11y" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/30/a11y/">a11y</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/30/a11y/" class="archive-article-date">
-  	<time datetime="2020-03-30T04:01:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="什么是Accessibility-a11y"><a href="#什么是Accessibility-a11y" class="headerlink" title="什么是Accessibility - a11y"></a>什么是Accessibility - a11y</h2><p><img src="/2020/03/30/a11y/a11y.png" alt="a11y"></p>
-<p>Accessibility，通常缩写为 A11Y ，这缩写取的是首字母 + 中间字母长度 + 结尾字母，译为 “可访问性”。这是一种让尽可能多的人访问我们所开发的网站的技术概念，通过这个概念，让互联网访问公平变得可能。</p>
-<p>A11Y是一件非常正确的事，在某些国家与地区，甚至提供无障碍站点已经成为了法律的一部分。</p>
-<p>Web根本的目的是为了服务于所有人，而不是受限于软硬件，语言，文化，位置以及身心状态。</p>
-<p>Web Accessibility，译为 “网页亲和力（又称网络无障碍、网络可达性、网络可用性、网页可访问性）” 。</p>
-<p>无论是一般人或者是身心障碍的朋友，都需要有规范的网站方可便捷地获取信息，无障碍网页则是拓展对网页的规范，以更严谨的态度及条件来设计网页，使网页内容落实“无障碍”让不同程度或需求的用户，可以顺畅的获取网站上的信息。</p>
-<h2 id="我们所应该关注的障碍类型"><a href="#我们所应该关注的障碍类型" class="headerlink" title="我们所应该关注的障碍类型"></a>我们所应该关注的障碍类型</h2><p>根据W3C所处的Web内容<a href="https://www.w3.org/Translations/WCAG21-zh/" target="_blank" rel="noopener">无障碍指南（WCAG）</a>所提到的，主要的障碍类型有以下四类：</p>
-<ul>
-<li>视力障碍</li>
-<li>听力障碍</li>
-<li>行动障碍</li>
-<li>认知障碍</li>
-</ul>
-<p>世界卫生组织(World Health Organization)的残疾和健康(Disability and health)状况说明书指出，“超过10亿人，约占世界人口的15%，患有某种形式的残疾”，“1.1亿至1.9亿成年人在功能上存在重大困难。”</p>
-<h3 id="视力障碍（Visual-impairments）"><a href="#视力障碍（Visual-impairments）" class="headerlink" title="视力障碍（Visual impairments）"></a>视力障碍（Visual impairments）</h3><p>视力障碍，是指视力下降到一定程度，导致某种程度的问题无法通过通常的手段（例如眼镜）解决。有些人还包括因无法接触眼镜或隐形眼镜而导致视力下降的人。视力障碍可能会导致人们在日常日常活动（例如驾车，阅读，社交和步行）中遇到困难。这部分的人通常会使用一些辅助的功能来阅读屏幕，例如放大镜，屏幕缩放以及屏幕阅读器。常见的屏幕阅读器有：</p>
-<p>付费的产品：JAWS (Windows) 和 Dolphin Screen Reader (Windows)。<br>免费的产品：NVDA (Windows)，ChromeVox (Chrome, Windows and Mac OS X)和 Orca (Linux)。<br>内置的产品：VoiceOver (macOS, iPadOS, iOS)，Narrator (Microsoft Windows，ChromeVox (on Chrome OS)和 TalkBack (Android).</p>
-<h3 id="听力障碍（Hearing-impairments）"><a href="#听力障碍（Hearing-impairments）" class="headerlink" title="听力障碍（Hearing impairments）"></a>听力障碍（Hearing impairments）</h3><p>听觉障碍又称听力缺损，指听觉部分或完全丧失，而耳聋人士则是指完全没有或几乎没有听力者。听力缺损可能发生在单耳或双耳，有可能是暂时或永久性质。孩童的听力问题可能影响语言学习，而对成人可能造成工作上的困难。对某些人而言，尤其是老年人口，听力缺损可能造成孤独感。</p>
-<p>听力障碍的人可能听力水平低或甚至完全听不见声音，听力受损的人可能会使用ATs(请参阅针对患有听力、语音、言语或语言障碍的人的辅助设备)，不过在Web中并没有专门的ATs可以使用。</p>
-<h3 id="行动障碍（Mobility-impairments）"><a href="#行动障碍（Mobility-impairments）" class="headerlink" title="行动障碍（Mobility impairments）"></a>行动障碍（Mobility impairments）</h3><p>行动障碍是指一个人不能使用他/她的一条或多条四肢，或缺乏行走、抓取或抬起物体的力量。轮椅、拐杖或助行器的使用可用于辅助行动。活动能力障碍可能由多种因素引起，如疾病、事故或先天性疾病，也可能是神经肌肉和骨科损伤所致。<br>声控轮椅是提高行动障碍人士生活质量最重要的发明之一。声控轮椅最初发明于1977年。<br>缺少手臂或者手指的障碍人士会严重影响使用键盘与鼠标，但是在近些年，语音识别设备跟软件都有了极大的发展，也为这部分障碍人士提供了不少的便利。</p>
-<h3 id="认知障碍（Cognitive-impairments）"><a href="#认知障碍（Cognitive-impairments）" class="headerlink" title="认知障碍（Cognitive impairments）"></a>认知障碍（Cognitive impairments）</h3><p>认知障碍是一种范围广泛的残疾类型，从能力最有限的智障人士到我们随着年龄增长和思考和记忆困难而出现的所有人。 该范围包括患有精神疾病的人，例如抑郁症和精神分裂症。 它还包括有学习障碍的人，例如阅读障碍和注意力缺陷多动障碍。 重要的是，尽管认知障碍的临床定义存在很多差异，但与之相关的人们会遇到一系列常见的功能问题。 其中包括难以理解内容，记住如何完成任务以及因网页布局不一致而引起的混乱。</p>
-<p>另外提一点，就是癫痫患者也属于我们认知障碍者的范畴，我们在开发的时候，这部分人士也是我们需要考虑的。</p>
-<p>在<a href="https://developer.mozilla.org/en-US/docs/Learn/Accessibility/What_is_accessibility" target="_blank" rel="noopener">MDN</a>上有为了认知障碍者总结的开发守则：</p>
-<ul>
-<li>用多种方式展示内容，例如通过文本，语音或视频；</li>
-<li>编写易于理解的内容，例如少用方言或者颜文字；</li>
-<li>重要的内容要细心写；</li>
-<li>尽量减少干扰，例如一些没什么用的功能与广告；</li>
-<li>网页布局与导航要一致；</li>
-<li>常规的元素样式，例如带下划线的链接（未访问时为蓝色）和访问时为紫色；</li>
-<li>流程交互要具有进度以及步骤指示；</li>
-<li>用户权限认证方式要简单；</li>
-<li>错误信息要展示清楚；</li>
-<li>表单要便于填写与操作。</li>
-</ul>
-<h2 id="WCAG"><a href="#WCAG" class="headerlink" title="WCAG"></a>WCAG</h2><p>Web内容可访问性指南(WCAG)是由互联网的主要国际标准组织万维网联盟(W3C)的Web可访问性倡议(WAI)发布的一系列Web可访问性指南的一部分。它们是一组使Web内容更易于访问的建议，主要针对残疾人，但也适用于所有用户代理，包括高度受限的设备，如移动电话。WCAG2.0，于2008年12月发布，并于2012年10月成为国际标准化组织标准，ISO/IEC 40500：2012。WCAG 2.1于2018年6月成为W3C推荐标准。</p>
-<p><a href="https://www.w3.org/Translations/WCAG20-zh/" target="_blank" rel="noopener">WCAG主要指南</a>如下：</p>
-<h3 id="可感知性（Perceivable）"><a href="#可感知性（Perceivable）" class="headerlink" title="可感知性（Perceivable）"></a>可感知性（Perceivable）</h3><p>信息和用户界面组件必须以可感知的方式呈现给用户。</p>
-<p>为所有非文本内容提供替代文本，使其可以转化为人们需要的其他形式，如大字体印刷、盲文、语音、符号或更简单的语言。<br>为时基媒体提供替代。<br>创建可用不同方式呈现的内容（例如简单的布局），而不会丢失信息或结构。</p>
-<h3 id="可操作性（Operable）"><a href="#可操作性（Operable）" class="headerlink" title="可操作性（Operable）"></a>可操作性（Operable）</h3><p>用户界面组件和导航必须可操作。</p>
-<ul>
-<li>使所有功能都能通过键盘来操作。</li>
-<li>为用户提供足够的时间用以阅读和使用内容。</li>
-<li>不要设计会导致癫痫发作的内容。</li>
-<li>提供帮助用户导航、查找内容、并确定其位置的方法。</li>
-</ul>
-<h3 id="可理解性（Understandable）"><a href="#可理解性（Understandable）" class="headerlink" title="可理解性（Understandable）"></a>可理解性（Understandable）</h3><p>信息和用户界面操作必须是可理解的。</p>
-<ul>
-<li>使文本内容可读，可理解。</li>
-<li>让网页以可预见的方式呈现和操作。</li>
-<li>帮助用户避免和纠正错误。</li>
-</ul>
-<h3 id="鲁棒性（Robust）"><a href="#鲁棒性（Robust）" class="headerlink" title="鲁棒性（Robust）"></a>鲁棒性（Robust）</h3><p>内容必须健壮到可信地被种类繁多的用户代理(包括辅助技术)所解释。</p>
-<p>最大化兼容当前和未来的用户代理(包括辅助技术)。</p>
-<h2 id="WAI-ARIA"><a href="#WAI-ARIA" class="headerlink" title="WAI-ARIA"></a>WAI-ARIA</h2><p>Web Accessibility Initiative –可访问的富Internet应用程序（WAI-ARIA）是由万维网联盟（W3C）发布的一项<em>技术规范</em>，该规范指定了如何增加网页的可访问性，尤其是动态内容以及使用该工具开发的用户界面组件。 Ajax，HTML，JavaScript和相关技术。</p>
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>WAI-ARIA是A11Y应用规范，主要就是针对于上述的障碍类型以及WCAG要求的技术细则，运用好这些技术细则，那么浏览障碍人士便能轻松访问我们的应用。</p>
-<p>在本文，我们讨论下前端里的WAI-ARIA规范，以下是规范里的三个主要特征：</p>
-<h3 id="角色（Roles）"><a href="#角色（Roles）" class="headerlink" title="角色（Roles）"></a>角色（Roles）</h3><p>WAI-ARIA角色是使用role属性在元素上设置的，类似于role属性[role]中定义的role属性。</p>
-<p>例子如下：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">role</span>=<span class="string">"menuitem"</span>&gt;</span>Open file…<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>此分类中的role可选属性如下：</p>
-<p><img src="/2020/03/30/a11y/a11y-role.png" alt="a11y-role"></p>
-<p>如上图，role 可选属性有点多，但其实主要就分了四类：</p>
-<p>抽象角色（Abstract Roles）<br>小部件角色（Widget Roles）<br>文件结构角色（Document Structure Roles）<br>地标角色（Landmark Roles）</p>
-<p>其主要作用为：</p>
-<ul>
-<li>角色信息描述。</li>
-<li>相关角色的等级信息。</li>
-<li>角色上下文。</li>
-<li>引用其他规范中的相关概念。</li>
-<li>使用OWL（Web Ontology Language）提供允许语义继承的类型层次结构。</li>
-<li>每个角色支持的状态和属性。</li>
-</ul>
-<h3 id="状态与属性（States-and-Properties）"><a href="#状态与属性（States-and-Properties）" class="headerlink" title="状态与属性（States and Properties）"></a>状态与属性（States and Properties）</h3><p>WAI-ARIA提供了可访问性状态和属性的集合，这些状态和属性用于支持各种操作系统平台上的平台可访问性API。辅助技术可以通过公共的用户代理应用（例如读屏软件）DOM或通过映射到平台可访问性API来访问这些信息。当与角色结合时，用户代理应用可以为辅助技术提供用户界面信息，以便随时传递给用户。状态或属性的更改将导致向辅助技术发出通知，这可能会警告用户发生了更改。</p>
-<p>我们来看个例子：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">li</span> <span class="attr">role</span>=<span class="string">"menuitemcheckbox"</span> <span class="attr">aria-checked</span>=<span class="string">"true"</span>&gt;</span>Sort by Last Modified<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>上面的例子里，使用了一个<code>&lt;li&gt;</code>来创建一个可点击的菜单，通过JS的事件来改变aria-checked，从而让用户代理应用理解这部分的功能作用。</p>
-<p>由于这部分是用户主动进行的操作，并非默认状态，所以为了更佳的体验，我们可以对aria-checked=”true”时li进行样式处理，如下：</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-attr">[aria-checked="true"]</span> &#123; <span class="attribute">font-weight</span>: bold; &#125;</span><br><span class="line"><span class="selector-attr">[aria-checked="true"]</span><span class="selector-pseudo">:before</span> &#123; <span class="attribute">background-image</span>: <span class="built_in">url</span>(checked.gif); &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="焦点管理（Managing-Focus）"><a href="#焦点管理（Managing-Focus）" class="headerlink" title="焦点管理（Managing Focus）"></a>焦点管理（Managing Focus）</h3><p>WAI-ARIA里提倡，所有的用户交互对象都应该是可聚焦的，就是键盘可选中的。</p>
-<p>当我们使用标准的HTML标签以及WAI-ARIA小部件时，开发者应该按顺序创建键盘可访问的节点，例如Tabs键，方向键等。</p>
-<p>参考：<br><a href="https://juejin.im/post/5dee4e39f265da33ba5a799b" target="_blank" rel="noopener">https://juejin.im/post/5dee4e39f265da33ba5a799b</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/30/a11y/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1337,6 +1269,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1349,14 +1285,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
@@ -1365,7 +1293,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1381,15 +1309,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1397,11 +1321,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">原型链</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1417,11 +1349,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vue</a>
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+                <a href="javascript:void(0)" class="js-tag color4">vue</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1453,6 +1385,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -1462,14 +1402,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">

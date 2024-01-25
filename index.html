@@ -166,6 +166,68 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Promise对象池" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/25/Promise对象池/">Promise对象池</a>
+    </h1>
+  
+
+        
+        <a href="/2024/01/25/Promise对象池/" class="archive-article-date">
+  	<time datetime="2024-01-25T14:37:30.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 递归辅助函数</span></span><br><span class="line"><span class="comment"> * 跟踪函数数组 (functionIndex) 中的当前索引和正在执行的 promise 的当前数量 (inProgressCount)。我们定义一个递归函数 helper，它让我们能够异步执行代码。所有这些代码都包含在返回的 promise 的回调中。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">1、每次我们执行一个新的函数，我们都会增加 functionIndex，并且我们会增加 inProgressCount。</span></span><br><span class="line"><span class="comment">2、每次一个 promise 解决，我们都会减少 inProgressCount，并且在 inProgressCount &lt; n 和还有剩余需要执行的函数时重复步骤 1</span></span><br><span class="line"><span class="comment">3、如果在任何时刻，functionIndex == functions.length 和 inProgressCount == 0，我们都可以完成并应该解决返回的 promise。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> promisePool = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">functions, n</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> &#123;</span><br><span class="line">       <span class="keyword">let</span> inProgressCount = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">let</span> functionIndex = <span class="number">0</span>;</span><br><span class="line">       <span class="function"><span class="keyword">function</span> <span class="title">helper</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">           <span class="keyword">if</span> (functionIndex &gt;= functions.length) &#123;</span><br><span class="line">               <span class="keyword">if</span> (inProgressCount === <span class="number">0</span>) resolve();</span><br><span class="line">               <span class="keyword">return</span>;</span><br><span class="line">           &#125;</span><br><span class="line"></span><br><span class="line">           <span class="keyword">while</span> (inProgressCount &lt; n &amp;&amp; functionIndex &lt; functions.length) &#123;</span><br><span class="line">               inProgressCount++;</span><br><span class="line">               <span class="keyword">const</span> promise = functions[functionIndex]();</span><br><span class="line">               functionIndex++;</span><br><span class="line">               promise.then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">                   inProgressCount--;</span><br><span class="line">                   helper();</span><br><span class="line">               &#125;);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       helper();</span><br><span class="line">   &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 异步/等待 + Promise.all() + Array.shift()</span></span><br><span class="line"><span class="comment">1、如果没有要执行的函数，立即返回（基本情况）。</span></span><br><span class="line"><span class="comment">2、从函数列表中删除第一个函数（使用 Array.shift）。</span></span><br><span class="line"><span class="comment">3、执行同一个第一个函数，并等待它完成。</span></span><br><span class="line"><span class="comment">4、递归调用自己并等待自己完成。这样，只要有任何函数完成，队列中的下一个函数就会被处理。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> promisePool2 = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">functions, n</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">evaluateNext</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (functions.length === <span class="number">0</span>) <span class="keyword">return</span>;</span><br><span class="line">        <span class="keyword">const</span> fn = functions.shift();</span><br><span class="line">        <span class="keyword">await</span> fn();</span><br><span class="line">        <span class="keyword">await</span> evaluateNext();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> nPromises = <span class="built_in">Array</span>(n).fill().map(evaluateNext);</span><br><span class="line">    <span class="keyword">await</span> <span class="built_in">Promise</span>.all(nPromises);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 修改方法二的一般想法，并用一些语法花样使它变得非常短。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">代替用 Array.shift 移除数组的第一个元素的做法，我们可以将变量 n 当作当前的索引使用。</span></span><br><span class="line"><span class="comment">代替用 if 语句检查是否还有函数要执行的做法，我们可以在函数调用时使用 可选链接 (functions[n++]?.())。这种语法会在 functions[n++] 是 null 或 undefined 时立即返回 undefined。没有这种语法，就会抛出一个错误。</span></span><br><span class="line"><span class="comment">举例说明，我们可以使用 promise 链式调用 (.then(evaluateNext))，而不是在不同的行中使用 await。</span></span><br><span class="line"><span class="comment">在最初并行执行前 n 个 promise 时，我们需要写 functions.slice(0, n).map(f =&gt; f().then(evaluateNext)) 而不是简单地写 functions.slice(0, n).map(evaluateNext)。那样，第 n 个 promise 就会在辅助函数外部立即执行，这样我们就可以正确地使用 n 作为索引变量。</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">var</span> promisePool3 = <span class="keyword">async</span> <span class="function"><span class="keyword">function</span>(<span class="params">functions, n</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">const</span> evaluateNext = <span class="function"><span class="params">()</span> =&gt;</span> functions[n++]?.().then(evaluateNext);</span><br><span class="line">   <span class="keyword">return</span> <span class="built_in">Promise</span>.all(functions.slice(<span class="number">0</span>, n).map(<span class="function"><span class="params">f</span> =&gt;</span> f().then(evaluateNext)));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2024/01/25/Promise对象池/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-模块化打包工具对比" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -186,7 +248,39 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>全局 window 的问题,定义的变量,函数,默认都在一个 window 作用域下. 比如<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// a.js</span></span><br><span class="line"><span class="keyword">var</span> userName = <span class="string">'牛夫人'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(userName);</span><br><span class="line"><span class="comment">// b.js</span></span><br><span class="line"><span class="keyword">var</span> userName = <span class="string">'小甜甜'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(userName);</span><br><span class="line"><span class="comment">// index.html写法1</span></span><br><span class="line">&lt;script src= <span class="string">'a.js'</span> /&gt;</span><br><span class="line">&lt;script src= <span class="string">'b.js'</span> /&gt;</span><br><span class="line"><span class="built_in">console</span>.log(userName); <span class="comment">// 小甜甜</span></span><br><span class="line"><span class="comment">// index.html写法2</span></span><br><span class="line">&lt;script src= <span class="string">'b.js'</span> /&gt;</span><br><span class="line">&lt;script src= <span class="string">'a.js'</span> /&gt;</span><br><span class="line"><span class="built_in">console</span>.log(userName); <span class="comment">// 牛夫人</span></span><br></pre></td></tr></table></figure></p>
+<p>仅仅只是引入 a.js和 b.js两个文件的顺序不同就会导致当前页面输出不一样的值.<br>而且没有模块化的话很容易把业务代码写在一个 很长的 js 里.<br>从性能来说,这个 js 会加载很长时间, 网站性能不好.<br>从代码角度来说. 很容易作用域相互混淆不说, 既不利于协作,也开发效率低<br>所以很需要模块化打包工具</p>
+<h2 id="模块化打包"><a href="#模块化打包" class="headerlink" title="模块化打包"></a>模块化打包</h2><p>所以当 Rollup 这种工具横空出世,模块化打包的概念开始流行.<br>你写代码的时候可以按照小模块分开写, 然后用上一个带有模块化打包功能的工具.<br>指定一个入口文件, 模块化打包工具会自动把你的文件按照入口和入口依赖的模块,按照顺序组织好.<br>这个过程,写代码就像搭积木. 你的项目是由一个个模块组成的.</p>
+<h2 id="二-模块化标准"><a href="#二-模块化标准" class="headerlink" title="二 模块化标准"></a>二 模块化标准</h2><h3 id="Commonjs"><a href="#Commonjs" class="headerlink" title="Commonjs"></a>Commonjs</h3><p>2009 年发布. Commonjs 最先开始使用是在 Nodejs 里提出的. 后来Webpack 能基于 Commonjs 打包.但是它的写法和 Nodejs 里的不是完全一样. Commonjs的写法是这样的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// user.js</span></span><br><span class="line"><span class="keyword">let</span> user = &#123;</span><br><span class="line">    getName:  <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'吴晓兰'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    getAge:  <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">888</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">exports = user;</span><br><span class="line"></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./user.js'</span>).</span><br></pre></td></tr></table></figure>
+<p>从写法上来说,它和 ECMA module 挺像的.但是他俩在引入方式上是不同的. 这里后面会讲.</p>
+<h3 id="ES6-module-推荐"><a href="#ES6-module-推荐" class="headerlink" title="ES6 module(推荐)"></a>ES6 module(推荐)</h3><p>这是 TC39 在 ECMA262 在2015 年发布的模块化标准方案. 优点多多.</p>
+<p>优点<br>静态引入, 所以比较方便做静态化代码分析. 能和构建工具结合的更好.</p>
+<p>缺点<br>无法根据表达式引入. 让他不能做一些更有意思的功能.</p>
+<h3 id="AMD"><a href="#AMD" class="headerlink" title="AMD"></a>AMD</h3><p>AMD 的意思是 Aysnc module AMD 和以上几种模块化的的最大区别从名字就可以看出来. 它主要是异步引入模块的.</p>
+<p>缺点<br>容易陷入地狱回调. 所以现在用的人也不是很多. 这种代码维护起来比较麻烦. 容易造 bug.</p>
+<h2 id="Commonjs-和-ES6-module-的区别"><a href="#Commonjs-和-ES6-module-的区别" class="headerlink" title="Commonjs 和 ES6 module 的区别"></a>Commonjs 和 ES6 module 的区别</h2><h3 id="Commonjs-必须引入整体-module-可以引入局部"><a href="#Commonjs-必须引入整体-module-可以引入局部" class="headerlink" title="Commonjs 必须引入整体,module 可以引入局部"></a>Commonjs 必须引入整体,module 可以引入局部</h3><p>比如同样的想要获得用户名 Commonjs 是这么写的</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> user = <span class="built_in">require</span>(<span class="string">'./user'</span>);</span><br><span class="line"><span class="keyword">const</span> userName = user.getName();</span><br></pre></td></tr></table></figure>
+<p>而 ES6 可以这样引入<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;getName&#125; <span class="keyword">from</span> <span class="string">'./user.js'</span></span><br><span class="line"><span class="keyword">const</span> userName = getName();</span><br></pre></td></tr></table></figure></p>
+<h3 id="引入方式分动态和静态"><a href="#引入方式分动态和静态" class="headerlink" title="引入方式分动态和静态"></a>引入方式分动态和静态</h3><p>Commonjs 的引入是支持写在表达式里的. 而 ES6 module 只能在最顶级引入,且不支持表达式 Commonjs 可以这么写</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(causeA) &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'./a.js'</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'./b.j'</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 写在 forEach 里.</span></span><br><span class="line">[<span class="string">'./a.js'</span>,<span class="string">'.b.js'</span>]).forEach(<span class="function"><span class="params">item</span>=&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">require</span>(item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>而 import 的引入只能在顶级引入字符串形式的文件地址, 不能引入表达式</p>
+<h3 id="值映射和值复制"><a href="#值映射和值复制" class="headerlink" title="值映射和值复制"></a>值映射和值复制</h3><p>Commonjs 里 require 进来的文件,不管你引入几次, 其实就是第一次执行. 然后会把这个执行结果存在内存里. 等你再次 require 和调用. 其实不会再执行了,而是获取这个文件第一次的执行结果. 来做个测试</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// user.js</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'我的天'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> user = &#123;</span><br><span class="line">    getName:  <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'吴晓兰'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    getAge:  <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">888</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">module</span>.exports = user;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">let</span> user = <span class="built_in">require</span>(<span class="string">'./user.js'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(user.getName());</span><br><span class="line"><span class="keyword">let</span> user2 = <span class="built_in">require</span>(<span class="string">'./user.js'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(use2r.getName());</span><br><span class="line"><span class="comment">// 执行 index.js,只会输出 1 个我的天.</span></span><br></pre></td></tr></table></figure>
+<h3 id="Commonjs-的引入可以只是挂载"><a href="#Commonjs-的引入可以只是挂载" class="headerlink" title="Commonjs 的引入可以只是挂载"></a>Commonjs 的引入可以只是挂载</h3><p>require 可以全局挂载不赋值变量, ES6 module 必须赋值.</p>
+<p>有时候我们只是想执行一个 js 文件,引入进来并执行就好. 并不需要再为它赋值. Commonjs 可以单独的引用执行. ES6 module 则不可以.<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">'./user'</span>); <span class="comment">// Commonjs写法</span></span><br><span class="line"><span class="keyword">import</span> user <span class="keyword">from</span> <span class="string">'./user'</span> <span class="comment">// ES6 module写法</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="三-模块化打包工具说明"><a href="#三-模块化打包工具说明" class="headerlink" title="三 模块化打包工具说明"></a>三 模块化打包工具说明</h2><p>开发工具演变</p>
+<p><img src="/2024/01/25/模块化打包工具对比/发展过程.png" alt="发展过程"></p>
+<ul>
+<li>Grunt,  比较早. 工作流打包,没有 Gulp 那么方便</li>
+<li>Gulp, 也是工作流. 比起 Grunt,他的 task 更方便复用</li>
+<li>Rollup,比较早期的模块化打包工具,就是他提出了 tree shaking</li>
+<li>Webpack.打包集大成者. 也是 Vue1-2 默认推荐的打包工具(目前使用最多)</li>
+<li>Turbopack: Webpack团队开发出的下一代打包工具,速度比 Webpack 快很多</li>
+<li>Vite: Vue 官方开发的打包工具.现在还支持 react 打包</li>
+</ul>
+<p><a href="https://juejin.cn/post/7207760939264311333" target="_blank" rel="noopener">https://juejin.cn/post/7207760939264311333</a></p>
+
       
 
       
@@ -1337,83 +1431,6 @@ switch (type) {
 
 
   
-    <article id="post-柯里化" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/09/柯里化/">柯里化</a>
-    </h1>
-  
-
-        
-        <a href="/2024/01/09/柯里化/" class="archive-article-date">
-  	<time datetime="2024-01-09T11:53:54.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-09</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h2><h3 id="实现柯里化函数"><a href="#实现柯里化函数" class="headerlink" title="实现柯里化函数"></a>实现柯里化函数</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> currying = <span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// fn 指官员消化老婆的手段</span></span><br><span class="line">    <span class="keyword">var</span> args = [].slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// args 指的是那个合法老婆</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 已经有的老婆和新搞定的老婆们合成一体，方便控制</span></span><br><span class="line">        <span class="keyword">var</span> newArgs = args.concat([].slice.call(<span class="built_in">arguments</span>));</span><br><span class="line">        <span class="comment">// 这些老婆们用 fn 这个手段消化利用，完成韦小宝前辈的壮举并返回</span></span><br><span class="line">        <span class="keyword">return</span> fn.apply(<span class="literal">null</span>, newArgs);</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 下为官员如何搞定7个老婆的测试</span></span><br><span class="line"><span class="comment">// 获得合法老婆</span></span><br><span class="line"><span class="keyword">var</span> getWife = currying(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> allWife = [].slice.call(<span class="built_in">arguments</span>);</span><br><span class="line">    <span class="comment">// allwife 就是所有的老婆的，包括暗渡陈仓进来的老婆</span></span><br><span class="line">    <span class="built_in">console</span>.log(allWife.join(<span class="string">";"</span>));</span><br><span class="line">&#125;, <span class="string">"合法老婆"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获得其他6个老婆</span></span><br><span class="line">getWife(<span class="string">"大老婆"</span>,<span class="string">"小老婆"</span>,<span class="string">"俏老婆"</span>,<span class="string">"刁蛮老婆"</span>,<span class="string">"乖老婆"</span>,<span class="string">"送上门老婆"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 换一批老婆</span></span><br><span class="line">getWife(<span class="string">"超越韦小宝的老婆"</span>);</span><br></pre></td></tr></table></figure>
-<h3 id="柯里化函数作用"><a href="#柯里化函数作用" class="headerlink" title="柯里化函数作用"></a>柯里化函数作用</h3><ol>
-<li>参数复用；2. 提前返回；3. 延迟计算/运行</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2024/01/09/柯里化/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1523,6 +1540,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1535,14 +1556,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
@@ -1551,7 +1564,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1567,15 +1580,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1583,11 +1592,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">原型链</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1603,11 +1620,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">vue</a>
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+                <a href="javascript:void(0)" class="js-tag color4">vue</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1639,6 +1656,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -1648,14 +1673,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">
