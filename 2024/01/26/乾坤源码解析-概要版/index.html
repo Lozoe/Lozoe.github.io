@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="L.Zoe">
 <meta property="og:description" content="乾坤源码解析Single-Spa 痛点single-spa就做了两件事 1. 加载微应用（加载方法还是用户自己提供的）2. 维护微应用状态（初始化、挂载、卸载）主要的问题1、对微应用的侵入性太强    ○ 微应用路由改造，添加一个特定的前缀    ○ 微应用入口改造，挂载点变更和生命周期函数导出    ○ 打包工具配置更改2、样式隔离问题3、JS 隔离4、资源预加载5、应用间通信第一个和第四个就不">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2024-01-26T09:10:29.558Z">
+<meta property="og:updated_time" content="2024-01-26T09:36:01.865Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="乾坤源码解析-概要版">
 <meta name="twitter:description" content="乾坤源码解析Single-Spa 痛点single-spa就做了两件事 1. 加载微应用（加载方法还是用户自己提供的）2. 维护微应用状态（初始化、挂载、卸载）主要的问题1、对微应用的侵入性太强    ○ 微应用路由改造，添加一个特定的前缀    ○ 微应用入口改造，挂载点变更和生命周期函数导出    ○ 打包工具配置更改2、样式隔离问题3、JS 隔离4、资源预加载5、应用间通信第一个和第四个就不">
@@ -210,6 +210,32 @@
 <p>作用是保证每一个微应用运行在一个干净的环境中（JS 执行上下文独立、应用间不会发生样式污染）</p>
 <h4 id="单例沙箱和多例沙箱的具体实现"><a href="#单例沙箱和多例沙箱的具体实现" class="headerlink" title="单例沙箱和多例沙箱的具体实现"></a>单例沙箱和多例沙箱的具体实现</h4><p>单例沙箱 基于 Proxy 实现的单例模式下的沙箱，直接操作原生 window 对象，并记录 window 对象的增删改查，在每次微应用切换时初始化 window 对象；激活时：将 window 对象恢复到上次即将失活时的状态;失活时：将 window 对象恢复为初始状态</p>
 <p>多例沙箱 通过 proxy 代理 fakeWindow 对象，所有的更改都是基于 fakeWindow，这点和单例不一样，从而保证每个 ProxySandbox 实例之间属性互不影响</p>
+<h3 id="Single-SPA"><a href="#Single-SPA" class="headerlink" title="Single-SPA"></a>Single-SPA</h3><ol>
+<li><p>systemjs<br>Dynamic ES module loader动态模块加载器，动态加载我们每个依赖的编译后的脚本文件。也正是因为system.js存在，你不会在代码中看到大量script脚本插入的痕迹。</p>
+</li>
+<li><p>single-spa-react  / single-spa-vue<br>bootstrap,mount,unmount 支持下一步single-spa进行注册registerApplication</p>
+</li>
+<li><p>single-spa<br>registerApplication注册，将所有的子模块加载到全局变量app数据中，并保存各种状态，用于后边的各种装载和卸载。本质上single-spa就是一个维护应用的状态机</p>
+</li>
+</ol>
+<p>关键的几步是</p>
+<p>● 初始：默认劫持浏览器事件，等注册应用完成后执行<br>● registerApplication注册应用，触发reroute<br>● start初始化第一次执行，触发reroute<br>● 根据不同情况，实现了加载、卸载、更改组件生命周期状态、并延迟执行执行浏览器事件reroute</p>
+<p>reroute执行时机：<br>● registerApplication初始化注册应用<br>● start第一次执行<br>● 浏览器更新路由hashchange/popstate - urlReroute(navigation event</p>
+<h4 id="如何监听路由的变化从而响应的"><a href="#如何监听路由的变化从而响应的" class="headerlink" title="如何监听路由的变化从而响应的"></a>如何监听路由的变化从而响应的</h4><p>start的时候  执行了下面的代码<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 监听路由变化</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">if</span> (isInBrowser) &#123;</span><br><span class="line">  <span class="comment">// We will trigger an app change for any routing events，监听hashchange和popstate事件</span></span><br><span class="line">  <span class="built_in">window</span>.addEventListener(<span class="string">"hashchange"</span>, urlReroute);</span><br><span class="line">  <span class="built_in">window</span>.addEventListener(<span class="string">"popstate"</span>, urlReroute);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Monkeypatch addEventListener so that we can ensure correct timing</span></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * 扩展原生的addEventListener和removeEventListener方法</span></span><br><span class="line"><span class="comment">   * 每次注册事件和事件处理函数都会将事件和处理函数保存下来，当然移除时也会做删除</span></span><br><span class="line"><span class="comment">   * */</span> </span><br><span class="line">  <span class="keyword">const</span> originalAddEventListener = <span class="built_in">window</span>.addEventListener;</span><br><span class="line">  <span class="keyword">const</span> originalRemoveEventListener = <span class="built_in">window</span>.removeEventListener;</span><br><span class="line">  <span class="built_in">window</span>.addEventListener = <span class="function"><span class="keyword">function</span> (<span class="params">eventName, fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> fn === <span class="string">"function"</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (</span><br><span class="line">        <span class="comment">// eventName只能是hashchange或popstate &amp;&amp; 对应事件的fn注册函数没有注册</span></span><br><span class="line">        routingEventsListeningTo.indexOf(eventName) &gt;= <span class="number">0</span> &amp;&amp;</span><br><span class="line">        !find(capturedEventListeners[eventName], (listener) =&gt; listener === fn)</span><br><span class="line">      ) &#123;</span><br><span class="line">        <span class="comment">// 注册（保存）eventName 事件的处理函数</span></span><br><span class="line">        capturedEventListeners[eventName].push(fn);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 原生方法</span></span><br><span class="line">    <span class="keyword">return</span> originalAddEventListener.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">window</span>.removeEventListener = <span class="function"><span class="keyword">function</span> (<span class="params">eventName, listenerFn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> listenerFn === <span class="string">"function"</span>) &#123;</span><br><span class="line">      <span class="comment">// 从captureEventListeners数组中移除eventName事件指定的事件处理函数</span></span><br><span class="line">      <span class="keyword">if</span> (routingEventsListeningTo.indexOf(eventName) &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">        capturedEventListeners[eventName] = capturedEventListeners[</span><br><span class="line">          eventName</span><br><span class="line">        ].filter(<span class="function">(<span class="params">fn</span>) =&gt;</span> fn !== listenerFn);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> originalRemoveEventListener.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 增强pushstate和replacestate</span></span><br><span class="line">  <span class="built_in">window</span>.history.pushState = patchedUpdateState(</span><br><span class="line">    <span class="built_in">window</span>.history.pushState,</span><br><span class="line">    <span class="string">"pushState"</span></span><br><span class="line">  );</span><br><span class="line">  <span class="built_in">window</span>.history.replaceState = patchedUpdateState(</span><br><span class="line">    <span class="built_in">window</span>.history.replaceState,</span><br><span class="line">    <span class="string">"replaceState"</span></span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="built_in">window</span>.singleSpaNavigate) &#123;</span><br><span class="line">    <span class="built_in">console</span>.warn(</span><br><span class="line">      formatErrorMessage(</span><br><span class="line">        <span class="number">41</span>,</span><br><span class="line">        __DEV__ &amp;&amp;</span><br><span class="line">          <span class="string">"single-spa has been loaded twice on the page. This can result in unexpected behavior."</span></span><br><span class="line">      )</span><br><span class="line">    );</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">/* For convenience in `onclick` attributes, we expose a global function for navigating to</span></span><br><span class="line"><span class="comment">     * whatever an &lt;a&gt; tag's href is.</span></span><br><span class="line"><span class="comment">     * singleSpa暴露出来的一个全局方法，用户也可以基于它去判断子应用是运行在基座应用上还是独立运行</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="built_in">window</span>.singleSpaNavigate = navigateToUrl;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="HTML-Entry"><a href="#HTML-Entry" class="headerlink" title="HTML Entry"></a>HTML Entry</h3><h4 id="为什么HTML-Entry"><a href="#为什么HTML-Entry" class="headerlink" title="为什么HTML Entry?"></a>为什么HTML Entry?</h4><p>JS Entry 改造时对微应用的侵入行太强，而且和主应用的耦合性太强。</p>
+<p>single-spa 采用 JS Entry 的方式接入微应用。微应用改造一般分为三步：</p>
+<p>● 微应用路由改造，添加一个特定的前缀<br>● 微应用入口改造，挂载点变更和生命周期函数导出<br>● 打包工具配置更改</p>
+<p>侵入型强其实说的就是第三点，更改打包工具的配置，使用 single-spa 接入微应用需要将微应用整个打包成一个 JS 文件，发布到静态资源服务器，然后在主应用中配置该 JS 文件的地址告诉 single-spa 去这个地址加载微应用。<br>将整个微应用打包成一个 JS 文件，常见的打包优化基本上都没了，比如：按需加载、首屏资源加载优化、css 独立打包等优化措施。</p>
+<p>qiankun 框架为了解决 JS Entry 的问题，于是采用了 HTML Entry 的方式，让用户接入微应用就像使用 iframe 一样简单。</p>
+<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>HTML Entry 是由 import-html-entry 库实现的，通过 http 请求加载指定地址的首屏内容即 html 页面，然后解析这个 html 模版得到 template,  scripts , entry, styles</p>
+<ol>
+<li>template: 经过处理的脚本，link、script 标签都被注释掉了</li>
+<li>scripts: 脚本的http地址 或者 { async: true, src: xx } 或者 代码块</li>
+<li>styles: 样式的http地址</li>
+<li>entry: 入口脚本的地址，要不是标有 entry 的 script 的 src，要不就是最后一个 script 标签的 src<br>向外暴露一个 Promise 对象</li>
+</ol>
+<h4 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h4><p>HTML Entry 最终会返回一个 Promise 对象，qiankun 就用了这个对象中的 template、assetPublicPath 和 execScripts 三项，将 template 通过 DOM 操作添加到主应用中，执行 execScripts 方法得到微应用导出的生命周期方法，并且还顺便解决了 JS 全局污染的问题，因为执行 execScripts 方法的时候可以通过 proxy 参数指定 JS 的执行上下文。</p>
+<p>参考: <a href="https://juejin.cn/post/7072735364892327972" target="_blank" rel="noopener">https://juejin.cn/post/7072735364892327972</a></p>
 
       
 
@@ -343,7 +369,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#乾坤源码解析"><span class="toc-number">1.</span> <span class="toc-text">乾坤源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Single-Spa-痛点"><span class="toc-number">1.1.</span> <span class="toc-text">Single-Spa 痛点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Qiankun由来"><span class="toc-number">1.2.</span> <span class="toc-text">Qiankun由来</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qiankun源码"><span class="toc-number">1.3.</span> <span class="toc-text">qiankun源码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-number">1.3.1.</span> <span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q-amp-A"><span class="toc-number">1.4.</span> <span class="toc-text">Q&amp;A</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#qiankun样式隔离如何做的"><span class="toc-number">1.4.1.</span> <span class="toc-text">qiankun样式隔离如何做的?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#loadAPP作用"><span class="toc-number">1.4.2.</span> <span class="toc-text">loadAPP作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#loadApp内部是如何渲染微应用的"><span class="toc-number">1.4.3.</span> <span class="toc-text">loadApp内部是如何渲染微应用的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行时JS沙箱机制作用"><span class="toc-number">1.4.4.</span> <span class="toc-text">运行时JS沙箱机制作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#单例沙箱和多例沙箱的具体实现"><span class="toc-number">1.4.5.</span> <span class="toc-text">单例沙箱和多例沙箱的具体实现</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#乾坤源码解析"><span class="toc-number">1.</span> <span class="toc-text">乾坤源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Single-Spa-痛点"><span class="toc-number">1.1.</span> <span class="toc-text">Single-Spa 痛点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Qiankun由来"><span class="toc-number">1.2.</span> <span class="toc-text">Qiankun由来</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#qiankun源码"><span class="toc-number">1.3.</span> <span class="toc-text">qiankun源码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-number">1.3.1.</span> <span class="toc-text">示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Q-amp-A"><span class="toc-number">1.4.</span> <span class="toc-text">Q&amp;A</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#qiankun样式隔离如何做的"><span class="toc-number">1.4.1.</span> <span class="toc-text">qiankun样式隔离如何做的?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#loadAPP作用"><span class="toc-number">1.4.2.</span> <span class="toc-text">loadAPP作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#loadApp内部是如何渲染微应用的"><span class="toc-number">1.4.3.</span> <span class="toc-text">loadApp内部是如何渲染微应用的</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#运行时JS沙箱机制作用"><span class="toc-number">1.4.4.</span> <span class="toc-text">运行时JS沙箱机制作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#单例沙箱和多例沙箱的具体实现"><span class="toc-number">1.4.5.</span> <span class="toc-text">单例沙箱和多例沙箱的具体实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Single-SPA"><span class="toc-number">1.5.</span> <span class="toc-text">Single-SPA</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#如何监听路由的变化从而响应的"><span class="toc-number">1.5.1.</span> <span class="toc-text">如何监听路由的变化从而响应的</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML-Entry"><span class="toc-number">1.6.</span> <span class="toc-text">HTML Entry</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#为什么HTML-Entry"><span class="toc-number">1.6.1.</span> <span class="toc-text">为什么HTML Entry?</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#概述"><span class="toc-number">1.6.2.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#应用"><span class="toc-number">1.6.3.</span> <span class="toc-text">应用</span></a></li></ol></li></ol></li></ol>
                     </div>
                 </span>
             </div>
@@ -467,7 +493,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+                <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">XSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -479,19 +517,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">XSS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -511,19 +537,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -539,15 +561,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -567,6 +589,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">微前端</a>
               </li>
              
@@ -583,7 +613,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -604,10 +634,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
             
             <div class="clearfix"></div>
