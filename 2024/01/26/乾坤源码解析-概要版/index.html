@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="L.Zoe">
 <meta property="og:description" content="乾坤源码解析Single-Spa 痛点single-spa就做了两件事 1. 加载微应用（加载方法还是用户自己提供的）2. 维护微应用状态（初始化、挂载、卸载）主要的问题1、对微应用的侵入性太强    ○ 微应用路由改造，添加一个特定的前缀    ○ 微应用入口改造，挂载点变更和生命周期函数导出    ○ 打包工具配置更改2、样式隔离问题3、JS 隔离4、资源预加载5、应用间通信第一个和第四个就不">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2024-01-26T09:06:17.349Z">
+<meta property="og:updated_time" content="2024-01-26T09:10:29.558Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="乾坤源码解析-概要版">
 <meta name="twitter:description" content="乾坤源码解析Single-Spa 痛点single-spa就做了两件事 1. 加载微应用（加载方法还是用户自己提供的）2. 维护微应用状态（初始化、挂载、卸载）主要的问题1、对微应用的侵入性太强    ○ 微应用路由改造，添加一个特定的前缀    ○ 微应用入口改造，挂载点变更和生命周期函数导出    ○ 打包工具配置更改2、样式隔离问题3、JS 隔离4、资源预加载5、应用间通信第一个和第四个就不">
@@ -196,7 +196,8 @@
 <li>yarn examples:install</li>
 <li>yarn examples:start   localhost:7099<br>qiankun提供的demo中 提供了两种主应用的实现方式(基于路由配置的 registerMicroApps 和 手动加载微应用的 loadMicroApp)，五种微应用的接入示例</li>
 </ol>
-<h3 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h3><h4 id="qiankun样式隔离如何做的"><a href="#qiankun样式隔离如何做的" class="headerlink" title="qiankun样式隔离如何做的?"></a>qiankun样式隔离如何做的?</h4><p>乾坤主要通过样式沙箱 通过增强 createElement 方法，负责创建元素并劫持 script、link、style 三个标签的创建动作；简单来说就是属于主应用的插入主应用，属于微应用的插入到对应的微应用中，方便微应用卸载的时候一起删除；<br>样式沙箱还额外做了两件事：<br>●    在卸载之前为动态添加样式做缓存<br>●    在微应用重新挂载时再插入到微应用内<br>将 proxy 对象传递给 execScripts 函数，将其设置为微应用的执行上下文<br>支持两种方式实现样式隔离 分别是shadow dom 和 scoped css<br>shadow dom为例  registerMicoApp时 配置strictStyleIsolation 和sandbox选项，内部核心代码在createElement实现，通过shadow dom实现<br>主要步骤为 通过document.createElement(‘div’)创建包裹容器原始dom，innerHTML赋值为appContent即编译后html模板，取出firstChild作为appElement，保存其innerHTML内容后清空innerHTML，检测支持attachShadow使用appElement.attachShadow({ mode: ‘open’ })作为shadow;否则使用 appElement.createShadowRoot()作为shadow; 最后把原始innerHTML赋值给  shadow.innerHTML<br>scoped css为例<br>取出appInstanceId(初始化时被赋值)，取出所有style节点，遍历尽心scope处理<br>生成scope prefix  ${tag}[${QiankunCSSRewriteAttr}=”${appName}”]  拿到样式表sheet cssRules<br>通过rewrite方法传递css和prefix, 通过给textContent赋值全新的css </p>
+<h3 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h3><h4 id="qiankun样式隔离如何做的"><a href="#qiankun样式隔离如何做的" class="headerlink" title="qiankun样式隔离如何做的?"></a>qiankun样式隔离如何做的?</h4><p>乾坤主要通过样式沙箱 通过增强 createElement 方法，负责创建元素并劫持 script、link、style 三个标签的创建动作；简单来说就是属于主应用的插入主应用，属于微应用的插入到对应的微应用中，方便微应用卸载的时候一起删除；<br>样式沙箱还额外做了两件事：<br>●    在卸载之前为动态添加样式做缓存<br>●    在微应用重新挂载时再插入到微应用内<br>将 proxy 对象传递给 execScripts 函数，将其设置为微应用的执行上下文<br>支持两种方式实现样式隔离 分别是shadow dom 和 scoped css<br>shadow dom为例<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">registerMicoApp时 配置strictStyleIsolation 和sandbox选项，内部核心代码在createElement实现，通过shadow dom实现</span><br><span class="line">主要步骤为 通过<span class="built_in">document</span>.createElement(<span class="string">'div'</span>)创建包裹容器原始dom，innerHTML赋值为appContent即编译后html模板，取出firstChild作为appElement，保存其innerHTML内容后清空innerHTML，检测支持attachShadow使用appElement.attachShadow(&#123; <span class="attr">mode</span>: <span class="string">'open'</span> &#125;)作为shadow;否则使用 appElement.createShadowRoot()作为shadow; 最后把原始innerHTML赋值给  shadow.innerHTML</span><br></pre></td></tr></table></figure></p>
+<p>scoped css为例<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">取出appInstanceId(初始化时被赋值)，取出所有style节点，遍历尽心scope处理</span><br><span class="line">生成scope prefix  $&#123;tag&#125;[$&#123;QiankunCSSRewriteAttr&#125;=<span class="string">"$&#123;appName&#125;"</span>]  拿到样式表sheet cssRules</span><br><span class="line">通过rewrite方法传递css和prefix, 通过给textContent赋值全新的css</span><br></pre></td></tr></table></figure></p>
 <p>核心代码<a href="https://github.com/umijs/qiankun/blob/master/src/sandbox/patchers/css.ts" target="_blank" rel="noopener">https://github.com/umijs/qiankun/blob/master/src/sandbox/patchers/css.ts</a></p>
 <h4 id="loadAPP作用"><a href="#loadAPP作用" class="headerlink" title="loadAPP作用"></a>loadAPP作用</h4><p>loadApp是乾坤的核心 主要干了以下几件事</p>
 <p>1、通过 HTML Entry 的方式远程加载微应用，得到微应用的 html 模版（首屏内容）、JS 脚本执行器、静态经资源路径<br>2、样式隔离，shadow DOM 或者 scoped css 两种方式<br>3、渲染微应用<br>4、运行时沙箱，JS 沙箱、样式沙箱<br>5、合并沙箱传递出来的 生命周期方法、用户传递的生命周期方法、框架内置的生命周期方法，将这些生命周期方法统一整理，导出一个生命周期对象，供 single-spa 的 registerApplication 方法使用，这个对象就相当于使用 single-spa 时你的微应用导出的那些生命周期方法，只不过 qiankun额外填了一些生命周期方法，做了一些事情<br>6、给微应用注册通信方法并返回通信方法，然后会将通信方法通过 props 注入到微应用</p>
@@ -466,19 +467,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">XSS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -490,7 +479,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">XSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">XSS防范措施</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -510,11 +511,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -522,7 +523,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+                <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -538,15 +539,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">throttle</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -562,11 +563,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
+                <a href="javascript:void(0)" class="js-tag color5">代码规范</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">代码规范</a>
+                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
               </li>
              
               <li class="article-tag-list-item">
