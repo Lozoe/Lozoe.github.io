@@ -166,6 +166,82 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-乾坤源码解析-概要版" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/26/乾坤源码解析-概要版/">乾坤源码解析-概要版</a>
+    </h1>
+  
+
+        
+        <a href="/2024/01/26/乾坤源码解析-概要版/" class="archive-article-date">
+  	<time datetime="2024-01-26T09:05:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="乾坤源码解析"><a href="#乾坤源码解析" class="headerlink" title="乾坤源码解析"></a>乾坤源码解析</h2><h3 id="Single-Spa-痛点"><a href="#Single-Spa-痛点" class="headerlink" title="Single-Spa 痛点"></a>Single-Spa 痛点</h3><p>single-spa就做了两件事 1. 加载微应用（加载方法还是用户自己提供的）2. 维护微应用状态（初始化、挂载、卸载）<br>主要的问题<br>1、对微应用的侵入性太强<br>    ○ 微应用路由改造，添加一个特定的前缀<br>    ○ 微应用入口改造，挂载点变更和生命周期函数导出<br>    ○ 打包工具配置更改<br>2、样式隔离问题<br>3、JS 隔离<br>4、资源预加载<br>5、应用间通信<br>第一个和第四个就不好解决了，这是 JS Entry 方式带来的问题</p>
+        
+          <a class="article-more-a" href="/2024/01/26/乾坤源码解析-概要版/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">微前端</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2024/01/26/乾坤源码解析-概要版/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Promise对象池" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1349,99 +1425,6 @@ switch (type) {
 
 
   
-    <article id="post-preact" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/11/preact/">preact</a>
-    </h1>
-  
-
-        
-        <a href="/2024/01/11/preact/" class="archive-article-date">
-  	<time datetime="2024-01-11T02:37:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="什么是-Preact？"><a href="#什么是-Preact？" class="headerlink" title="什么是 Preact？"></a>什么是 Preact？</h3><p>Preact 是一个和 React 类似的用于构建用户界面 (UI) 的前端库。<br>具有和 React 相同 API 的快速 3kb 替代方案 <a href="https://preactjs.com/" target="_blank" rel="noopener">https://preactjs.com/</a><br>同样使用虚拟 DOM、Context、Hooks 等概念，由加拿大软件开发人员 Jason Miller 开发</p>
-<h3 id="Preact-是如何工作的？"><a href="#Preact-是如何工作的？" class="headerlink" title="Preact 是如何工作的？"></a>Preact 是如何工作的？</h3><p>Preact 的工作原理与 React 非常相似，但它对 React 的许多功能进行了单独的实现。接下来，我们将研究 Preact 的核心功能，我把它们分为三类：</p>
-<ul>
-<li>虚拟 DOM</li>
-<li>无需构建工具</li>
-<li>适合嵌入式</li>
-</ul>
-<h4 id="虚拟-DOM"><a href="#虚拟-DOM" class="headerlink" title="虚拟 DOM"></a>虚拟 DOM</h4><p>大多数 UI 框架都会使用虚拟 DOM，这是因为使用 JavaScript 更新真实 DOM 时渲染速度较慢。这对于动态 Web 应用程序来说是一个大的性能问题，因为它们需要不断更新元素。</p>
-<p>参考: <a href="https://juejin.cn/post/7137559254440869896" target="_blank" rel="noopener">https://juejin.cn/post/7137559254440869896</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/framework/" class="article-tag-list-link color5">Framework</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2024/01/11/preact/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1551,6 +1534,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1563,23 +1554,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1595,7 +1574,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1608,10 +1595,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1651,6 +1634,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
               </li>
              
@@ -1667,14 +1654,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -1684,6 +1663,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">

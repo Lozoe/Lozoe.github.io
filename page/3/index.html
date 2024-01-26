@@ -166,6 +166,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Vue源码解析之render" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/03/Vue源码解析之render/">Vue之render源码解析</a>
+    </h1>
+  
+
+        
+        <a href="/2020/06/03/Vue源码解析之render/" class="archive-article-date">
+  	<time datetime="2020-06-03T12:42:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-06-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>render函数可以作为一道分割线，render函数的左边可以称之为编译期，将Vue的模板转换为渲染函数。render函数的右边是Vue的运行时，主要是基于渲染函数生成Virtual DOM树，Diff和Patch。</p>
+<p>render渲染函数将结合数据生成Virtual DOM<br>有了虚拟的DOM树后，再交给Patch函数，负责把这些虚拟DOM真正施加到真实的DOM上。在这个过程中，Vue有自身的响应式系统来侦测在渲染过程中所依赖到的数据来源。在渲染过程中，侦测到数据来源之后就可以精确感知数据源的变动。<br>根据需要重新进行渲染。当重新进行渲染之后，会生成一个新的树，将新的树与旧的树进行diff对比，就可以最终落实到真实DOM上的改动。</p>
+<p>一个简单的实例：</p>
+<p><img src="/2020/06/03/Vue源码解析之render/render-example.png" alt="render-example"></p>
+<p>vue的渲染机制可以总结如下：</p>
+<p><img src="/2020/06/03/Vue源码解析之render/render-process.png" alt="render-process"></p>
+<h2 id="render前置操作"><a href="#render前置操作" class="headerlink" title="render前置操作"></a>render前置操作</h2><ol>
+<li>为何要用with(this){}包裹？</li>
+<li>何时将render函数的字符串转成函数？</li>
+</ol>
+<h3 id="1-为何要用with-this-包裹"><a href="#1-为何要用with-this-包裹" class="headerlink" title="1. 为何要用with(this){}包裹"></a>1. 为何要用with(this){}包裹</h3><blockquote>
+<p>with通常被当做重复引用同一个对象中的多个属性的快捷方式，可以不需要重复引用对象本身。引自《你不知道的JavaScript》上2.2.2节with</p>
+</blockquote>
+<h3 id="2-何时将render函数的字符串转成函数-vue2-6-11"><a href="#2-何时将render函数的字符串转成函数-vue2-6-11" class="headerlink" title="2. 何时将render函数的字符串转成函数(vue2.6.11)"></a>2. 何时将render函数的字符串转成函数(vue2.6.11)</h3><blockquote>
+<p>经过parse生成AST和optimize对AST树的优化，会生成render函数的字符串。在createCompilerCreator（在src\compiler\create-compiler.js）中，调用createCompileToFunctionFn将字符串转成函数。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src\compiler\index.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; parse &#125; <span class="keyword">from</span> <span class="string">'./parser/index'</span></span><br><span class="line"><span class="keyword">import</span> &#123; optimize &#125; <span class="keyword">from</span> <span class="string">'./optimizer'</span></span><br><span class="line"><span class="keyword">import</span> &#123; generate &#125; <span class="keyword">from</span> <span class="string">'./codegen/index'</span></span><br><span class="line"><span class="keyword">import</span> &#123; createCompilerCreator &#125; <span class="keyword">from</span> <span class="string">'./create-compiler'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// `createCompilerCreator` allows creating compilers that use alternative</span></span><br><span class="line"><span class="comment">// parser/optimizer/codegen, e.g the SSR optimizing compiler.</span></span><br><span class="line"><span class="comment">// Here we just export a default compiler using the default parts.</span></span><br><span class="line"><span class="comment">// createCompilerCreator做了render的前置操作</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> createCompiler = createCompilerCreator(<span class="function"><span class="keyword">function</span> <span class="title">baseCompile</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">  template: string,</span></span></span><br><span class="line"><span class="function"><span class="params">  options: CompilerOptions</span></span></span><br><span class="line"><span class="function"><span class="params"></span>): <span class="title">CompiledResult</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ast = parse(template.trim(), options)</span><br><span class="line">  <span class="keyword">if</span> (options.optimize !== <span class="literal">false</span>) &#123;</span><br><span class="line">    optimize(ast, options)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">const</span> code = generate(ast, options)</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    ast,</span><br><span class="line">    render: code.render, <span class="comment">// 此时还是render函数的字符串</span></span><br><span class="line">    staticRenderFns: code.staticRenderFns</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// src\compiler\create-compiler.js</span></span><br><span class="line"><span class="keyword">import</span> &#123; extend &#125; <span class="keyword">from</span> <span class="string">'shared/util'</span></span><br><span class="line"><span class="keyword">import</span> &#123; detectErrors &#125; <span class="keyword">from</span> <span class="string">'./error-detector'</span></span><br><span class="line"><span class="keyword">import</span> &#123; createCompileToFunctionFn &#125; <span class="keyword">from</span> <span class="string">'./to-function'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createCompilerCreator</span> (<span class="params">baseCompile: Function</span>): <span class="title">Function</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">createCompiler</span> (<span class="params">baseOptions: CompilerOptions</span>) </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">compile</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">      template: string,</span></span></span><br><span class="line"><span class="function"><span class="params">      options?: CompilerOptions</span></span></span><br><span class="line"><span class="function"><span class="params">    </span>): <span class="title">CompiledResult</span> </span>&#123;</span><br><span class="line">      <span class="keyword">const</span> finalOptions = <span class="built_in">Object</span>.create(baseOptions)</span><br><span class="line">      <span class="keyword">const</span> errors = []</span><br><span class="line">      <span class="keyword">const</span> tips = []</span><br><span class="line">      finalOptions.warn = <span class="function">(<span class="params">msg, tip</span>) =&gt;</span> &#123;</span><br><span class="line">        (tip ? tips : errors).push(msg)</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (options) &#123;</span><br><span class="line">        <span class="comment">// merge custom modules</span></span><br><span class="line">        <span class="keyword">if</span> (options.modules) &#123;</span><br><span class="line">          finalOptions.modules =</span><br><span class="line">            (baseOptions.modules || []).concat(options.modules)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// merge custom directives</span></span><br><span class="line">        <span class="keyword">if</span> (options.directives) &#123;</span><br><span class="line">          finalOptions.directives = extend(</span><br><span class="line">            <span class="built_in">Object</span>.create(baseOptions.directives || <span class="literal">null</span>),</span><br><span class="line">            options.directives</span><br><span class="line">          )</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// copy other options</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> options) &#123;</span><br><span class="line">          <span class="keyword">if</span> (key !== <span class="string">'modules'</span> &amp;&amp; key !== <span class="string">'directives'</span>) &#123;</span><br><span class="line">            finalOptions[key] = options[key]</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">const</span> compiled = baseCompile(template, finalOptions)</span><br><span class="line">      <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">        errors.push.apply(errors, detectErrors(compiled.ast))</span><br><span class="line">      &#125;</span><br><span class="line">      compiled.errors = errors</span><br><span class="line">      compiled.tips = tips</span><br><span class="line">      <span class="keyword">return</span> compiled</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      compile,</span><br><span class="line">      compileToFunctions: createCompileToFunctionFn(compile)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>createCompileToFunctionFn（在src\compiler\to-function.js）中，会优先读缓存信息，若没有才会执行编译方法，同时将render字符串通过createFunction调用New Function()的方法，创造render函数，然后缓存信息。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* @flow */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> &#123; noop, extend &#125; <span class="keyword">from</span> <span class="string">'shared/util'</span></span><br><span class="line"><span class="keyword">import</span> &#123; warn <span class="keyword">as</span> baseWarn, tip &#125; <span class="keyword">from</span> <span class="string">'core/util/debug'</span></span><br><span class="line"><span class="keyword">import</span> &#123; generateCodeFrame &#125; <span class="keyword">from</span> <span class="string">'./codeframe'</span></span><br><span class="line"></span><br><span class="line">type CompiledFunctionResult = &#123;</span><br><span class="line">  render: <span class="built_in">Function</span>;</span><br><span class="line">  staticRenderFns: <span class="built_in">Array</span>&lt;<span class="built_in">Function</span>&gt;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createFunction</span> (<span class="params">code, errors</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Function</span>(code)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    errors.push(&#123; err, code &#125;)</span><br><span class="line">    <span class="keyword">return</span> noop</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">createCompileToFunctionFn</span> (<span class="params">compile: Function</span>): <span class="title">Function</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> cache = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">compileToFunctions</span> (<span class="params"></span></span></span><br><span class="line"><span class="function"><span class="params">    template: string,</span></span></span><br><span class="line"><span class="function"><span class="params">    options?: CompilerOptions,</span></span></span><br><span class="line"><span class="function"><span class="params">    vm?: Component</span></span></span><br><span class="line"><span class="function"><span class="params">  </span>): <span class="title">CompiledFunctionResult</span> </span>&#123;</span><br><span class="line">    options = extend(&#123;&#125;, options)</span><br><span class="line">    <span class="keyword">const</span> warn = options.warn || baseWarn</span><br><span class="line">    <span class="keyword">delete</span> options.warn</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="comment">// detect possible CSP restriction</span></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="built_in">Function</span>(<span class="string">'return 1'</span>)</span><br><span class="line">      &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (e.toString().match(<span class="regexp">/unsafe-eval|CSP/</span>)) &#123;</span><br><span class="line">          warn(</span><br><span class="line">            <span class="string">'It seems you are using the standalone build of Vue.js in an '</span> +</span><br><span class="line">            <span class="string">'environment with Content Security Policy that prohibits unsafe-eval. '</span> +</span><br><span class="line">            <span class="string">'The template compiler cannot work in this environment. Consider '</span> +</span><br><span class="line">            <span class="string">'relaxing the policy to allow unsafe-eval or pre-compiling your '</span> +</span><br><span class="line">            <span class="string">'templates into render functions.'</span></span><br><span class="line">          )</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check cache</span></span><br><span class="line">    <span class="keyword">const</span> key = options.delimiters</span><br><span class="line">      ? <span class="built_in">String</span>(options.delimiters) + template</span><br><span class="line">      : template</span><br><span class="line">    <span class="keyword">if</span> (cache[key]) &#123;</span><br><span class="line">      <span class="keyword">return</span> cache[key]</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// compile</span></span><br><span class="line">    <span class="keyword">const</span> compiled = compile(template, options)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check compilation errors/tips</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (compiled.errors &amp;&amp; compiled.errors.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (options.outputSourceRange) &#123;</span><br><span class="line">          compiled.errors.forEach(<span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">            warn(</span><br><span class="line">              <span class="string">`Error compiling template:\n\n<span class="subst">$&#123;e.msg&#125;</span>\n\n`</span> +</span><br><span class="line">              generateCodeFrame(template, e.start, e.end),</span><br><span class="line">              vm</span><br><span class="line">            )</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          warn(</span><br><span class="line">            <span class="string">`Error compiling template:\n\n<span class="subst">$&#123;template&#125;</span>\n\n`</span> +</span><br><span class="line">            compiled.errors.map(<span class="function"><span class="params">e</span> =&gt;</span> <span class="string">`- <span class="subst">$&#123;e&#125;</span>`</span>).join(<span class="string">'\n'</span>) + <span class="string">'\n'</span>,</span><br><span class="line">            vm</span><br><span class="line">          )</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">if</span> (compiled.tips &amp;&amp; compiled.tips.length) &#123;</span><br><span class="line">        <span class="keyword">if</span> (options.outputSourceRange) &#123;</span><br><span class="line">          compiled.tips.forEach(<span class="function"><span class="params">e</span> =&gt;</span> tip(e.msg, vm))</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          compiled.tips.forEach(<span class="function"><span class="params">msg</span> =&gt;</span> tip(msg, vm))</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// turn code into functions</span></span><br><span class="line">    <span class="keyword">const</span> res = &#123;&#125;</span><br><span class="line">    <span class="keyword">const</span> fnGenErrors = []</span><br><span class="line">    res.render = createFunction(compiled.render, fnGenErrors)</span><br><span class="line">    res.staticRenderFns = compiled.staticRenderFns.map(<span class="function"><span class="params">code</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> createFunction(code, fnGenErrors)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check function generation errors.</span></span><br><span class="line">    <span class="comment">// this should only happen if there is a bug in the compiler itself.</span></span><br><span class="line">    <span class="comment">// mostly for codegen development use</span></span><br><span class="line">    <span class="comment">/* istanbul ignore if */</span></span><br><span class="line">    <span class="keyword">if</span> (process.env.NODE_ENV !== <span class="string">'production'</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> ((!compiled.errors || !compiled.errors.length) &amp;&amp; fnGenErrors.length) &#123;</span><br><span class="line">        warn(</span><br><span class="line">          <span class="string">`Failed to generate render function:\n\n`</span> +</span><br><span class="line">          fnGenErrors.map(<span class="function">(<span class="params">&#123; err, code &#125;</span>) =&gt;</span> <span class="string">`<span class="subst">$&#123;err.toString()&#125;</span> in\n\n<span class="subst">$&#123;code&#125;</span>\n`</span>).join(<span class="string">'\n'</span>),</span><br><span class="line">          vm</span><br><span class="line">        )</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (cache[key] = res)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考：</p>
+<p><a href="https://juejin.im/post/5d09c587e51d454f71439ce2" target="_blank" rel="noopener">https://juejin.im/post/5d09c587e51d454f71439ce2</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/06/03/Vue源码解析之render/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Vue之vuex在ts中的应用" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1083,83 +1167,6 @@
 
 
   
-    <article id="post-实现cacheRequest，相同资源ajax只发一次请求" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/">实现cacheRequest，相同资源ajax只发一次请求</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/" class="archive-article-date">
-  	<time datetime="2020-03-30T08:18:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>请实现一个cacheRequest方法，保证当前ajax请求相同资源时，真实网络层中，实际只发出一次请求（假设已经存在request方法用于封装ajax请求）</p>
-<p>一开始看到第一感觉是，设个Http Headercache-control，把expire调大，不就自然会找浏览器缓存拿了。但是看到后面说提供自带的request方法和只发起一次ajax。那估计是想让笔者在业务层自己用代码解决这个cache问题。</p>
-        
-          <a class="article-more-a" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/javascript/" class="article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/30/实现cacheRequest，相同资源ajax只发一次请求/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1269,6 +1276,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">assign</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Web安全</a>
               </li>
              
@@ -1281,23 +1296,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">assign</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">async</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">http</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1313,7 +1316,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1326,10 +1337,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">面向对象</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1369,6 +1376,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
               </li>
              
@@ -1385,14 +1396,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">通信</a>
               </li>
              
@@ -1402,6 +1405,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">跨域</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">页面性能</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
               </li>
              
               <li class="article-tag-list-item">
