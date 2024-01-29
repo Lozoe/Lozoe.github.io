@@ -166,6 +166,144 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-自动化测试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/29/自动化测试/">自动化测试</a>
+    </h1>
+  
+
+        
+        <a href="/2024/01/29/自动化测试/" class="archive-article-date">
+  	<time datetime="2024-01-29T08:49:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>自动化测试(Automated Testing)，是指把以人为驱动的测试行为转化为机器执行的过程。往往通过一些测试工具或框架，编写自动化测试用例，来模拟手工测试过程<br></p>
+        
+          <a class="article-more-a" href="/2024/01/29/自动化测试/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/tool/" class="article-tag-list-link color5">Tool</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2024/01/29/自动化测试/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-认识IntersectionObserver" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/29/认识IntersectionObserver/">认识IntersectionObserver</a>
+    </h1>
+  
+
+        
+        <a href="/2024/01/29/认识IntersectionObserver/" class="archive-article-date">
+  	<time datetime="2024-01-29T02:48:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2024/01/29/认识IntersectionObserver/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-乾坤源码解析-概要版" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1082,349 +1220,6 @@ ii. HMR 热更新慢： 即使有 webpack 的热更新加成，项目热更新�
 
 
   
-    <article id="post-vue面试题目系列" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/13/vue面试题目系列/">vue面试题目系列</a>
-    </h1>
-  
-
-        
-        <a href="/2024/01/13/vue面试题目系列/" class="archive-article-date">
-  	<time datetime="2024-01-13T03:29:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>vue 响应式原理<br><a href="响应式.jpg">vue双向绑定原理</a></p>
-<p>入门: reactive api为例子详解响应式原理 </p>
-<p>需要解决什么问题(同vue2.0 老三样)</p>
-<ol>
-<li>数据劫持</li>
-<li>依赖收集</li>
-<li>派发更新</li>
-</ol>
-<p>接下来咱们以reactive(其他比如ref computed都是以reactive为基础)为例子去看 在vue3.0里面是如何一步步完成响应式的。</p>
-<p>第一步 数据劫持<br>刚才已经在PPT中讲过，vue3.0做数据代理就是通过 es6 Proxy这个api来完成的<br>Vue3.0 对于数据的响应式挟持，统一使用 composition API 来实现，对最典型的 reactive来讲解</p>
-<p>铺垫<br>依赖缓存的数据结构 (一对多对多的结构模式)</p>
-<p>reactive</p>
-<p>export function reactive<t extends="" object="">(target: T): UnwrapNestedRefs<t><br>export function reactive(target: object) {<br>  // 如果目标数据已经被 readonly() 封装过了，则直接返回，不对其进行响应式处理<br>  if (target &amp;&amp; (target as Target)[ReactiveFlags.IS_READONLY]) {<br>    return target<br>  }<br>  // 通用createReactiveObject函数进行响应式处理<br>  return createReactiveObject(<br>    target, // 目标数据<br>    false, // 是否做只读操作<br>    mutableHandlers, // Object/Array 类型的代理处理器<br>    mutableCollectionHandlers // Map/Set/WeakMap/WeakSet 集合类型的代理处理器<br>  )<br>}</t></t></p>
-<p>createReactiveObject<br>前置函数或者依赖<br>这个先不看 createReactiveObject用到的时候再来看下</p>
-<p>export const reactiveMap = new WeakMap&lt;Target, any&gt;()<br>export const readonlyMap = new WeakMap&lt;Target, any&gt;()<br>const enum TargetType {<br>  INVALID = 0,<br>  COMMON = 1,<br>  COLLECTION = 2<br>}</p>
-<p>function targetTypeMap(rawType: string) {<br>  switch (rawType) {<br>    case ‘Object’:<br>    case ‘Array’:<br>      return TargetType.COMMON<br>    case ‘Map’:<br>    case ‘Set’:<br>    case ‘WeakMap’:<br>    case ‘WeakSet’:<br>      return TargetType.COLLECTION<br>    default:<br>      return TargetType.INVALID<br>  }<br>}</p>
-<p>createReactiveObject入口函数</p>
-<p>function createReactiveObject(<br>  target: Target,<br>  isReadonly: boolean,<br>  baseHandlers: ProxyHandler<any>,<br>  collectionHandlers: ProxyHandler<any><br>) {<br>  // 如果不是对象，直接抛出错误并返回<br>  if (!isObject(target)) {<br>    if (<strong>DEV</strong>) {<br>      console.warn(<code>value cannot be made reactive: ${String(target)}</code>)<br>    }<br>    return target<br>  }</any></any></p>
-<p>  // 如果对象已经是响应式对象，则直接返回<br>  // 但如果是 readonly() 一个已经是响应式的数据则不返回，继续执行<br>  if (<br>    target[ReactiveFlags.RAW] &amp;&amp;<br>    !(isReadonly &amp;&amp; target[ReactiveFlags.IS_REACTIVE])<br>  ) {<br>    return target<br>  }</p>
-<p>  // 已经被代理的缓存（WeekMap），readonly 和 reactive 两种代理方式各有一个缓存<br>  const proxyMap = isReadonly ? readonlyMap : reactiveMap</p>
-<p>  // 如果对象已经被代理过了，则直接从缓存中取出<br>  const existingProxy = proxyMap.get(target)<br>  if (existingProxy) {<br>    return existingProxy<br>  }</p>
-<p>  // 判断目标对象是否是一些特殊的或者不需要劫持的对象，如果是则直接返回<br>  // 并获得其数据类型：Object/Array =&gt; TargeType.COMMON、Map/Set/WeakMap/WeakSet =&gt; TargeType.COLLECTION<br>  const targetType = getTargetType(target)<br>  if (targetType === TargetType.INVALID) {<br>    return target<br>  }</p>
-<p>  // 创建 Proxy 代理，如果目标对象的类型是 Map/Set/WeakMap/WeakSet 则使用专门针对集合使用的代理处理器，反之用基本处理器<br>  const proxy = new Proxy(<br>    target,<br>    targetType === TargetType.COLLECTION ? collectionHandlers : baseHandlers<br>  )<br>  proxyMap.set(target, proxy) // 依赖的模子有了 具体再往后看<br>  return proxy<br>}</p>
-<p>mutableHandlers(Object/Array 代理处理器)<br>注意看这里<br>有依赖收集track触发逻辑，在get、has、ownKeys拦截里面<br>有惰性响应式的实现，在get拦截里面<br>有派发更新trigger触发逻辑，在set、deleteProperty拦截里面</p>
-<p>为了方便阅读，忽略了一些在 reactive 情境下的常量值判断，比如 readOnly，shadow</p>
-<p>export const mutableHandlers: ProxyHandler<object> = {<br>  get(target: Target, key: string | symbol, receiver: object) {<br>    // …内部常量代理<br>    // ReactiveFlags.IS_REACTIVE = true<br>    // ReactiveFlags.IS_READONLY = false<br>    // ReactiveFlags.RAW = target</object></p>
-<pre><code>// 目标对象是否是数组
-const targetIsArray = isArray(target);
-
-// 调用一些特定的数组方法时的特殊处理
-if (targetIsArray &amp;&amp; hasOwn(arrayInstrumentations, key)) {
-  return Reflect.get(arrayInstrumentations, key, receiver);
-}
-
-// 获取值
-const res = Reflect.get(target, key, receiver);
-
-// 如果是一些原生内置 Symbol，或者不需要跟踪的值的直接返回
-if (
-  isSymbol(key)
-    ? builtInSymbols.has(key as symbol)
-    : isNonTrackableKeys(key)
-) {
-  return res;
-}
-
-// 依赖收集
-track(target, TrackOpTypes.GET, key);
-
-// 如果对应值已经 Ref() 过，则根据当前是不是通过正常 key 值访问一个数组来决定要不要返回原生 ref，还是其 value
-if (isRef(res)) {
-  const shouldUnwrap = !targetIsArray || !isIntegerKey(key);
-  return shouldUnwrap ? res.value : res;
-}
-
-// 如果是对象，则挟持该对象（惰性响应式的出处）
-if (isObject(res)) {
-  return reactive(res);
-}
-
-// 返回结果
-return res;
-</code></pre><p>  },<br>  set(target: object, key: string | symbol, value: unknown, receiver: object): boolean {<br>    // 旧值<br>    const oldValue = (target as any)[key];</p>
-<pre><code>// 新值去除可能存在的响应式
-value = toRaw(value);
-
-// 如果旧值是 Ref 值，则传递给 Ref 处理
-if (!isArray(target) &amp;&amp; isRef(oldValue) &amp;&amp; !isRef(value)) {
-  oldValue.value = value;
-  return true;
-}
-
-// 有没有对应 key 值
-const hadKey =
-  isArray(target) &amp;&amp; isIntegerKey(key)
-    ? Number(key) &lt; target.length
-    : hasOwn(target, key);
-
-// 设置值
-const result = Reflect.set(target, key, value, receiver);
-
-// 派发更新
-if (target === toRaw(receiver)) {
-  if (!hadKey) {
-    trigger(target, TriggerOpTypes.ADD, key, value);
-  } else if (hasChanged(value, oldValue)) {
-    trigger(target, TriggerOpTypes.SET, key, value, oldValue);
-  }
-}
-return result;
-</code></pre><p>  },<br>  deleteProperty(target: object, key: string | symbol): boolean {<br>    const hadKey = hasOwn(target, key);<br>    const oldValue = (target as any)[key];<br>    const result = Reflect.deleteProperty(target, key);<br>    // 派发更新<br>    if (result &amp;&amp; hadKey) {<br>      trigger(target, TriggerOpTypes.DELETE, key, undefined, oldValue);<br>    }<br>    return result;<br>  },<br>  has(target: object, key: string | symbol): boolean {<br>    const result = Reflect.has(target, key);<br>    // 如果该值不是原生内部的 Symbol 值，则进行依赖收集<br>    if (!isSymbol(key) || !builtInSymbols.has(key)) {<br>      track(target, TrackOpTypes.HAS, key);<br>    }<br>    return result;<br>  },<br>  ownKeys(target: object): (string | number | symbol)[] {<br>      // 依赖收集<br>    track(<br>      target,<br>      TrackOpTypes.ITERATE,<br>      isArray(target) ? “length” : ITERATE_KEY<br>    );<br>    return Reflect.ownKeys(target);<br>  },<br>};</p>
-<p>collectionHandlers(Map/Set/WeakMap/WeakSet 代理处理器)<br>由于上述四个类型修改值都是通过函数修改的，所以代理函数只拦截 get 方法，用于拦截响应对象调用了哪个操作函数，通过key判断再进行具体的依赖收集或者派发更新</p>
-<p>注意看这里，通过key作为代理函数<br>有依赖收集track触发逻辑，在get、size、has、ownKeys、forEach拦截里面<br>有派发更新trigger触发逻辑，在add、set、deleteEntry、clear拦截里面</p>
-<p>export const mutableCollectionHandlers: ProxyHandler<collectiontypes> = {<br>  get: (<br>    target: CollectionTypes,<br>    key: string | symbol,<br>    receiver: CollectionTypes<br>  ) =&gt; {<br>    // …内部常量代理<br>    // ReactiveFlags.IS_REACTIVE = true<br>    // ReactiveFlags.IS_READONLY = false<br>    // ReactiveFlags.RAW = target</collectiontypes></p>
-<pre><code>// 使用对应封装的函数，来进行处理
-return Reflect.get(
-  hasOwn(mutableInstrumentations, key) &amp;&amp; key in target
-    ? mutableInstrumentations
-    : target,
-  key,
-  receiver
-)
-</code></pre><p>  }<br>}</p>
-<p>// 函数代理<br>const mutableInstrumentations: Record&lt;string, Function&gt; = {<br>  get(this: MapTypes, key: unknown) {<br>    return get(this, key)<br>  },<br>  get size() {<br>    return size((this as unknown) as IterableCollections)<br>  },<br>  has,<br>  add,<br>  set,<br>  delete: deleteEntry,<br>  clear,<br>  forEach: createForEach(false, false)<br>}</p>
-<p>// 获取值<br>function get(<br>  target: MapTypes,<br>  key: unknown,<br>  isReadonly = false,<br>  isShallow = false<br>) {<br>  // 原生对象<br>  target = (target as any)[ReactiveFlags.RAW]<br>  const rawTarget = toRaw(target)</p>
-<p>  // 原生 key<br>  const rawKey = toRaw(key)</p>
-<p>  // 如果是响应式的，则对响应式 key 进行依赖收集<br>  if (key !== rawKey) {<br>    track(rawTarget, TrackOpTypes.GET, key)<br>  }</p>
-<p>  // 对原生 key 进行依赖收集<br>  track(rawTarget, TrackOpTypes.GET, rawKey)</p>
-<p>  // 如果目标集合存在 has 函数，则再调用 has 进行依赖收集，因为 get()隐形依赖 has，并返回响应式 key<br>  const { has } = getProto(rawTarget)<br>  if (has.call(rawTarget, key)) {<br>    return toReactive(target.get(key))<br>  } else if (has.call(rawTarget, rawKey)) {<br>    return toReactive(target.get(rawKey))<br>  }<br>}</p>
-<p>function size(target: IterableCollections, isReadonly = false) {<br>  // 依赖收集，key 值时 Vue 内部的 Symbol(‘iterate’)<br>  target = (target as any)[ReactiveFlags.RAW]<br>  track(toRaw(target), TrackOpTypes.ITERATE, ITERATE_KEY)<br>  return Reflect.get(target, ‘size’, target)<br>}</p>
-<p>function add(this: SetTypes, value: unknown) {<br>  value = toRaw(value)<br>  const target = toRaw(this)<br>  // 调用原生的 has<br>  const proto = getProto(target)<br>  const hadKey = proto.has.call(target, value)</p>
-<p>  // 如果不存在，则添加，并派发更新<br>  if (!hadKey) {<br>    target.add(value)<br>    trigger(target, TriggerOpTypes.ADD, value, value)<br>  }<br>  return this<br>}</p>
-<p>function set(this: MapTypes, key: unknown, value: unknown) {<br>  value = toRaw(value)<br>  const target = toRaw(this)<br>  const { has, get } = getProto(target)</p>
-<p>  // 是否已经存在对应的 key，通过传入的 key 和 key 可能存在的真实 rawKey 去分别判断<br>  let hadKey = has.call(target, key)<br>  if (!hadKey) {<br>    key = toRaw(key)<br>    hadKey = has.call(target, key)<br>  }</p>
-<p>  // 取出旧值，并设置<br>  const oldValue = get.call(target, key)<br>  target.set(key, value)</p>
-<p>  // 如果是新增则触发新增的更新，反之触发设置的更新<br>  if (!hadKey) {<br>    trigger(target, TriggerOpTypes.ADD, key, value)<br>  } else if (hasChanged(value, oldValue)) {<br>    trigger(target, TriggerOpTypes.SET, key, value, oldValue)<br>  }<br>  return this<br>}</p>
-<p>function deleteEntry(this: CollectionTypes, key: unknown) {<br>  const target = toRaw(this)<br>  const { has, get } = getProto(target)</p>
-<p>  // 同 set，是否已经存在对应的 key，通过传入的 key 和 key 可能存在的真实 rawKey 去分别判断<br>  let hadKey = has.call(target, key)<br>  if (!hadKey) {<br>    key = toRaw(key)<br>    hadKey = has.call(target, key)<br>  }</p>
-<p>  // 取出旧值，并删除<br>  const oldValue = get ? get.call(target, key) : undefined<br>  const result = target.delete(key)</p>
-<p>  // 触发删除的更新<br>  if (hadKey) {<br>    trigger(target, TriggerOpTypes.DELETE, key, undefined, oldValue)<br>  }<br>  return result<br>}</p>
-<p>function clear(this: IterableCollections) {<br>  const target = toRaw(this)<br>  const hadItems = target.size !== 0<br>  const result = target.clear()<br>  // 触发清空的更新<br>  if (hadItems) {<br>    trigger(target, TriggerOpTypes.CLEAR, undefined, undefined, undefined)<br>  }<br>  return result<br>}</p>
-<p>function forEach(<br>  this: IterableCollections,<br>  callback: Function,<br>  thisArg?: unknown<br>) {<br>  const observed = this as any<br>  const target = observed[ReactiveFlags.RAW]<br>  const rawTarget = toRaw(target)<br>     // 基于迭代器收集依赖<br>  track(rawTarget, TrackOpTypes.ITERATE, ITERATE_KEY)<br>     // 使其子集具备响应式<br>  return target.forEach((value: unknown, key: unknown) =&gt; {<br>    return callback.call(thisArg, toReactive(value), toReactive(key), observed)<br>  })<br>}</p>
-<p>第二步 依赖收集<br>在刚刚数据劫持的逻辑里面可以看到很多 调用track，这个就是定义在effect模块里面，作为依赖收集的功能函数。</p>
-<p>如何知道 响应对象 依赖了哪些 数据，这个问题进一步就是 响应对象用了哪些数据。<br>Vue 的大体思路是这样的，比如我一个函数 fnA，里使用了 data 里的 B 和 C。<br>想要知道 fnA 使用了 B 和 C，那我们干脆就直接运行一下 fnA，在 B 和 C 里面等待 fnA 的获取，然后建立两者的依赖。</p>
-<p>在看完2.0源码分析 回顾Vue2.0 里有一些概念 Watcher，Dep，target。<br>●    Watcher 就是指 fnA<br>●    Dep 则是存在 B 的 setter 里面的一个对象，用于存放 Watcher 集合<br>●    target 则是现在正在进行依赖收集的 Watcher</p>
-<p>简单粗暴来讲<br>new Watcher(fnA)<br>   =&gt; target 等于当前 Watcher并调用 fnA<br>   =&gt; fnA 获取 B 的值，B 会将 target 放到自己的 Dep 上<br>   =&gt; B 更新了，通知自己 Dep 上的 Watcher 重新执行 fnA</p>
-<p>Vue3.0 思路差不多，但是实现上大有不同，因为 Vue3.0 不再随意对数据进行侵入式修改或者挟持，所以 Vue3.0 单独拎出来了一个静态变量存储依赖关系，这个变量叫做 targetMap</p>
-<p>同时引进了一个新概念 effect，它与 Vue2.0 的 Watcher 差不多，但是概念有些转换，从 监听者 变成了 副作用，指的是值 (对应依赖) 改变后会发生的副作用</p>
-<p>targetMap数据类型</p>
-<p>type Dep = Set<reactiveeffect><br>type KeyToDepMap = Map&lt;any, Dep&gt;<br>const targetMap = new WeakMap&lt;any, KeyToDepMap&gt;()</reactiveeffect></p>
-<p>targetMap 的 key 指向的是 A 和 B 所在的对象 Data<br>targetMap 的 value 指向的是KeyToDepMap<br>    KeyToDepMap 的 key 指向的是被响应式数据的键值<br>       KeyToDepMap 的 value 存放 effect 里面的 Watcher 集合</p>
-<p>effect<br>effect 作用相当于 Vue2.0 里面的 Watcher，做的事情相对而言化繁为简<br>注意看这里<br>computed为何是惰性的答案在这里<br>第13行 立即执行副作用函数以触发依赖的getter 从而依赖收集</p>
-<p>const effectStack: ReactiveEffect[] = [] // 全局 effect 栈<br>let activeEffect: ReactiveEffect | undefined // 当前激活的 effect</p>
-<p>export function effect<t =="" any="">(<br>  fn: () =&gt; T,<br>  options: ReactiveEffectOptions = EMPTY_OBJ<br>): ReactiveEffect<t> {<br>  // 如果传进来的函数已经是一个 effect 了，则取出其原生的函数进行处理<br>  if (isEffect(fn)) { fn = fn.raw }</t></t></p>
-<p>  // 创建响应式副作用<br>  const effect = createReactiveEffect(fn, options)</p>
-<p>  // 如果不是惰性的副作用，则直接运行并依赖收集，computed 就是惰性的<br>  if (!options.lazy) {<br>    effect()<br>  }<br>  return effect<br>}</p>
-<p>createReactiveEffect</p>
-<p>function createReactiveEffect<t =="" any="">(<br>  fn: () =&gt; T,<br>  options: ReactiveEffectOptions<br>): ReactiveEffect<t> {<br>  // 返回封装后的副作用函数<br>  const effect = function reactiveEffect(): unknown {<br>    // 副作用函数核心，稍后讲<br>  } as ReactiveEffect</t></t></p>
-<p>  // 一些静态属性的定义<br>  effect.id = uid++<br>  effect.allowRecurse = !!options.allowRecurse // 是否允许递归<br>  effect._isEffect = true // 标识是一个 effect 函数<br>  effect.active = true // effect 自身的状态<br>  effect.raw = fn // 包装的原始函数<br>  effect.deps = [] // effect 对应的依赖，双向指针，依赖包含对 effect 的引用，effect 也包含对依赖的引用<br>  effect.options = options // effect 的相关配置<br>  return effect<br>}</p>
-<p>reactiveEffect<br>18行关键点 真正触发副作用函数的地方<br>前置变量或者函数</p>
-<p>let shouldTrack = true // 是否允许依赖收集</p>
-<p>function reactiveEffect(): unknown {<br>  // 如果副作用已经被暂停，则优先执行其调度器，再运行函数本体<br>  if (!effect.active) {<br>    return options.scheduler ? undefined : fn()<br>  }<br>  // 如果当前副作用未在运行的时候才进入<br>  if (!effectStack.includes(effect)) {<br>    // 先清除旧的依赖关系<br>    cleanup(effect)<br>    try {<br>      // 开启全局 shouldTrack，允许依赖收集<br>      enableTracking()<br>      // 压栈 加入运行中的副作用堆栈<br>      effectStack.push(effect)<br>      // 确认当前副作用，Vue2.0 里的 target<br>      activeEffect = effect<br>      // 执行函数 调用fn()时可能会触发get方法，此时会触发上面get中调用的track函数<br>      return fn()<br>    } finally {<br>      // 出栈<br>      effectStack.pop()<br>      // 恢复 shouldTrack 开启之前的状态<br>      resetTracking()<br>      // 将当前副作用转交给上一个或者置空<br>      activeEffect = effectStack[effectStack.length - 1]<br>    }<br>  }<br>}</p>
-<p>track<br>会在数据挟持的 get / has / ownKeys  中调用，这里前面已经敲重点了。<br>前置依赖</p>
-<p>export const enum TrackOpTypes {<br>  GET = ‘get’,<br>  HAS = ‘has’,<br>  ITERATE = ‘iterate’<br>}<br>const effectStack: ReactiveEffect[] = [] // 全局 effect 栈<br>let activeEffect: ReactiveEffect | undefined // 当前激活的 effect</p>
-<p>export function track(target: object, type: TrackOpTypes, key: unknown) {<br>  // 如果当前没有在收集过程中，则退出<br>  if (!shouldTrack || activeEffect === undefined) {<br>    return<br>  }<br>  // 取出对象的 KeyToDepMap，如果没有则创建一个新的<br>  let depsMap = targetMap.get(target)<br>  if (!depsMap) {<br>    targetMap.set(target, (depsMap = new Map()))<br>  }</p>
-<p>  // 取出对应 key 值的依赖集合，如果没有则创建一个新的<br>  let dep = depsMap.get(key)<br>  if (!dep) {<br>    depsMap.set(key, (dep = new Set()))<br>  }</p>
-<p>  // 如果依赖中不存在当前的队列则添加进去，防止重复设置依赖<br>  if (!dep.has(activeEffect)) {<br>    // 双向依赖，保证新旧依赖的一致性<br>    dep.add(activeEffect)<br>    activeEffect.deps.push(dep)<br>  }<br>}</p>
-<p>第三步 派发更新<br>只需要在值发生变动的时候，从依赖关系中取出对应的副作用集合，触发effect副作用函数即可。<br>我们可以在上面数据挟持中的 set / deleteProperty 发现派发更新的函数 trigger 的调用。<br>前置依赖</p>
-<p>export const enum TriggerOpTypes {<br>  SET = ‘set’,<br>  ADD = ‘add’,<br>  DELETE = ‘delete’,<br>  CLEAR = ‘clear’<br>}</p>
-<p>trigger</p>
-<p>// 根据target为key值找到对应的存储集合中的effect依次执行，直接看到最后一句<br>export function trigger(<br>  target: object,<br>  type: TriggerOpTypes,<br>  key?: unknown,<br>  newValue?: unknown,<br>  oldValue?: unknown,<br>  oldTarget?: Map&lt;unknown, unknown&gt; | Set<unknown><br>) {<br>  // 响应值所在对象的 KeyToDepMap，如果没有则直接返回<br>  const depsMap = targetMap.get(target)<br>  if (!depsMap) {<br>    // never been tracked<br>    return<br>  }</unknown></p>
-<p>  // 所需要触发的副作用集合<br>  const effects = new Set<reactiveeffect>()<br>  // 添加到集合里的函数，可以在下面触发的时候再看<br>  const add = (effectsToAdd: Set<reactiveeffect> | undefined) =&gt; {<br>    // 传入一个副作用集合<br>    if (effectsToAdd) {<br>      // 遍历传入的副作用集合<br>      effectsToAdd.forEach(effect =&gt; {<br>        // 如果副作用不是当前正在执行的副作用（防止反复调用死循环），或者允许递归调用，则添加值即将触发的副作用集合中<br>        if (effect !== activeEffect || effect.allowRecurse) {<br>          effects.add(effect)<br>        }<br>      })<br>    }<br>  }<br>  // 这几个条件逻辑 就处理一件事儿 就是拿出需要执行的副作用函数<br>  if (type === TriggerOpTypes.CLEAR) {<br>      // 如果对应的修改操作是，比如 new Set().clear()<br>    // 则将所有子值的副作用添加到副作用队列中<br>    depsMap.forEach(add)<br>  } else if (key === ‘length’ &amp;&amp; isArray(target)) {<br>    // 如果修改的是数组的 length，意味新的长度后面的值都发生了变动，并将这些下标所对应的副作用加入到队列中<br>    depsMap.forEach((dep, key) =&gt; {<br>      if (key === ‘length’ || key &gt;= (newValue as number)) {<br>        add(dep)<br>      }<br>    })<br>  } else {<br>    // 修改值，新增值，删除值<br>    // 将对应值的副作用添加至队列<br>    if (key !== void 0) {<br>      add(depsMap.get(key))<br>    }</reactiveeffect></reactiveeffect></p>
-<pre><code>// 增删改对应需要触发的其他副作用（比如依赖于长度的副作用，依赖于迭代器的副作用）
-switch (type) {
-  // 新增
-  case TriggerOpTypes.ADD:
-    // 新增意味着长度发生改变，触发对应迭代器和长度的副作用函数
-    if (!isArray(target)) {
-      add(depsMap.get(ITERATE_KEY))
-      if (isMap(target)) {
-        add(depsMap.get(MAP_KEY_ITERATE_KEY))
-      }
-    } else if (isIntegerKey(key)) {
-      add(depsMap.get(&apos;length&apos;))
-    }
-    break
-  case TriggerOpTypes.DELETE:
-    // 同上，由于数组的删除操作比较特殊所以没有出现
-    if (!isArray(target)) {
-      add(depsMap.get(ITERATE_KEY))
-      if (isMap(target)) {
-        add(depsMap.get(MAP_KEY_ITERATE_KEY))
-      }
-    }
-    break
-  case TriggerOpTypes.SET:
-    // 依赖于迭代器（比如调用了 new Map().forEach() 等于变相依赖了 set）的函数
-    if (isMap(target)) {
-      add(depsMap.get(ITERATE_KEY))
-    }
-    break
-}
-</code></pre><p>  }</p>
-<p>  // 优先调用调度器否则调用副作用自身<br>  // 当属性值发生改变之后，会触发trigger函数进行派发更新，将所有依赖这个属性的effect函数循环遍历,使用run函数执行effect<br>  // 如果effect的参数中配置了scheduler，则就执行scheduler函数，而不是执行依赖的副作用函数<br>  // 当计算属性依赖的属性发生变化的时候，会执行包装getter函数的effect<br>  const run = (effect: ReactiveEffect) =&gt; {<br>    if (effect.options.scheduler) { // 如果有scheduler 说明不需要执行effect (computed懒执行)<br>      effect.options.scheduler(effect) // 将dirty设置为true,下次获取值时变可以重新执行runner方法<br>    } else {<br>      effect()<br>    }<br>  }<br>  effects.forEach(run) // 存储集合中的effect依次执行<br>}</p>
-<p>到这里 是不是vue3.0响应式原理的面纱就揭开了~<br>了解了这些，再去看ref 和 computed 实现就简单了，实际上还是对reactive和effect的调用。去看看~</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2024/01/13/vue面试题目系列/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-二叉树遍历" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/11/二叉树遍历/">二叉树</a>
-    </h1>
-  
-
-        
-        <a href="/2024/01/11/二叉树遍历/" class="archive-article-date">
-  	<time datetime="2024-01-11T13:16:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-01-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在 JavaScript 中，你可以使用递归或迭代的方式来实现二叉树的前序、中序和后序遍历。下面是使用递归方式实现的示例代码：</p>
-<h3 id="递归遍历"><a href="#递归遍历" class="headerlink" title="递归遍历"></a>递归遍历</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义二叉树节点</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(val, left, right) &#123;</span><br><span class="line">    <span class="keyword">this</span>.val = val;</span><br><span class="line">    <span class="keyword">this</span>.left = left;</span><br><span class="line">    <span class="keyword">this</span>.right = right;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 前序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">preorderTraversal</span>(<span class="params">root</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> result = [];</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">traverse</span>(<span class="params">node</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    result.push(node.val);</span><br><span class="line">    traverse(node.left);</span><br><span class="line">    traverse(node.right);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  traverse(root);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">inorderTraversal</span>(<span class="params">root</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> result = [];</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">traverse</span>(<span class="params">node</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    traverse(node.left);</span><br><span class="line">    result.push(node.val);</span><br><span class="line">    traverse(node.right);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  traverse(root);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 后序遍历</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">postorderTraversal</span>(<span class="params">root</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> result = [];</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">traverse</span>(<span class="params">node</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (node === <span class="literal">null</span>) <span class="keyword">return</span>;</span><br><span class="line">    </span><br><span class="line">    traverse(node.left);</span><br><span class="line">    traverse(node.right);</span><br><span class="line">    result.push(node.val);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  traverse(root);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建二叉树</span></span><br><span class="line"><span class="keyword">const</span> tree = <span class="keyword">new</span> TreeNode(<span class="number">1</span>);</span><br><span class="line">tree.left = <span class="keyword">new</span> TreeNode(<span class="number">2</span>);</span><br><span class="line">tree.right = <span class="keyword">new</span> TreeNode(<span class="number">3</span>);</span><br><span class="line">tree.left.left = <span class="keyword">new</span> TreeNode(<span class="number">4</span>);</span><br><span class="line">tree.left.right = <span class="keyword">new</span> TreeNode(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试</span></span><br><span class="line"><span class="built_in">console</span>.log(preorderTraversal(tree));   <span class="comment">// 前序遍历结果：[1, 2, 4, 5, 3]</span></span><br><span class="line"><span class="built_in">console</span>.log(inorderTraversal(tree));    <span class="comment">// 中序遍历结果：[4, 2, 5, 1, 3]</span></span><br><span class="line"><span class="built_in">console</span>.log(postorderTraversal(tree));  <span class="comment">// 后序遍历结果：[4, 5, 2, 3, 1]</span></span><br></pre></td></tr></table></figure>
-<h3 id="迭代遍历"><a href="#迭代遍历" class="headerlink" title="迭代遍历"></a>迭代遍历</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">TreeNode</span>(<span class="params">val, left, right</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.val = (val === <span class="literal">undefined</span> ? <span class="number">0</span> : val)</span><br><span class="line">    <span class="keyword">this</span>.left = (left === <span class="literal">undefined</span> ? <span class="literal">null</span> : left)</span><br><span class="line">    <span class="keyword">this</span>.right = (right === <span class="literal">undefined</span> ? <span class="literal">null</span> : right)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 前序遍历</span></span><br><span class="line"><span class="keyword">var</span> preorderTraversal = <span class="function"><span class="keyword">function</span>(<span class="params">root</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> result = [];</span><br><span class="line">    <span class="keyword">const</span> stack = [];</span><br><span class="line">    stack.push(root);</span><br><span class="line">    <span class="keyword">while</span>(stack.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> node = stack.pop();</span><br><span class="line">        result.push(node.val);</span><br><span class="line">        <span class="keyword">if</span> (node.right !== <span class="literal">null</span>) &#123;</span><br><span class="line">            stack.push(node.right);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node.left !== <span class="literal">null</span>) &#123;</span><br><span class="line">            stack.push(node.left);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 中序遍历</span></span><br><span class="line"><span class="keyword">var</span> inorderTraversal = <span class="function"><span class="keyword">function</span> (<span class="params">root</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> result = [];</span><br><span class="line">    <span class="keyword">const</span> stack = [];</span><br><span class="line">    <span class="keyword">let</span> current = root;</span><br><span class="line">    <span class="keyword">while</span> (current !== <span class="literal">null</span> || stack.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span> (current !== <span class="literal">null</span>) &#123;</span><br><span class="line">            stack.push(current);</span><br><span class="line">            current = current.left;</span><br><span class="line">        &#125;</span><br><span class="line">        current = stack.pop();</span><br><span class="line">        result.push(current.val);</span><br><span class="line">        current = current.right;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 后续遍历</span></span><br><span class="line"><span class="keyword">var</span> postorderTraversal = <span class="function"><span class="keyword">function</span> (<span class="params">root</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> result = [];</span><br><span class="line">    <span class="keyword">const</span> stack = [];</span><br><span class="line">    <span class="keyword">let</span> current = root;</span><br><span class="line">    <span class="keyword">let</span> lastVisited = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (current !== <span class="literal">null</span> || stack.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (current !== <span class="literal">null</span>) &#123;</span><br><span class="line">            stack.push(current);</span><br><span class="line">            current = current.left;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">const</span> peekNode = stack[stack.length - <span class="number">1</span>];</span><br><span class="line">            <span class="keyword">if</span> (peekNode.right !== <span class="literal">null</span> &amp;&amp; lastVisited !== peekNode.right) &#123;</span><br><span class="line">                current = peekNode.right;</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                result.push(peekNode.val);</span><br><span class="line">                lastVisited = stack.pop();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建二叉树</span></span><br><span class="line"><span class="keyword">const</span> root = <span class="keyword">new</span> TreeNode(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">const</span> node2 = <span class="keyword">new</span> TreeNode(<span class="number">2</span>);</span><br><span class="line"><span class="keyword">const</span> node3 = <span class="keyword">new</span> TreeNode(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">root.right = node2;</span><br><span class="line">node2.left = node3;</span><br><span class="line"><span class="comment">// 层序遍历</span></span><br><span class="line"><span class="keyword">const</span> result1 = preorderTraversal(root);</span><br><span class="line"><span class="keyword">const</span> result2 = inorderTraversal(root);</span><br><span class="line"><span class="keyword">const</span> result3 = postorderTraversal(root);</span><br><span class="line"><span class="comment">// 打印结果</span></span><br><span class="line"><span class="built_in">console</span>.log(result1);</span><br><span class="line"><span class="built_in">console</span>.log(result2);</span><br><span class="line"><span class="built_in">console</span>.log(result3);</span><br></pre></td></tr></table></figure>
-<h3 id="二叉树深度"><a href="#二叉树深度" class="headerlink" title="二叉树深度"></a>二叉树深度</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// [队列 ]使用一个队列 queue 来进行广度优先搜索。首先将根节点放入队列中，然后不断迭代直到队列为空。在每一轮迭代中，我们先记录当前队列的大小 size，然后依次取出队列中的节点，并将它们的左右子节点（如果存在）加入队列。这样，每一轮迭代都表示一层的节点被访问过。最后，返回迭代的次数，即为二叉树的最大深度。</span></span><br><span class="line"><span class="keyword">var</span> calculateDepth = <span class="function"><span class="keyword">function</span> (<span class="params">root</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">let</span> depth = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">const</span> queue = [root];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (queue.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> size = queue.length;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; size; i++) &#123;</span><br><span class="line">            <span class="keyword">const</span> node = queue.shift();</span><br><span class="line">            <span class="keyword">if</span> (node.left) &#123;</span><br><span class="line">                queue.push(node.left);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (node.right) &#123;</span><br><span class="line">                queue.push(node.right);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        depth++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> depth;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// [递归]如果当前节点为空，表示到达叶子节点的子节点，返回深度0。否则，递归计算左子树和右子树的最大深度，然后取两者中的较大值，并加上当前节点的深度1，作为当前子树的最大深度。</span></span><br><span class="line"><span class="keyword">var</span> calculateDepth = <span class="function"><span class="keyword">function</span> (<span class="params">root</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (root === <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">const</span> leftDepth = calculateDepth(root.left);</span><br><span class="line">    <span class="keyword">const</span> rightDepth = calculateDepth(root.right);</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.max(leftDepth, rightDepth) + <span class="number">1</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="图遍历算法"><a href="#图遍历算法" class="headerlink" title="图遍历算法"></a>图遍历算法</h3><p>BFS（广度优先搜索）和DFS（深度优先搜索）是两种常用的图遍历算法，它们也可以用于遍历二叉树。下面分别介绍它们在二叉树中的实现方式：</p>
-<h4 id="BFS（广度优先搜索）"><a href="#BFS（广度优先搜索）" class="headerlink" title="BFS（广度优先搜索）"></a>BFS（广度优先搜索）</h4><p>BFS使用队列来实现，按照层级顺序逐层遍历二叉树。具体步骤如下：</p>
-<ol>
-<li>创建一个队列，并将根节点入队。</li>
-<li>当队列不为空时，执行以下步骤：<ul>
-<li>出队一个节点，并访问该节点。</li>
-<li>将该节点的左子节点和右子节点（如果存在）依次入队。</li>
-<li>重复步骤2直到队列为空。</li>
-</ul>
-</li>
-</ol>
-<h4 id="DFS（深度优先搜索）"><a href="#DFS（深度优先搜索）" class="headerlink" title="DFS（深度优先搜索）"></a>DFS（深度优先搜索）</h4><p>DFS有两种常见的实现方式：递归和迭代。</p>
-<p>递归实现DFS：<br>递归实现DFS是最直观的方式，它可以通过递归函数来实现。具体步骤如下：</p>
-<ol>
-<li>定义一个递归函数，传入当前节点作为参数。</li>
-<li>如果当前节点为空，返回。</li>
-<li>访问当前节点。</li>
-<li>递归调用函数遍历当前节点的左子节点。</li>
-<li>递归调用函数遍历当前节点的右子节点。</li>
-</ol>
-<p>迭代实现DFS：<br>迭代实现DFS可以使用栈来辅助实现。具体步骤如下：</p>
-<ol>
-<li>创建一个栈，并将根节点入栈。</li>
-<li>当栈不为空时，执行以下步骤：<ul>
-<li>出栈一个节点，并访问该节点。</li>
-<li>将该节点的右子节点（如果存在）入栈。</li>
-<li>将该节点的左子节点（如果存在）入栈。<br>重复步骤2直到栈为空。<br>无论是BFS还是DFS，它们都可以用于遍历二叉树，并根据需要执行相应的操作。选择使用哪种方式取决于具体的需求和问题。</li>
-</ul>
-</li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2024/01/11/二叉树遍历/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1546,6 +1341,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
@@ -1555,10 +1354,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1578,15 +1373,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1598,7 +1393,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">reduce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1607,10 +1410,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1630,18 +1429,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
               </li>
              
@@ -1654,7 +1441,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1675,6 +1466,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
             
             <div class="clearfix"></div>

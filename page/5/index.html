@@ -166,6 +166,171 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Node-js垃圾回收与内存管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/17/Node-js垃圾回收与内存管理/">Node.js垃圾回收与内存管理</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/17/Node-js垃圾回收与内存管理/" class="archive-article-date">
+  	<time datetime="2020-03-17T13:03:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>使用JavaScript进行前端开发时几乎完全不需要关心内存管理问题，对于前端编程来说，V8限制的内存几乎不会出现用完的情况，但是由于后端程序往往进行的操作更加复杂，并且长期运行在服务器不重启，如果不关注内存管理，导致内存泄漏，就算1GB，也会很快用尽。</p>
+<p>垃圾回收器是一把十足的双刃剑。其好处是可以大幅简化程序的内存管理代码，因为内存管理无需程序员来操作，由此也减少了（但没有根除）长时间运转的程序的内存泄漏。对于某些程序员来说，它甚至能够提升代码的性能。另一方面，选择垃圾回收器也就意味着程序当中无法完全掌控内存，而这正是移动终端开发的症结。对于JavaScript，程序中没有任何内存管理的可能——ECMAScript标准中没有暴露任何垃圾回收器的接口。网页应用既没有办法管理内存，也没办法给垃圾回收器进行提示。</p>
+<p>Node.js构建于Chrome V8引擎之上，因此本文首先讲解V8引擎的内存管理机制，了解底层原理后，再讲解Node开发中的内存管理与优化。</p>
+<p>nodeJs查看垃圾回收日志的方式主要是在启动时添加 –trace_gc 参数。</p>
+        
+          <a class="article-more-a" href="/2020/03/17/Node-js垃圾回收与内存管理/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/node/" class="article-tag-list-link color5">Node</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/17/Node-js垃圾回收与内存管理/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-css单位" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/17/css单位/">css单位</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/17/css单位/" class="archive-article-date">
+  	<time datetime="2020-03-17T05:38:33.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一、px，em，rem、vw、vh、pt"><a href="#一、px，em，rem、vw、vh、pt" class="headerlink" title="一、px，em，rem、vw、vh、pt"></a>一、px，em，rem、vw、vh、pt</h2><h3 id="1-px-pixel，像素"><a href="#1-px-pixel，像素" class="headerlink" title="1.px (pixel，像素)"></a>1.px (pixel，像素)</h3><p>是一个虚拟长度单位，是计算机系统的数字化图像长度单位，如果px要换算成物理长度，需要指定精度DPI(Dots Per Inch，每英寸像素数)，在扫描打印时一般都有DPI可选。Windows系统默认是96dpi，Apple系统默认是72dpi。px 单位的值必须是整数值.</p>
+<p>与px相关的一些单位</p>
+<p>in - 表示英寸，是一个物理单位，在CSS中被直接映射成为px; 转换的方法是 1in = 96px</p>
+<p>cm - 表示厘米，在生活中常用的单位，同样被映射为 px; 转换方法为 1cm = 37.8px</p>
+<p>mm - 表示毫米，与cm类似，转换方法为 1mm = 0.1cm = 3.78px</p>
+<h3 id="2-em-相对长度单位，相对于当前对象内文本的字体尺寸"><a href="#2-em-相对长度单位，相对于当前对象内文本的字体尺寸" class="headerlink" title="2.em(相对长度单位，相对于当前对象内文本的字体尺寸)"></a>2.em(相对长度单位，相对于当前对象内文本的字体尺寸)</h3><p>是一个相对长度单位，指的是字符宽度的倍数，用法类似百分比，如：0.8em, 1.2em,2em等。通常1em=16px。</p>
+<h3 id="3-rem-root-em，根em"><a href="#3-rem-root-em，根em" class="headerlink" title="3.rem(root em，根em)"></a>3.rem(root em，根em)</h3><p>rem是一个相对单位，1rem等于html元素上字体设置的大小。我们只要设置html上font-size的大小，就可以改变rem所代表的大小。这样我们就有了一个可控的统一参考系。我们现在有两个目标：rem单位所代表的尺寸大小和屏幕宽度成正比，也就是设置html元素的font-size和屏幕宽度成正比rem单位和px单位很容易进行换算，方便我们按照标注稿写css</p>
+<h4 id="rem与em的区别"><a href="#rem与em的区别" class="headerlink" title="rem与em的区别"></a>rem与em的区别</h4><p>rem是相对于根元素（html）的字体大小</p>
+<p>em是相对于其父元素的字体大小em最多取到小数点的后三位</p>
+<h3 id="4-vw、vh"><a href="#4-vw、vh" class="headerlink" title="4.vw、vh"></a>4.vw、vh</h3><p>css3中引入了一个新的单位vw/vh，与视图窗口有关，vw表示相对于视图窗口的宽度，vh表示相对于视图窗口高度，除了vw和vh外，还有vmin和vmax两个相关的单位。</p>
+<p>各个单位具体的含义如下：单位含义vw相对于视窗的宽度，视窗宽度是100vwvh相对于视窗的高度，视窗高度是100vhvminvw和vh中的较小值vmax vw和vh中的较大值 这里我们发现视窗宽高都是100vw／100vh，那么vw或者vh，下简称vw，很类似百分比单位。</p>
+<p>vw和%的区别为：<br>%大部分相对于祖先元素，也有相对于自身的情况比如（border-radius、translate等)<br>vw/vh相对于视窗的尺寸</p>
+<h3 id="5-pt-（点）"><a href="#5-pt-（点）" class="headerlink" title="5.pt （点）"></a>5.pt （点）</h3><p>绝对长度单位，多用于字体尺寸，1px = 0.75pt</p>
+<p>in:寸</p>
+<p>cm:厘米</p>
+<p>mm:毫米</p>
+<p>q: 1/4毫米（quarter-millimeters）。绝对长度单位。</p>
+<p>pt:point，大约1/72寸</p>
+<p>pc:pica，大约6pt，1/6寸</p>
+<p>1in = 2.54cm = 25.4mm = 101.6q = 72pt = 6pc = 96px</p>
+<h3 id="6"><a href="#6" class="headerlink" title="6.%"></a>6.%</h3><p>一般宽泛的讲是相对于父元素，但是并不是十分准确。</p>
+<p>1、对于普通定位元素就是我们理解的父元素</p>
+<p>2、对于position: absolute;的元素是相对于已定位的父元素</p>
+<p>3、对于position: fixed;的元素是相对于 ViewPort（可视窗口）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/17/css单位/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-CSS之BFC、IFC、GFC和FFC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -977,201 +1142,6 @@
 
 
   
-    <article id="post-vuex面试题" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/02/vuex面试题/">vuex面试题</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/02/vuex面试题/" class="archive-article-date">
-  	<time datetime="2020-03-02T09:08:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://juejin.im/post/5dba91e4518825647e4ef18b" target="_blank" rel="noopener">https://juejin.im/post/5dba91e4518825647e4ef18b</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/02/vuex面试题/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-浏览器键入url回车后经历的那些事儿" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/03/01/浏览器键入url回车后经历的那些事儿/">浏览器键入url回车后经历的那些事儿</a>
-    </h1>
-  
-
-        
-        <a href="/2020/03/01/浏览器键入url回车后经历的那些事儿/" class="archive-article-date">
-  	<time datetime="2020-03-01T04:57:43.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="整体步骤"><a href="#整体步骤" class="headerlink" title="整体步骤"></a>整体步骤</h2><p>1、URL解析<br>2、DNS域名解析<br>3、浏览器主机根据ip地址与服务器建立TCP连接<br>4、发送HTTP请求<br>5、服务器处理请求<br>6、断开TCP连接<br>7、浏览器解析文件<br>8、浏览器布局渲染</p>
-<h3 id="1、URL解析"><a href="#1、URL解析" class="headerlink" title="1、URL解析"></a>1、URL解析</h3><p>一个URL包括协议，网络地址（域名 + 端口），资源路径</p>
-<p>协议：最常用的比如HTTP（超文本传输协议）FTP（文件传输协议）</p>
-<p>网络地址：可以是域名或者ip地址，包括端口号，如果没有默认为80</p>
-<p>如果是不合法的地址，会转给默认的搜索引擎,例如如果你正在使用chrome，可以在url输入框输入你想要搜索的内容，然后搜索引擎会根据关键字进行搜索。</p>
-<h3 id="2、DNS域名解析"><a href="#2、DNS域名解析" class="headerlink" title="2、DNS域名解析"></a>2、DNS域名解析</h3><p>例如：baidu.com就是域名</p>
-<p>1）先到各种缓存信息中查找</p>
-<p>先到浏览器缓存记录中查找 - 浏览器会缓存DNS一段时间（浏览器缓存）</p>
-<p>如果浏览器中没有找到，浏览器会有一个系统调用，获得系统缓存中的记录（系统缓存）</p>
-<p>接着将请求发给路由器，路由器一般也有自己的DNS缓存（路由器缓存）</p>
-<p>2）DNS服务器查找</p>
-<p>没有则发送请求到本地域名服务器，每一个本地域名服务器都维护一个高速缓存，存放最近用过的域名及其IP地址.如果还没有则发出递归查询（本地服务器请求比他高一级的服务器，如此递归直到根域名服务器，肯定能找到这个服务器的IP地址）通过这个IP可以找到客户端到服务器端的唯一路径.</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/dns解析.png" alt="dns解析"></p>
-<p>总结起来就是：<br>浏览器缓存 =&gt; 系统缓存 =&gt; 路由器缓存 =&gt;ISP(运营商)DNS缓存 =&gt; 根域名服务器 =&gt; 顶级域名服务器 =&gt; 主域名服务器的顺序</p>
-<h3 id="3、浏览器主机根据ip地址与服务器建立TCP连接"><a href="#3、浏览器主机根据ip地址与服务器建立TCP连接" class="headerlink" title="3、浏览器主机根据ip地址与服务器建立TCP连接"></a>3、浏览器主机根据ip地址与服务器建立TCP连接</h3><p>浏览器向服务器端发送SYN连接请求，经过服务器与浏览器三次报文的交互连接建立完成，就可以发送数据了。</p>
-<p>找到了正确的IP地址以后就要开始建立连接了，建立连接的过程一般会使用TCP协议，通过三次握手建立连接。</p>
-<h4 id="TCP-三次握手"><a href="#TCP-三次握手" class="headerlink" title="TCP 三次握手"></a>TCP 三次握手</h4><p>客户端发出建立连接的请求。数据包携带有SYN。</p>
-<p>如果服务端有开放的端口，可以接受并建立连接，那么服务端会返回SYN + ACK,告诉客户端我可以接受你的请求。</p>
-<p>客户端收到服务端的回应，发送ACK给服务端。 连接建立。</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/TCP三次握手.png" alt="TCP三次握手"></p>
-<h3 id="4、发送HTTP请求"><a href="#4、发送HTTP请求" class="headerlink" title="4、发送HTTP请求"></a>4、发送HTTP请求</h3><p>与服务器建立了连接后，就可以向服务器发起请求了</p>
-<p>根据HTTP协议的要求，组织一个HTTP数据包，向服务器发送HTTP请求，HTTP的请求报头有请求行和请求报头，空行，请求体。</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/request.png" alt="request"></p>
-<p>在浏览器中查看报文首部:</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/request-example.png" alt="request-example"></p>
-<p>请求报文主要包括</p>
-<p>1）请求行:http方法、页面地址、协议、版本</p>
-<p>2）请求头:key、value告诉服务端需要内容，注意什么类型</p>
-<p>3）空行:告诉服务端请求头已经结束</p>
-<p>4）请求体</p>
-<h3 id="5、服务器处理请求"><a href="#5、服务器处理请求" class="headerlink" title="5、服务器处理请求"></a>5、服务器处理请求</h3><p>服务器收到请求并响应，生成一个HTTP响应报文，通过TCP协议发送给浏览器主机</p>
-<p>通过HTTP请求服务后，服务器会向浏览器返回一个应答信息 - HTTP响应，</p>
-<p>在HTTP里，有请求就会有响应，哪怕是错误信息。这里我们同样看下响应报文的组成结构：</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/response.png" alt="response"></p>
-<p>在响应结果中都会有个一个HTTP状态码，比如我们熟知的200、301、404、500等。通过这个状态码我们可以知道服务器端的处理是否正常，并能了解具体的错误。</p>
-<p>状态码由3位数字和原因短语组成。根据首位数字，状态码可以分为五类：</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/response-status.png" alt="response-status"></p>
-<h3 id="6、断开TCP连接"><a href="#6、断开TCP连接" class="headerlink" title="6、断开TCP连接"></a>6、断开TCP连接</h3><p>为了避免服务器与客户端双方的资源占用和损耗，当双方没有请求或响应传递时，任意一方都可以发起关闭请求。与创建TCP连接的3次握手类似，关闭TCP连接，需要4次握手。</p>
-<p><img src="/2020/03/01/浏览器键入url回车后经历的那些事儿/TCP四次握手.png" alt="TCP四次握手"></p>
-<p>1) 客户端发起中断请求，发送FIN到服务端<br>2) 服务端收到请求，可能数据还没有发完。这个时候不会关闭socket，而是回复ACK，告诉客户端知道了<br>3) 客户端进入Fin_Wait状态，继续等待服务端端的FIN报文。服务端端发送完毕后，会向客户端发送FIN<br>4) 客户端客服端收到后就回复ACK，并关闭连接</p>
-<p>上图可以这么理解：</p>
-<ul>
-<li>客户端：“兄弟，我这边没数据要传了，咱关闭连接吧。”</li>
-<li>服务端：“收到，我看看我这边有木有数据了。”</li>
-<li>服务端：“兄弟，我这边也没数据要传你了，咱可以关闭连接了。”</li>
-<li>客户端：“好嘞。”</li>
-</ul>
-<h3 id="7、浏览器解析文件"><a href="#7、浏览器解析文件" class="headerlink" title="7、浏览器解析文件"></a>7、浏览器解析文件</h3><blockquote>
-<p>浏览器通过解析HTML，生成DOM树，解析CSS，生成CSS规则树，然后通过DOM树和CSS规则树生成渲染树。渲染树与DOM树不同，渲染树中并没有head、display为none等不必显示的节点。<br>要注意的是，浏览器的解析过程并非是串连进行的，比如在解析CSS的同时，可以继续加载解析HTML，但在解析执行JS脚本时，会停止解析后续HTML，这就会出现阻塞问题，关于JS阻塞相关问题</p>
-</blockquote>
-<h3 id="8、浏览器布局渲染"><a href="#8、浏览器布局渲染" class="headerlink" title="8、浏览器布局渲染"></a>8、浏览器布局渲染</h3><p>根据渲染树布局，计算CSS样式，即每个节点在页面中的大小和位置等几何信息。HTML默认是流式布局的，CSS和js会打破这种布局，改变DOM的外观样式以及大小和位置。这时就要提到两个重要概念：repaint(重绘)和reflow(回流)。</p>
-<p>repaint：屏幕的一部分重画，不影响整体布局，比如某个CSS的背景色变了，但元素的几何尺寸和位置不变。</p>
-<p>reflow： 意味着元件的几何尺寸变了，我们需要重新验证并计算渲染树。是渲染树的一部分或全部发生了变化。这就是Reflow，或是Layout。</p>
-<p>所以我们应该尽量减少reflow和repaint,良好的css规范会减少这种操作, <a href="https://juejin.im/post/5d552252f265da03a14852cc" target="_blank" rel="noopener">CSS书写规范和顺序</a></p>
-<p>最后浏览器绘制各个节点，将页面展示给用户。</p>
-<p>致此输入url到展现页面的一个周期就完成了。</p>
-<p>参考：</p>
-<p><a href="https://juejin.im/post/5d5a622ef265da03f47c20e9" target="_blank" rel="noopener">https://juejin.im/post/5d5a622ef265da03f47c20e9</a></p>
-<p><a href="https://juejin.im/post/5d552252f265da03a14852cc" target="_blank" rel="noopener">https://juejin.im/post/5d552252f265da03a14852cc</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/NetWork/" class="article-tag-list-link color3">NetWork</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/03/01/浏览器键入url回车后经历的那些事儿/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/6/">Next &raquo;</a>
@@ -1293,6 +1263,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">assign</a>
               </li>
              
@@ -1302,10 +1276,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">defer</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Promise</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1325,15 +1295,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">设计模式</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1345,7 +1315,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">reduce</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1354,10 +1332,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">debounce</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">类型转换</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1377,18 +1351,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Event Loop</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器渲染</a>
               </li>
              
@@ -1401,7 +1363,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+                <a href="javascript:void(0)" class="js-tag color1">响应式原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">微前端</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1422,6 +1388,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">浏览器缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
               </li>
             
             <div class="clearfix"></div>
